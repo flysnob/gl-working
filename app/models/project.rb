@@ -1,3 +1,4 @@
+# represents a single project
 class Project < ActiveRecord::Base
   belongs_to :user
   # has_one :subject

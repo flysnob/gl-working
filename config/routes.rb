@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   resources :users
 
   resources :projects
-  
+
   resources :pages, only: [] do
     collection do
-      get 'about', to: 'pages#about' 
+      get 'about', to: 'pages#about'
     end
   end
 end

@@ -5,7 +5,6 @@ FactoryGirl.define do
     password 'please123'
 
     factory :admin do
-    
       trait :admin do
         role 'admin'
       end

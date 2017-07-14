@@ -18,7 +18,7 @@ class ProjectsController < ApplicationController
 
     redirect_to request.referer || projects_path
   end
-  
+
   def build_project(project_params)
     Project.create(
       title: project_params.title,

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.3.1'
-#gem 'autoprefixer-rails', '7.1.2.1'
+# gem 'autoprefixer-rails', '7.1.2.1'
 # ---------------------------------------------------------------------------------------
 # BOOTSTRAP
 # ---------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ gem 'mailboxer'
 gem 'multi_logger'
 gem 'nested_form'
 # Passenger is the application server that will run Rails
-#gem 'passenger', require: 'phusion_passenger/rack_handler' # This require will execute passenger start on rails server
+# gem 'passenger', require: 'phusion_passenger/rack_handler' # This require will execute passenger start on rails server
 # For rendering a pdf
 gem 'prawn'
 # For rendering a table inside the pdf
