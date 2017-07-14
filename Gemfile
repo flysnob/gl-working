@@ -38,7 +38,7 @@ gem 'prawn'
 gem 'prawn-table'
 # The core Rails gem
 gem 'puma'
-gem 'rails', '4.2.5.1'
+gem 'rails', '5.0.4'
 # For running rake tasks, and scripting against the app
 gem 'rake'
 # For rendering remote assets (http://www.aljex.com/news) as a partial
@@ -76,7 +76,7 @@ group :development do
   # A tool to convert HTML to HAML
   gem 'html2haml'
   # Makes web requests not log an obnoxious amount to the console
-  gem 'quiet_assets'
+  # gem 'quiet_assets'
   # Generates some base layout templates for styles and such. Can probably be removed now
   gem 'rails_layout'
   # ---------------------------------------------------------------------------------------
