@@ -1,9 +1,20 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :users
-    root to: "users#index"
+    root to: 'users#index'
   end
+
   root to: 'visitors#index'
+
   devise_for :users
+
   resources :users
+
+  resources :projects
+  
+  resources :pages, only: [] do
+    collection do
+      get 'about', to: 'pages#about' 
+    end
+  end
 end

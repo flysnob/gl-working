@@ -1,0 +1,21 @@
+AllCops:
+  Include:
+    - '**/Gemfile'
+    - '**/Rakefile'
+  Exclude:
+    - 'db/**/*'
+    - 'bin/*'
+    - 'vendor/bundle/**/*'
+  TargetRubyVersion: 2.2
+
+Metrics/LineLength:
+  Max: 160
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/ClassLength:
+  Max: 150

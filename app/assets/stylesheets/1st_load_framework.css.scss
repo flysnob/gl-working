@@ -4,7 +4,7 @@
 
 // make all images responsive by default
 img {
-  @extend .img-fluid;
+  @extend .img-fluid !optional;
   margin: 0 auto;
 }
 // override for the 'Home' navigation link
@@ -53,10 +53,10 @@ section {
   margin: 0 auto;
 }
 .authform form {
-  @extend .card;
+  @extend .card !optional;
   @extend .col-md-9;
   padding-bottom: 40px;
-  @extend .bg-faded;
+  @extend .bg-faded !optional;
   @extend .small;
 }
 .authform .right {
@@ -67,7 +67,7 @@ section {
   @extend .btn-primary;
 }
 .authform fieldset {
-  @extend .card;
+  @extend .card !optional;
 }
 #error_explanation:not(:empty) {
   @extend .alert;
