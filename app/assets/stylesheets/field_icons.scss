@@ -1,0 +1,17 @@
+@import 'colors';
+
+.addon {
+  position: relative;
+
+  .glyphicon {
+    color: $color_mountain_mist_approx;
+    pointer-events: none;
+    padding: 9px;
+  }
+
+  .right-addon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+}

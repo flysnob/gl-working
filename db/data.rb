@@ -3,14 +3,15 @@ ActiveRecord::Base.transaction do
     # -------------------------------------------------------------------------------------------------------------------
     # Test users
     # -------------------------------------------------------------------------------------------------------------------
-    def create_user(username, email, password, role, name)
-      u = User.create_with(username: username, email: email, password: password, role: role).find_or_create_by(name: name)
-      u.update! role: role if role != u.role
+    def create_user(email, password, role, name)
+      u = User.create_with(name: name, email: email, password: password, role: role).find_or_create_by(name: name)
+      # u.update! role: role if role != u.role
     end
 
     puts 'Creating users'
 
-    create_user('flysnob', 'flysnob@gmail.com', 'gaapflysnob123', :super_admin, 'Mark')
+    create_user('flysnob@gmail.com', 'gaapflysnob123', :admin, 'flysnob')
+    create_user('mlefferscpa@yahoo.com', 'gaapmark123', :user, 'mark')
     # -------------------------------------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------------------------------------
@@ -18,7 +19,10 @@ ActiveRecord::Base.transaction do
     # -------------------------------------------------------------------------------------------------------------------
     puts 'Creating projects'
 
-    project_1 = Project.find_or_create_by(name: 'My first project', description: 'My first project')
+    project_1 = Project.find_or_create_by(name: 'My first project', description: 'My first project', user: User.find_by(name: 'flysnob'))
+    project_2 = Project.find_or_create_by(name: 'My first project', description: 'My first project', user: User.find_by(name: 'mark'))
+    project_3 = Project.find_or_create_by(name: 'My second project', description: 'My second project', user: User.find_by(name: 'flysnob'))
+    project_4 = Project.find_or_create_by(name: 'My second project', description: 'My second project', user: User.find_by(name: 'mark'))
     puts '.'
     # -------------------------------------------------------------------------------------------------------------------
   end

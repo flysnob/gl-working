@@ -10,11 +10,20 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :projects
+  resources :projects, except: [] do
+    member do
+      get 'work', to: 'projects#work'
+      get 'delete_modal', to: 'projects#delete_modal'
+      patch 'delete', to: 'projects#delete'
+    end
+  end
 
   resources :pages, only: [] do
     collection do
       get 'about', to: 'pages#about'
     end
+  end
+
+  resources :notifications, only: [:index, :destroy] do
   end
 end

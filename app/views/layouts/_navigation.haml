@@ -1,0 +1,39 @@
+-# navigation styled for Bootstrap 3.0
+- if current_user
+  .container
+    %nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          .collapse.navbar-collapse
+            %span.navbar-text.header-company GAAP Logic
+            %ul.nav.navbar-nav
+              = render 'layouts/navigation_links'
+            .navbar-right
+              %span.navbar-text<
+                = link_to "#{current_user.try(:name) || current_user.try(:email)}", user_session_path(current_user)
+                %span{style: 'margin-right:5px;'}='|'
+                = Time.now.strftime('%A, %B %d, %Y')
+              %ul.nav.navbar-nav.navbar-icon-list
+                %li
+                  %span.nav-home-button.glyphicon.glyphicon-home.navbar-text{style: 'line-height: 16px', data: {toggle: 'tooltip', placement: 'bottom'}, title: 'Home' }
+                %li.dropdown
+                  %a.dropdown-toggle{href: "#", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
+                    %span.glyphicon.glyphicon-option-vertical
+                  %ul.dropdown-menu
+                    %li
+                      = link_to 'Edit account', edit_user_registration_path, class: 'nav-link'
+                    %li
+                      %a{href: '#'} Help
+                    %li.divider
+                    %li
+                      = link_to("Sign out", destroy_user_session_path, method: :delete)
+- else
+  .container
+    %nav.navbar.navbar-default
+      %ul.nav.navbar-nav.clearfix
+        %li.nav-item
+          %button.navbar-toggler.hidden-sm-up.nav-link{"aria-controls" => "exCollapsingNavbar2", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#exCollapsingNavbar2", "data-toggle" => "collapse", :type => "button"}
+            \ &#9776;
+      #exCollapsingNavbar2.collapse.navbar-toggleable-xs
+        = link_to "Rails bootstrap", root_path, class: 'navbar-brand'
+        %ul.nav.navbar-nav= render 'layouts/navigation_links'

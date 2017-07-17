@@ -1,0 +1,29 @@
+@import "colors";
+
+.notifications {
+  .notification {
+    margin-bottom: 0px;
+    border: 1px solid $faint_gray;
+    padding: 5px;
+    margin-bottom: 5px;
+
+    .icon {
+      color: white;
+      background: $menu_header;
+      padding: 6px;
+      border-radius: 30px;
+      margin-right: 3px;
+    }
+
+    .subject {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .body {
+
+    }
+  }
+
+  margin-bottom: 20px;
+}

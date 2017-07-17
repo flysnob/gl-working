@@ -1,0 +1,14 @@
+.modal-header
+  %button.close{ 'aria-label': "Close", 'data-dismiss': 'modal', type: 'button' }
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title= "Delete this project"
+.modal-body
+  = form_for @project, url: delete_project_path(@project), method: 'post', html: { class: 'validate' } do |f|
+    = hidden_field_tag :project_id, params[:project_id]
+
+  .row{style: 'margin-top: 20px;'}
+  = render partial: 'project_field', locals: { label: 'Name', value: @project.name }
+  = render partial: 'project_field', locals: { label: 'Description', value: @project.description }
+.modal-footer
+  %a.btn.btn-default{ 'data-dismiss': 'modal', type: 'button' } Cancel
+  %a#delete-project-confirm-link.btn.btn-danger{ href: '#' } Delete

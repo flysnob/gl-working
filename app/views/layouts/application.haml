@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
+    %title= content_for?(:title) ? yield(:title) : 'Gl Working'
+    %meta{name: "description", content: "#{content_for?(:description) ? yield(:description) : 'Gl Working'}"}
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
+    = csrf_meta_tags
+  %body
+    %header
+      = render 'layouts/navigation'
+    %main{role: "main"}
+      #main-container
+        #pad-content-container
+          .sections
+            - if flash.present?
+              .row
+                .col-lg-12= render 'layouts/messages'
+
+            = yield
+
+            #modal.modal.fade
+              .modal-dialog.modal-lg
+                .modal-content

@@ -1,0 +1,21 @@
+$ ->
+  # attach on-clik event to the home icon on the nav to let us jump to 'aljex'
+  $('.nav-home-button').on('click', (evt) =>
+    evt.preventDefault()
+
+    $.ajax
+      url: "/home/fetch_login_form",
+      type: 'GET'
+      dataType: 'json'
+      json: true
+      success: (data, textStatus, jqXHR) ->
+        Object.keys(data).forEach (key) ->
+          if (!document.route.elements.namedItem("key"))
+            # make fresh input and append it
+            $(document.route).append(
+              $("<input type = 'hidden' name = '#{key}' value = '#{data[key]}'/>")
+            )
+          else
+            document.route.elements.namedItem(key).value = data[key]
+        document.route.submit()
+  )

@@ -1,0 +1,15 @@
+<% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
+
+dismissNotification = ->
+  $('.notification [data-dismiss="alert"]').on('click', (e) ->
+    $.ajax
+      url: "<%= notifications_path %>/#{$(e.target).closest('.notification').data('notification-id')}",
+      method: 'DELETE'
+
+    $('.notifications').closest('.row').remove() if $('.notification').length <= 1
+  )
+
+$ ->
+  dismissNotification()
+
+$(document).on('page:load', dismissNotification)

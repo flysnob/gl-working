@@ -1,0 +1,40 @@
+@import "colors";
+
+.sections {
+  margin-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  .container-fluid {
+    padding: 0;
+  }
+
+  .section {
+
+    h1 {
+      color: $menu_header;
+      margin-bottom: 10px;
+      margin-top: 0px;
+      height: 36px;
+      line-height: 26px;
+    }
+
+    .container-fluid {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  .report-header {
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    h1 {
+     color: $charcoal;
+    }
+    
+    h3 {
+      margin-top: 10px;
+    }
+  }
+}
