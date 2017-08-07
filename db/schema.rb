@@ -10,14 +10,74 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711101425) do
+ActiveRecord::Schema.define(version: 20170725100905) do
+
+  create_table "project_questions", force: :cascade do |t|
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "project_id"
+    t.integer  "question_id"
+    t.index ["project_id"], name: "index_project_questions_on_project_id"
+    t.index ["question_id"], name: "index_project_questions_on_question_id"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string   "name",        null: false
     t.text     "description"
+    t.datetime "date"
+    t.string   "entity"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.integer  "subject_id"
+    t.integer  "version_id"
+    t.index ["subject_id"], name: "index_projects_on_subject_id"
+    t.index ["version_id"], name: "index_projects_on_version_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "module_code",    null: false
+    t.string   "question_code",  null: false
+    t.text     "question",       null: false
+    t.string   "sort"
+    t.string   "kind"
+    t.text     "summary"
+    t.text     "report_summary"
+    t.text     "help"
+    t.text     "faq"
+    t.text     "asc"
+    t.text     "examples"
+    t.string   "conclusion_1"
+    t.string   "conclusion_2"
+    t.string   "conclusion_3"
+    t.string   "fail_response"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "subject_id"
+    t.index ["subject_id"], name: "index_questions_on_subject_id"
+  end
+
+  create_table "responses", force: :cascade do |t|
+    t.string  "type"
+    t.string  "response_value"
+    t.string  "target_node"
+    t.string  "sequence"
+    t.string  "decision_node"
+    t.string  "fail_value"
+    t.string  "return_node"
+    t.text    "comment"
+    t.text    "conclusion"
+    t.integer "project_id"
+    t.integer "project_question_id"
+    t.index ["project_id"], name: "index_responses_on_project_id"
+    t.index ["project_question_id"], name: "index_responses_on_project_question_id"
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.string   "name",        null: false
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -37,6 +97,19 @@ ActiveRecord::Schema.define(version: 20170711101425) do
     t.integer  "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string   "module_code",     null: false
+    t.string   "version_number",  null: false
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.string   "status"
+    t.text     "json"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "subject_id"
+    t.index ["subject_id"], name: "index_versions_on_subject_id"
   end
 
 end

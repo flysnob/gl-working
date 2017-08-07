@@ -4,7 +4,7 @@
 %td
 %td.actions
   = link_to work_project_path(project), class: 'work-project-link' do
-    %span.glyphicon.glyphicon-tasks{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Work'}
+    %span.glyphicon.glyphicon-tasks{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Process'}
   = link_to edit_project_path(project), class: 'edit-project-link', 'data-toggle': 'modal', 'data-target': '#modal'  do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
   = link_to delete_modal_project_path(project), class: 'delete-modal-project-link', 'data-toggle': 'modal', 'data-target': '#modal'  do

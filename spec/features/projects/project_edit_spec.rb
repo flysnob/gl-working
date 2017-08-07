@@ -13,16 +13,19 @@ feature 'Project edit', :devise do
   # Scenario: User changes project name
   #   Given I am signed in
   #   When I change my project name
-  #   Then I see a project update message
+  #   Then I see a project update change
   scenario 'user changes project name' do
     user = FactoryGirl.create(:user)
     login_as(user, scope: :user)
     project = FactoryGirl.create(:project)
+    FactoryGirl.create(:subject)
+    FactoryGirl.create(:version)
     visit edit_project_path(project)
     fill_in 'Name', with: 'My new project name'
     fill_in 'Description', with: 'My new project description'
-    click_button 'Update'
-    txts = [I18n.t('devise.registrations.updated'), I18n.t('devise.registrations.update_needs_confirmation')]
-    expect(page).to have_content(/.*#{txts[0]}.*|.*#{txts[1]}.*/)
+    select 'My subject', from: 'Subject'
+    select "v1 - effective #{1.year.ago.strftime('%m/%d/%Y')}", from: 'Version'
+    click_button 'Save'
+    expect(page).to have_content('Project "My new project name" successfully updated')
   end
 end

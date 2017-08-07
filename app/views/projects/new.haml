@@ -1,0 +1,46 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title Add New Project
+.modal-body
+  = form_for @project, { html: { id: 'new_project', class: 'validate' }} do |f|
+    .row
+      .col-lg-2
+      .col-lg-8.form-group.required
+        = f.label :name, class: 'required-label'
+        .help-block A short title for the project (limited to 150 characters)
+        = f.text_field :name, class: 'form-control', required: true
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :description
+        .help-block A description of how this project should be used
+        = f.text_field :description, class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :date
+        .help-block Enter the transaction date or effective date
+        = f.text_field :date, class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8
+        %span.form-group.required
+          = f.label :subject, 'Subject', class: 'required-label'
+          .help-block
+          = f.select :subject, subject_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select Subject',} }
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8
+        %span.form-group.required
+          = f.label :version, 'Version', class: 'required-label'
+          .help-block
+          #version-radio-container.form-control
+      .col-lg-2
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
+  %button#add-project-link.btn.btn-primary{ type: 'submit', form: 'new_project', href: '#' } Add project

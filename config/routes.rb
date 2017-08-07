@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :subjects, except: [] do
+    member do
+      get 'versions', to: 'subjects#versions'
+    end
+  end
+
   resources :pages, only: [] do
     collection do
       get 'about', to: 'pages#about'

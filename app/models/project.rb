@@ -1,8 +1,11 @@
 # represents a single project
 class Project < ActiveRecord::Base
   belongs_to :user
-  # has_one :subject
-  # has_one :version
-  # has_many :questions
-  # has_many :responses
+  belongs_to :subject
+  belongs_to :version
+  has_many :project_questions, dependent: :destroy
+  has_many :responses
+
+  accepts_nested_attributes_for :project_questions, allow_destroy: true
+  accepts_nested_attributes_for :responses, allow_destroy: true
 end

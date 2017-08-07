@@ -15,6 +15,20 @@ modalize = ->
     $(this).removeData('bs.modal')
   )
 
+  $(document).on 'change', '#project_subject', (evt) ->
+    console.log('change')
+    subject = $('#project_subject').val()
+    $.ajax "/subjects/#{subject}/versions",
+      datatype: 'json',
+      success: (data) ->
+        $(data).each (k, v) ->
+          date = new Date(v.effective_date)
+          dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear()
+          radio = "<div class='radio'><input type='radio' name='version' value='#{v.id}'>Ver. #{v.version_number} (effective as of #{dateString})</div>"
+          $('#version-radio-container').html(radio)
+      error: (jqXHR, textStatus, errorThrown) ->
+        false
+
 $ ->
   modalize()
 

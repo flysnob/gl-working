@@ -14,4 +14,10 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require bootstrap/tooltip
+//= require bootstrap/modal
+//= require jquery_nested_form
+//= require bootstrap-datepicker
+//= require validator
+//= require select2-full
 //= require_tree .

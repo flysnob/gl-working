@@ -17,7 +17,7 @@ feature 'Project show page', :devise do
   scenario 'user sees project details' do
     user = FactoryGirl.create(:user)
     login_as(user, scope: :user)
-    user = FactoryGirl.create(:project)
+    project = FactoryGirl.create(:project)
     visit project_path(project)
     expect(page).to have_content project.name
     expect(page).to have_content project.description

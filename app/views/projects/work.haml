@@ -1,0 +1,45 @@
+.section.process
+  %h1 Process
+  %h4= "Project name: #{@project.name}"
+  .row
+    %small
+      %em.text-muted
+        .row
+          .col-md-2 Project create on:
+          .col-md-10= @project.created_at.strftime('%m/%d/%Y')
+        .row
+          .col-md-2 Project description:
+          .col-md-10= @project.description
+  - unless @responses.nil?
+    .row
+      .col-md-12.spacer
+        %h3.panel-title Previous Project Nodes
+      .col-md-12.spacer
+        %nav
+          %ul.pagination.pagination-small.breadcrumbs
+  .row
+    .col-md-12
+      %h3= "Current index: #{@index}"
+    .col-md-12
+      %h4= "Current node ID: #{@question.question_code}"
+  .row
+    .col-mid-12
+      .col-mid-6
+        %h3 Question
+      .col-mid-6
+        %h4= @question.question
+    .col-mid-12
+      %button#response_1_button.btn-button.btn-primary= @question.response_1
+      %button#response_2_button.btn-button.btn-primary= @question.response_2
+      %button#response_3_button.btn-button.btn-primary= @question.response_3
+    .col-mid-12
+      %h3 Comments
+    .col-mid-12
+      %textarea
+  .row
+    .col-mid-12
+      %button#asc.btn-button.btn-info ASC
+      %button#asc.btn-button.btn-info Examples
+      %button#asc.btn-button.btn-info FAQ
+      %button#asc.btn-button.btn-info Help
+      
