@@ -10,9 +10,12 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :responses
+
   resources :projects, except: [] do
     member do
       get 'work', to: 'projects#work'
+      get 'previous', to: 'projects#previous'
       get 'delete_modal', to: 'projects#delete_modal'
       patch 'delete', to: 'projects#delete'
     end

@@ -41,6 +41,8 @@ gem 'puma'
 gem 'rails', '5.0.4'
 # For running rake tasks, and scripting against the app
 gem 'rake'
+# For rendering dynamic images in SVG
+gem 'rasem'
 # For rendering remote assets (http://www.aljex.com/news) as a partial
 gem 'remote_partial'
 # SASS is syntactically awesome stylesheets, a CSS replacement

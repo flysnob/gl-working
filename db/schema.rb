@@ -12,13 +12,47 @@
 
 ActiveRecord::Schema.define(version: 20170725100905) do
 
-  create_table "project_questions", force: :cascade do |t|
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "nodes", force: :cascade do |t|
+    t.string   "module_code"
+    t.string   "question_code"
+    t.text     "content"
+    t.string   "sort"
+    t.string   "kind"
+    t.text     "summary"
+    t.text     "report_summary"
+    t.text     "help"
+    t.text     "faq"
+    t.text     "asc"
+    t.text     "examples"
+    t.string   "conclusion_1"
+    t.string   "conclusion_2"
+    t.string   "conclusion_3"
+    t.string   "fail_response"
+    t.string   "response_1"
+    t.string   "response_2"
+    t.string   "response_3"
+    t.string   "target_1"
+    t.string   "target_2"
+    t.string   "target_3"
+    t.string   "target_module"
+    t.string   "return_node"
+    t.string   "decision_node"
+    t.string   "boolean"
+    t.boolean  "return",         default: false
+    t.string   "response_value"
+    t.string   "response_text"
+    t.string   "target_node"
+    t.string   "index"
+    t.string   "comment"
+    t.string   "conclusion"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "project_id"
     t.integer  "question_id"
-    t.index ["project_id"], name: "index_project_questions_on_project_id"
-    t.index ["question_id"], name: "index_project_questions_on_question_id"
+    t.integer  "subject_id"
+    t.index ["project_id"], name: "index_nodes_on_project_id"
+    t.index ["question_id"], name: "index_nodes_on_question_id"
+    t.index ["subject_id"], name: "index_nodes_on_subject_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -38,7 +72,7 @@ ActiveRecord::Schema.define(version: 20170725100905) do
   create_table "questions", force: :cascade do |t|
     t.string   "module_code",    null: false
     t.string   "question_code",  null: false
-    t.text     "question",       null: false
+    t.text     "content",        null: false
     t.string   "sort"
     t.string   "kind"
     t.text     "summary"
@@ -58,7 +92,7 @@ ActiveRecord::Schema.define(version: 20170725100905) do
   end
 
   create_table "responses", force: :cascade do |t|
-    t.string  "type"
+    t.string  "kind"
     t.string  "response_value"
     t.string  "target_node"
     t.string  "sequence"
@@ -67,10 +101,9 @@ ActiveRecord::Schema.define(version: 20170725100905) do
     t.string  "return_node"
     t.text    "comment"
     t.text    "conclusion"
+    t.text    "boolean"
     t.integer "project_id"
-    t.integer "project_question_id"
     t.index ["project_id"], name: "index_responses_on_project_id"
-    t.index ["project_question_id"], name: "index_responses_on_project_question_id"
   end
 
   create_table "subjects", force: :cascade do |t|

@@ -1,5 +1,6 @@
 include Warden::Test::Helpers
 Warden.test_mode!
+binding.pry
 # Feature: Project work page
 #   As a user
 #   I want to answer questions related to my project's subject
@@ -15,19 +16,19 @@ feature 'Project work page', :devise do
   #   And I select a project to work
   #   Then I see my project's work page
   scenario 'user sees project work page' do
+    load "#{Rails.root}/db/seeds.rb"
+    binding.pry
     user = FactoryGirl.create(:user)
     login_as(user, scope: :user)
-    FactoryGirl.create(:version_1)
-    FactoryGirl.create(:version_2)
-    FactoryGirl.create(:subject)
-    FactoryGirl.create(:question_1_1)
     visit projects_path
     click_link 'Project'
     fill_in 'Name', with: 'My new project name'
     fill_in 'Description', with: 'My new project description'
     fill_in 'Date', with: Date.today.strftime('%m/%d/%Y')
-    select 'My subject', from: 'Subject'
-    select "v1 - effective #{1.year.ago.strftime('%m/%d/%Y')}", from: 'Version'
+    binding.pry
+    select 'Equity-Linked Contracts', from: 'Subject'
+    expect(page).to have_content("Ver. 1 (effective as of 12/31/2010)")
+    choose("Ver. 1 (effective as of 12/31/2010)")
     click_button 'Add project'
     click 
     project = FactoryGirl.create(:project)
