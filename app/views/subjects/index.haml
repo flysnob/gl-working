@@ -1,0 +1,16 @@
+.section.subjects
+  %h1 Subjects
+  .pull-right{ style: 'margin-bottom: 10px'}
+    = link_to new_subject_path, id: 'new-subject-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-plus
+      subject
+  %table.table.table-condensed.subjects-table
+    %thead.subjects-header
+      %tr 
+      %th Subject Name
+      %th Description
+      %th.actions Actions
+    %tbody
+      - @subjects.each do |subject|
+        %tr
+          = render subject

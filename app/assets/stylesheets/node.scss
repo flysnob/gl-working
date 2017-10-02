@@ -1,0 +1,24 @@
+@import "colors";
+
+.node {
+  .question-container {
+    border-right: 1px #e7e7e7 solid;
+    border-top: 1px #e7e7e7 solid;
+    padding-right: 5px;
+    min-height: 500px;
+  }
+  .info-container {
+    border-top: 1px #e7e7e7 solid;
+    padding-left: 15px;
+    padding-top: 10px;
+    min-height: 500px;
+  }
+  .info-elements {
+    margin-left: 10px !important;
+  }
+}
+.process {
+  .spacer {
+    margin-top: 15px;
+  }
+}

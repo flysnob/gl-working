@@ -15,6 +15,7 @@
  *= require bootstrap-datepicker3
  *= require select2
  *= require select2-bootstrap
+ *= require bootstrap-wysihtml5
  */
 
 @import 'bootstrap/mixins';
@@ -22,3 +23,4 @@
 @import 'bootstrap/tooltip';
 @import 'bootstrap/modals';
 @import 'font-awesome';
+@import "bootstrap-wysihtml5/bootstrap3-wysihtml5";

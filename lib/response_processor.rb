@@ -11,7 +11,6 @@ class ResponseProcessor
       @logger.info("@responses.length: #{@responses.length}")
       @logger.info("@last_node: #{@last_node}")
       @logger.info("@last_node.content: #{@last_node.content}")
-      @logger.info("@nodes: #{@nodes}")
       @logger.info("@nodes.length: #{@nodes.length}")
       @logger.info("@return_node_code: #{@return_node_code}")
       next_node = get_next_node
@@ -42,7 +41,7 @@ class ResponseProcessor
       if @last_node.return
         @logger.info('return')
         update_return_node # update with result of the last response
-        next_node = fetch_node(@return_node.target_node)
+        next_node = evaluate_target_node_return
         next_node
       else
         @target_node = fetch_node(@last_node.target_node)
@@ -72,11 +71,11 @@ class ResponseProcessor
       @return_node = fetch_node(@last_node.return_node)
 
       if @last_node.pass?
-        #fail
+        #pass
         @return_node.response_value = @return_node.response_1
         @return_node.target_node = @return_node.target_1
       else
-        #pass
+        #fail
         @return_node.response_value = @return_node.response_2
         @return_node.target_node = @return_node.target_2
       end
@@ -124,31 +123,44 @@ class ResponseProcessor
       # Get all responses related to decision
       decision_responses = @responses.select { |r| r[:decision_node] == @last_node.question_code }
 
-      # Set pass to 1 at loop start
-      pass = 1
+      # Set meets (i.e., meets conditions or 'true') to nil (falsy) at loop start
+      meets = nil
 
       # Loop over the responses and evaluate based on boolean value
       decision_responses.each do |r|
         @logger.info("r: #{r}")
-        case r.boolean
-          # Test 'or' only if pass is still 1 (i.e., not false). Any false response will force fail (i.e., pass == false) so only value for pass will be 1 (start value) or false (fail).
-          # Therefore, any fail? results in false (i.e., pass == false)
+        @logger.info("r.boolean: #{r.boolean}")
+        @logger.info("r.response_value: #{r.response_value}")
+        @logger.info("r.meets_response: #{r.meets_response}")
+        case @last_node.boolean
+          # Test 'or' only if meets is falsy. Any true response will force meets to be truthy. Therefore, any pass? results in meets being truthy
         when 'or'
-          if pass == 1 && r.fail?
-            pass = false
+          if !meets 
+            @logger.info("meets condition: false") 
+          end
+          if !meets && r.pass?
+            @logger.info("meets: true")
+            meets = true
           end
         
-        # Test 'and' only if pass is still 1 (i.e., not true) or false. Must fail all nodes, so any true (pass?) means the entire decision is true (i.e., pass == true)
+        # Test 'and' only if meets is truthy because you are looking for a single failure. Must pass all nodes, so any false response (fails?) means the
+        # entire decision is falsy (i.e., meets == false).
+        # Note: Have to test condition meets == nil even though it is falsy (versus meets == false) in case meets is still the start value, otherwise
+        # meets never has the possibility of ever being truthy.
         when 'and'
-          if (pass == 1 || !pass) && r.pass?
-            pass = true
+          if meets == nil && r.pass?
+            @logger.info("meets: true")
+            meets = true
+          elsif meets && r.fail?
+            @logger.info("meets: false")
+            meets = false
           end
         end
       end
 
-      # 1 and true are both truthy
-      @logger.info("pass: #{pass}")
-      if pass || pass == 1
+      # nil and false are both falsy
+      @logger.info("meets: #{meets}")
+      if meets
         make_response_hash(@last_node.response_1, @last_node.target_1, 1)
       else
         make_response_hash(@last_node.response_2, @last_node.target_2, 2)
@@ -159,9 +171,9 @@ class ResponseProcessor
 
     def make_response_hash(text, target, value)
       @response_hash = {
-        response_value: value,
         response_text: text,
-        target_node: target
+        target_node: target,
+        response_value: value
       }
     end
 

@@ -20,16 +20,11 @@
       .col-lg-2
     .row
       .col-lg-2
-      .col-lg-4
+      .col-lg-8
         %span.form-group.required
           = f.label :subject, 'Subject', class: 'required-label'
           .help-block
           = f.select :subject, subject_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select Subject'} }
-      .col-lg-4
-        %span.form-group.required
-          = f.label :version, 'Version', class: 'required-label'
-          .help-block
-          = f.select :version, version_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select Version'} }
       .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel

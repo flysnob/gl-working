@@ -1,0 +1,131 @@
+@import "colors";
+
+// this is for the bootstrap pills width
+.nav-pills > li > a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-pills > li.spacer {
+  height: 10px;
+}
+
+#main-container {
+  padding-left: 0px;
+  transition: all 0.5s ease;
+  &.toggled {
+    padding-left: 195px;
+    #sidebar-container {
+      width: 175px;
+    }
+    #page-content-container {
+      position: absolute;
+      margin-right: -175px;
+    }
+  }
+}
+
+.force-default-cursor {
+  cursor: default;
+}
+
+#sidebar-container {
+  z-index: 2;
+  position: absolute;
+  left: 20px;
+  width: 0;
+  height: 100%;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+#page-content-container {
+  width: 100%;
+  position: absolute;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+
+  > li {
+    margin-bottom: 10px;
+    border: 1px solid $menu_border;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    text-indent: 20px;
+    line-height: 30px;
+  }
+
+  .sidebar-header {
+    position: relative;
+    background-color: $menu_header;
+    color: $white;
+
+    > .glyphicon {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+    }
+
+    &.collapsed + .sidebar-nav {
+      display: none;
+    }
+
+    &.expanded + .sidebar-nav {
+      display: default;
+    }
+  }
+
+  .sidebar-nav {
+    position: relative;
+    top: 0;
+    width: 175px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      line-height: 30px;
+      a {
+        display: block;
+        text-decoration: none;
+        color: $menu_border;
+        &:hover {
+          text-decoration: none;
+          color: $white;
+          background: $menu_border;
+        }
+        &:active {
+          text-decoration: none;
+        }
+        &:focus {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+@media(min-width:768px) {
+  #main-container {
+    padding-left: 195px;
+    &.toggled {
+      padding-left: 0px;
+      #sidebar-container {
+        width: 0;
+      }
+      #page-content-container {
+        position: relative;
+        margin-right: 0;
+      }
+    }
+  }
+  #sidebar-container {
+    width: 175px;
+    overflow: visible;
+  }
+  #page-content-container {
+    position: relative;
+  }
+}

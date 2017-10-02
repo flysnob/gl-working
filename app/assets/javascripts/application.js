@@ -20,4 +20,5 @@
 //= require bootstrap-datepicker
 //= require validator
 //= require select2-full
+//= require bootstrap-wysihtml5
 //= require_tree .

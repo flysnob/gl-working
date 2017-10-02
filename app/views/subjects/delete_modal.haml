@@ -1,0 +1,15 @@
+.modal-header
+  %button.close{ 'aria-label': "Close", 'data-dismiss': 'modal', type: 'button' }
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title= "Delete this subject"
+.modal-body
+  = form_for @subject, url: delete_subject_path(@subject), method: 'post', html: { class: 'validate' } do |f|
+    = hidden_field_tag :subject_id, params[:subject_id]
+
+  .row{style: 'margin-top: 20px;'}
+  = render partial: 'subject_field', locals: { label: 'Name', value: @subject.name }
+  = render partial: 'subject_field', locals: { label: 'Description', value: @subject.description }
+.modal-footer
+  %a.btn.btn-default{ 'data-dismiss': 'modal', type: 'button' } Cancel
+  = link_to subject_path(@subject), method: :destroy, class: 'delete-subject-link' do
+    %a#delete-subject-confirm-link.btn.btn-danger{ href: '#' } Delete

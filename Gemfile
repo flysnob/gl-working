@@ -8,6 +8,8 @@ ruby '2.3.1'
 gem 'bootstrap-datepicker-rails'
 gem 'bootstrap-sass', '~> 3'
 # ---------------------------------------------------------------------------------------
+# WYSIWIG editor for bootstrap
+gem 'bootstrap-wysihtml5-rails'
 gem 'bourbon'
 # Provides authentication for users
 gem 'cancancan'

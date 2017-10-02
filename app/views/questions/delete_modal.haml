@@ -1,0 +1,15 @@
+.modal-header
+  %button.close{ 'aria-label': "Close", 'data-dismiss': 'modal', type: 'button' }
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title= "Delete this question"
+.modal-body
+  = form_for @question, url: delete_question_path(@question), method: 'post', html: { class: 'validate' } do |f|
+    = hidden_field_tag :question_id, params[:question_id]
+
+  .row{style: 'margin-top: 20px;'}
+  = render partial: 'question_field', locals: { label: 'Question Code', value: @question.question_code }
+  = render partial: 'question_field', locals: { label: 'Content', value: @question.content }
+.modal-footer
+  %a.btn.btn-default{ 'data-dismiss': 'modal', type: 'button' } Cancel
+  = link_to question_path(@question), method: :destroy, class: 'delete-question-link' do
+    %a#delete-question-confirm-link.btn.btn-danger{ href: '#' } Delete

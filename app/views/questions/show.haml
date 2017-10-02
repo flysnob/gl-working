@@ -1,0 +1,94 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title= @question.question_code
+.modal-body
+  = form_for @question, html: { id: 'show_question', class: 'validate' } do |f| 
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Question code
+      .col-lg-6= @question.question_code
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Content
+      .col-lg-6= @question.content
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Summary
+      .col-lg-6= @question.summary
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Report summary
+      .col-lg-6= @question.report_summary
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Type
+      .col-lg-6= @question.kind
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Help text
+      .col-lg-6= @question.help
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label FAQ text
+      .col-lg-6= @question.faq
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label ASC text
+      .col-lg-6= @question.asc
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Examples text
+      .col-lg-6= @question.examples
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Conclusion 1
+      .col-lg-6= @question.conclusion_1
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Conclusion 2
+      .col-lg-6= @question.conclusion_2
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Conclusion 3
+      .col-lg-6= @question.conclusion_3
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Fail response
+      .col-lg-6= @question.fail_response
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Subject
+      .col-lg-6
+        -if @question.subject.present?
+          = @question.subject.name
+      .col-lg-1
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close

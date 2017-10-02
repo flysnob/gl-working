@@ -5,10 +5,10 @@ class Node < ActiveRecord::Base
   has_one :response
 
   def pass?
-    response_value != fail_response
+    response_value == meets_response
   end
   
   def fail?
-    response_value == fail_response
+    response_value != meets_response
   end
 end

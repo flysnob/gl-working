@@ -15,7 +15,7 @@ class CreateQuestions < ActiveRecord::Migration[5.0]
       t.string :conclusion_1
       t.string :conclusion_2
       t.string :conclusion_3
-      t.string :fail_response
+      t.string :meets_response
 
       t.timestamps null: false
     end

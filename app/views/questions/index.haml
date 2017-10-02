@@ -1,0 +1,17 @@
+.section.questions
+  %h1 Questions
+  .pull-right{ style: 'margin-bottom: 10px'}
+    = link_to new_question_path, id: 'new-question-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-plus
+      Question
+  %table.table.table-condensed.questions-table
+    %thead.questions-header
+      %tr 
+      %th Question code
+      %th Content
+      %th Type
+      %th.actions Actions
+    %tbody
+      - @questions.each do |question|
+        %tr
+          = render question

@@ -1,5 +1,48 @@
-.section.project
-  %h1.name
-    = "#{@project.name}"
-  %h3.details
-    = "#{@project.description}"
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title= @project.name
+.modal-body
+  = form_for @project, html: { id: 'edit_project', class: 'validate' } do |f| 
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Name
+      .col-lg-6= @project.name
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Description
+      .col-lg-6= @project.description
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Date
+      .col-lg-6= @project.date
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Subject
+      .col-lg-6= @project.subject.name
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Subject version effective date
+      .col-lg-6= @project.version.effective_date.strftime('%m/%d/%Y')
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Subject version expiration date
+      .col-lg-6
+        - if @project.version.expiration_date.present?
+          = @project.version.expiration_date.strftime('%m/%d/%Y')
+        - else
+          NA
+      .col-lg-1
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close

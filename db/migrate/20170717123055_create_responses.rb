@@ -6,7 +6,7 @@ class CreateResponses < ActiveRecord::Migration[5.0]
       t.string :target_node
       t.string :sequence
       t.string :decision_node
-      t.string :fail_value
+      t.string :meets_value
       t.string :return_node
       t.text :comment
       t.text :conclusion

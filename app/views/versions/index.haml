@@ -1,0 +1,19 @@
+.section.versions
+  %h1 Versions
+  .pull-right{ style: 'margin-bottom: 10px'}
+    = link_to new_version_path, id: 'new-version-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-plus
+      version
+  %table.table.table-condensed.versions-table
+    %thead.versions-header
+      %tr 
+      %th Version #
+      %th Subject
+      %th Effective Date
+      %th Expiration Date
+      %th Status
+      %th.actions Actions
+    %tbody
+      - @versions.each do |version|
+        %tr
+          = render version

@@ -5,7 +5,7 @@ modalize = ->
     $form.find('input').each (index, element) ->
       $(element).data 'bs.validator.previous', null
       $(element).data 'bs.validator.errors', null
-
+    
     $form.validator 'validate'
 
     hasErrors = $form.data('bs.validator').hasErrors()
@@ -14,7 +14,21 @@ modalize = ->
   $(document).on('hidden.bs.modal', '.modal', ->
     $(this).removeData('bs.modal')
   )
-
+    
+  $(document).on 'shown.bs.modal', '.modal', (evt) ->
+    $form = $('#modal form')
+    
+    $form.find('textarea').each (index, element) ->
+      console.log('index')
+      $(element).wysihtml5(
+        { 'toolbar': {
+          'font-styles': false,
+          'color': false,
+          'image': false,
+          'link': false
+        } }
+      )
+  
   $(document).on 'change', '#project_subject', (evt) ->
     console.log('change')
     subject = $('#project_subject').val()

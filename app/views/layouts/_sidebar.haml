@@ -1,0 +1,14 @@
+#sidebar-container
+  - # Chrome's default styling means we have to jump through hoops to force the cursor to
+  - # behave as we intend: just look like a mouse pointer when there's not really a link
+  %ul.nav.nav-pills.nav-stacked
+    %li.active= link_to 'Projects', '', class: 'force-default-cursor'
+    %li.spacer &nbsp;
+
+  %ul.nav.nav-pills.nav-stacked
+    %li.active= link_to 'Reports', '', class: 'force-default-cursor'
+    %li.spacer &nbsp;
+
+  %ul.nav.nav-pills.nav-stacked
+    %li.active= link_to 'Config', '', class: 'force-default-cursor'
+    %li= link_to("Logout", destroy_user_session_path, method: :delete)

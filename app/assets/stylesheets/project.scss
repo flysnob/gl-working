@@ -1,10 +1,9 @@
 @import "colors";
 
-.projectss-table {
-  width: 97%;
-  margin: 0px auto 10px auto;
+.projects-table {
+  margin: 10px auto 10px auto;
 
-  .projectss-header {
+  .projects-header {
     th.ytd {
       padding-right: 15px;
       text-align: right;
@@ -16,6 +15,7 @@
   }
 
   td.actions {
+    text-align: center;
     a {
       &:hover {
         text-decoration: none;
@@ -57,7 +57,7 @@ tr.project {
   .actions {
     text-align: center;
 
-    .open-reconciliation {
+    .open-project {
       color: $warning_color;
     }
   }
@@ -141,17 +141,6 @@ tr.project {
 
       th.actions {
         text-align: left;
-      }
-      tr.journal-line {
-        .actions {
-          text-align: left;
-        }
-        .glyphicon {
-          padding-left: 5px;
-        }
-        .glyphicon-remove {
-          color: $remove_color;
-        }
       }
     }
   }

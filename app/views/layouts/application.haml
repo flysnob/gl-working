@@ -11,15 +11,14 @@
     %header
       = render 'layouts/navigation'
     %main{role: "main"}
-      #main-container
-        #pad-content-container
-          .sections
-            - if flash.present?
-              .row
-                .col-lg-12= render 'layouts/messages'
+      #pad-content-container
+        .sections
+          - if flash.present?
+            .row
+              .col-lg-12= render 'layouts/messages'
 
-            = yield
+          = yield
 
-            #modal.modal.fade
-              .modal-dialog.modal-lg
-                .modal-content
+          #modal.modal.fade
+            .modal-dialog.modal-lg
+              .modal-content

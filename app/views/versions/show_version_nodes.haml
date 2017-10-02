@@ -1,0 +1,23 @@
+.section.versions
+  %h1= "#{@version.subject.name}, ver. #{@version.version_number}"
+  %table.table.table-condensed.versions-table
+    %thead.versions-header
+      %tr 
+      %th Question code
+      %th Response 1
+      %th Target 1
+      %th Response 2
+      %th Target 2
+      %th Response 3
+      %th Target 3
+      %th Return node
+      %th Decision node
+      %th Meets response
+      %th Boolean
+      %th Target module
+      %th Return?
+      %th.actions Actions
+    %tbody
+      - @version.version_nodes.map do |version_node|
+        %tr
+          = render version_node

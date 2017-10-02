@@ -1,0 +1,38 @@
+@import 'colors';
+
+#login {
+  h1.title {
+    text-align: center;
+    color: $menu_header;
+    text-transform: uppercase;
+  }
+
+  .jumbotron {
+    background-color: $near_white;
+    border: 2px solid $color_mountain_mist_approx;
+    box-shadow: 5px 5px 5px #ccc;
+    padding: 10px 20px 10px 20px;
+
+    #news {
+      height: 400px;
+      padding: 10px;
+      margin: 0px;
+      border: 1px solid $color_mountain_mist_approx;
+      overflow-y: scroll;
+
+      .title {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      ul {
+        padding: 0;
+      }
+    }   
+
+    .sign-in-message {
+      font-size: 20px;
+    }
+  }
+}
+

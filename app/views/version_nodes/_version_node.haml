@@ -1,0 +1,16 @@
+%td
+  = link_to questions_path(version_node[:question]), class: 'show-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    = version_node[:question_code]
+%td= version_node[:response_1]
+%td= version_node[:target_1]
+%td= version_node[:response_2]
+%td= version_node[:target_2]
+%td= version_node[:response_3]
+%td= version_node[:target_3]
+%td= version_node[:return_node]
+%td= version_node[:decision_node]
+%td= version_node[:meets_response]
+%td= version_node[:boolean]
+%td= version_node[:target_module]
+%td= version_node[:return]
+%td.actions

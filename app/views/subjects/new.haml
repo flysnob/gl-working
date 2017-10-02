@@ -1,0 +1,23 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title Add New subject
+.modal-body
+  = form_for @subject, { html: { id: 'new_subject', class: 'validate' }} do |f|
+    .row
+      .col-lg-2
+      .col-lg-8.form-group.required
+        = f.label :name, class: 'required-label'
+        .help-block A short title for the subject (limited to 150 characters)
+        = f.text_field :name, class: 'form-control', required: true
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :description
+        .help-block A description of how this subject should be used
+        = f.text_field :description, class: 'form-control'
+      .col-lg-2
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
+  %button#add-subject-link.btn.btn-primary{ type: 'submit', form: 'new_subject', href: '#' } Add subject

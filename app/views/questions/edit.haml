@@ -1,0 +1,75 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title Edit Question
+.modal-body
+  = form_for @question, { html: { id: 'edit_question', class: 'validate' }} do |f|
+    =f.hidden_field :id
+    .row
+      .col-lg-2
+      .col-lg-4.form-group.required
+        = f.label :question_code, class: 'required-label'
+        = f.text_field :question_code, class: 'form-control', required: true
+      .col-lg-4.form-group.required
+        = f.label :module_code, class: 'required-label'
+        = f.text_field :module_code, class: 'form-control', required: true
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8
+        %span.form-group.required
+          = f.label :subject, 'Subject', class: 'required-label'
+          = f.select :subject, subject_select_options(f.object.subject), { }, { class: 'form-control', required: true, 'data-placeholder': 'Select Subject' }
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :content
+        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } } , class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :summary
+        = f.text_area :summary, class: 'form-control wysihtml5'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :report_summary
+        = f.text_area :report_summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } } , class: 'form-control wysihtml5'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        %span.form-group.required
+          = f.label :kind, 'Kind', class: 'required-label'
+          = f.select :kind, kind_select_options(f.object.kind), { include_blank: true }, { class: 'form-control', required: true, 'data-placeholder': 'Select kind' }
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :help
+        = f.text_area :help, class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :faq
+        = f.text_area :faq, class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :asc
+        = f.text_area :asc, class: 'form-control'
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :examples
+        = f.text_area :examples, class: 'form-control'
+      .col-lg-2
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
+  %button#save-question-link.btn.btn-primary{ type: 'submit', form: 'edit_question', href: '#' } Save

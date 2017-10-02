@@ -59,10 +59,10 @@ class ProjectsController < ApplicationController
       @next_node = @project_nodes.first
       @index = 1 
     elsif @last_node.nil?
-      @next_node = @response_nodes.last
-      @index = @next_node.index
+      # coming from project index with existing nodes
+      @last_node = @response_nodes.last
+      make_next_node
     else
-      drop_subsequent_nodes
       # next node in the project
       @logger.info("@last_node.kind: #{@last_node.kind}")
       @logger.info("@last_node.return_node: #{@last_node.return_node}")
@@ -82,24 +82,39 @@ class ProjectsController < ApplicationController
                           .to_a
 
     @next_node = @project_nodes.select { |q| q[:question_code] == params[:node_code] }.first
+    @current_node = @project_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
     @index = @next_node.index
   end
   
   def make_next_node
     return_node_code = @last_node.return_node
     @next_node = ResponseProcessor.perform(@last_node, @project_nodes, return_node_code)
-    @index = params[:index].to_f.round(0) + 1
     if @next_node.kind == 'd'
+      @logger.info("'d' loop")
+      # we have a new last node now
+      @response_nodes = Node.where(project_id: @project.id)
+                            .where('response_value IS NOT NULL')
+                            .to_a
+      @logger.info("@response_nodes.length: #{@response_nodes.length}")
+      # if @next_node already has an index (from page reload or coming from index)
+      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+      @logger.info("@index: #{@index}")
       @next_node.update(
         index: @index,
         return_node: params[:return_node]
       )
-      @logger.info("'d' loop")
-      # we have a new last node now
-      @last_node = @next_node
       @logger.info("@last_node.return_node: #{@last_node.return_node}")
-
+      @last_node = @next_node
       make_next_node
+    else
+      # have we changed a previous answer?
+      drop_subsequent_nodes
+
+      @response_nodes = Node.where(project_id: @project.id)
+                            .where('response_value IS NOT NULL')
+                            .to_a
+      @index = @response_nodes.length + 1
+      @logger.info("@index: #{@index}")
     end
   end
 
@@ -113,10 +128,8 @@ class ProjectsController < ApplicationController
   def delete_modal; end
 
   def create
-    puts params[:project]
     project_params = params[:project]
     project_params[:created_by] = current_user
-    project_params[:version] = params[:version]
 
     @project = build_project(project_params)
 
@@ -131,18 +144,21 @@ class ProjectsController < ApplicationController
   end
 
   def build_project(project_params)
-    puts project_params
     Project.create(
       name: project_params[:name],
       description: project_params[:description],
-      subject: Subject.find(project_params[:subject]),
-      version: Version.find(project_params[:version]),
+      subject: find_subject(project_params[:subject]),
+      version: select_core_version(params),
       date: project_params[:date],
       user: current_user
     )
   end
 
   private
+
+  def find_subject(subject_id)
+    @subject = Subject.find(subject_id)
+  end
 
   def create_node_set
     @nodes.each do |n|
@@ -165,7 +181,7 @@ class ProjectsController < ApplicationController
         conclusion_1: n[:question][:conclusion_1],
         conclusion_2: n[:question][:conclusion_2],
         conclusion_3: n[:question][:conclusion_3],
-        fail_response: n[:question][:fail_response],
+        meets_response: n[:version]['meets_response'],
         response_1: n[:version]['response_1'],
         response_2: n[:version]['response_2'],
         response_3: n[:version]['response_3'],
@@ -189,20 +205,14 @@ class ProjectsController < ApplicationController
   # core project questions
   def build_nodes(project_params)
     @nodes = []
-    
-    core_version = Version.find(project_params[:version])
 
-    json = JSON.parse(core_version.json)
-    
-    json.each do |v|
-      question = Question.find_by(question_code: v['question_code'])
+    @project.version.version_nodes.each do |n|
+      question = Question.find(n.question_id)
 
-      @nodes.push({question: question, version: v})
-    end
+      @nodes.push({question: question, version: n})
 
-    json.each do |v|
-      if v['target_module'].present?
-        build_module_version_nodes(v)
+      if n.target_module.present?
+        build_module_version_nodes(n)
       end
     end
 
@@ -210,29 +220,40 @@ class ProjectsController < ApplicationController
   end
 
   # submodule questions for analyze buttons
-  def build_module_version_nodes(v)
-    module_version = select_module_version(v)
+  def build_module_version_nodes(core_node)
+    module_version = select_module_version(core_node)
 
-    json = JSON.parse(module_version.json)
-    
-    json.each do |v|
-      question = Question.find_by(question_code: v['question_code'])
+    module_version.version_nodes.each do |n|
+      question = Question.find(n.question_id)
 
-      @nodes.push({question: question, version: v})
+      @nodes.push({question: question, version: n})
     end
   end
 
+  def select_core_version(params)
+    versions = if params[:date].nil?
+                 Version.where(subject: @subject)
+                        .where('expiration_date IS NULL')
+               else
+                 Version.where(subject: @subject)
+                        .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
+               end
+    raise Exception.new("No version available for subject #{@subject.name}.") if versions.length.zero?
+    @core_version = versions.first
+    @core_version
+  end
+
   def select_module_version(v)
-    if @project[:date].nil?
-      versions = Version.where(module_code: v['target_module'])
+    versions = if @project[:date].nil?
+                 Version.where(module_code: v.target_module)
+                        .where('expiration_date IS NULL')
 
-      raise Exception.new("No versions available for module code #{v['target_module']}.") if versions.length.zero?
-
-      versions.first
-    else
-      Version.where(module_code: v['target_module'])
-             .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
-    end
+               else
+                 Version.where(module_code: v.target_module)
+                        .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
+               end
+    raise Exception.new("No version available for module code #{v['target_module']}.") if versions.length.zero?
+    versions.first
   end
 
   def find_project
@@ -274,6 +295,13 @@ class ProjectsController < ApplicationController
 
   # @TODO: Fix this
   def drop_subsequent_nodes
+    # Only need to valaluate this if the index of the last node is less than @response_nodes.last.index.
+    # This avoids running this when the last node is a decision node
+    @logger.info("@last_node[:index]: #{@last_node[:index]}")
+    @logger.info("@response_nodes.last.index: #{@response_nodes.last.index}")
+    @logger.info("@last_node.kind: #{@last_node.kind}")
+    return if @last_node.kind == 'd' || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
+    @logger.info('now drop nodes')
     # if the node already has an answer, and it has now changed, drop all subsequent nodes
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|

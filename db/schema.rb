@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725100905) do
+ActiveRecord::Schema.define(version: 20170916182807) do
 
   create_table "nodes", force: :cascade do |t|
     t.string   "module_code"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20170725100905) do
     t.string   "conclusion_1"
     t.string   "conclusion_2"
     t.string   "conclusion_3"
-    t.string   "fail_response"
+    t.string   "meets_response"
     t.string   "response_1"
     t.string   "response_2"
     t.string   "response_3"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20170725100905) do
     t.string   "conclusion_1"
     t.string   "conclusion_2"
     t.string   "conclusion_3"
-    t.string   "fail_response"
+    t.string   "meets_response"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "subject_id"
@@ -97,7 +97,7 @@ ActiveRecord::Schema.define(version: 20170725100905) do
     t.string  "target_node"
     t.string  "sequence"
     t.string  "decision_node"
-    t.string  "fail_value"
+    t.string  "meets_value"
     t.string  "return_node"
     t.text    "comment"
     t.text    "conclusion"
@@ -130,6 +130,27 @@ ActiveRecord::Schema.define(version: 20170725100905) do
     t.integer  "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "version_nodes", force: :cascade do |t|
+    t.string   "response_1"
+    t.string   "target_1"
+    t.string   "response_2"
+    t.string   "target_2"
+    t.string   "response_3"
+    t.string   "target_3"
+    t.string   "target_module"
+    t.string   "return_node"
+    t.string   "decision_node"
+    t.string   "boolean"
+    t.string   "meets_response"
+    t.boolean  "return",         default: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "version_id"
+    t.integer  "question_id"
+    t.index ["question_id"], name: "index_version_nodes_on_question_id"
+    t.index ["version_id"], name: "index_version_nodes_on_version_id"
   end
 
   create_table "versions", force: :cascade do |t|

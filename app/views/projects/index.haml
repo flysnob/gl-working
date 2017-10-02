@@ -1,18 +1,17 @@
 .section.projects
   %h1 Projects
-  .pull-right
+  .pull-right{ style: 'margin-bottom: 10px'}
     = link_to new_project_path, id: 'new-project-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
       %span.glyphicon.glyphicon-plus
       Project
-  .column
-    %table.table.projects-table
-      %thead.projects-header
-        %tr 
-        %th Project name
-        %th Date
-        %th Type
-        %th.actions Actions
-      %tbody
-        - @projects.each do |project|
-          %tr
-            = render project
+  %table.table.table-condensed.projects-table
+    %thead.projects-header
+      %tr 
+      %th Project name
+      %th Date
+      %th Type
+      %th.actions Actions
+    %tbody
+      - @projects.each do |project|
+        %tr
+          = render project

@@ -1,0 +1,38 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title= "#{@version.subject.name}, ver. #{@version.version_number}"
+.modal-body
+  = form_for @version, html: { id: 'edit_version', class: 'validate' } do |f| 
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Version Number
+      .col-lg-6= @version.version_number
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Subject
+      .col-lg-6= @version.subject.name
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Effective date
+      .col-lg-6= @version.effective_date.present? ? @version.effective_date.strftime('%m/%d/%Y') : 'NA'
+      .col-lg-1
+    .row
+      .col-lg-1
+      .col-lg-4 
+        %label Expiration date
+      .col-lg-6= @version.expiration_date.present? ? @version.expiration_date.strftime('%m/%d/%Y') : 'NA'
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
+        %label Status
+      .col-lg-6= @version.status
+      .col-lg-1
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close

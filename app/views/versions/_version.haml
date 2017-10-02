@@ -1,0 +1,14 @@
+%td
+  = link_to version, class: 'show-version-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    = version.version_number
+%td= version.subject.name
+%td= version.effective_date.present? ? version.effective_date.strftime('%m/%d/%Y') : ''
+%td= version.expiration_date.present? ? version.expiration_date.strftime('%m/%d/%Y') : ''
+%td= version.status
+%td.actions
+  = link_to show_version_nodes_version_path(version), class: 'show-json-link' do
+    %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Show version nodes'}
+  = link_to edit_version_path(version), class: 'edit-version-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
+  = link_to delete_modal_version_path(version), class: 'delete-modal-version-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-trash{ data: { toggle: 'tooltip', placement: 'top' }, title: 'Delete' }

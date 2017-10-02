@@ -16,7 +16,7 @@ class CreateNodes < ActiveRecord::Migration[5.0]
       t.string :conclusion_1
       t.string :conclusion_2
       t.string :conclusion_3
-      t.string :fail_response
+      t.string :meets_response
       # Version
       t.string :response_1
       t.string :response_2
