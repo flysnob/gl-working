@@ -2,7 +2,7 @@
   .row
     .col-md-12
       %h2= @project.name
-      = link_to project_path, class: 'show-project-link' do
+      = link_to project_path, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
         %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'View'}
       = link_to project_path, class: 'print-project-link' do
         %span.glyphicon.glyphicon-print{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Print'}
@@ -13,19 +13,26 @@
   - unless @response_nodes.length.zero?
     .row.spacer
       .col-md-12
-        %h4.panel-title Previous Project Nodes (in sequence)
+        %h4.panel-title Previous Questions
       .col-md-12.spacer
         %div{ class: 'btn-group', role: 'group' }
           - @response_nodes.each do |n|
-            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{n.kind == 'd' ? 'btn btn-info' : 'btn btn-default'}", title: "Node question(ID #{n.question_code}): #{n.kind   == 'd' ? n.summary : n.content}" }
-      .col-md-12.spacer
-        = link_to 'Return to Last node', work_project_path, { class: 'btn btn-default' } 
+            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{n.kind == 'd' ? 'btn btn-info' : 'btn btn-default'}", title: "Node question(ID #{n.question_code}): #{n.kind == 'd' ? n.summary : n.content}" }
+    .row.spacer
+      .col-md-12
+        =link_to 'Return to Last Node', work_project_path, { class: 'btn btn-default' }
   .node.spacer
     .col-md-6.question-container
       .col-md-12
-        %h4= "Node ID #{@next_node.question_code} (Index #{@index})"
+        %h4= "Question #{@index}"
+        - if current_user.admin?
+          = link_to edit_question_path(@next_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+            %span.glyphicon.glyphicon-edit{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit question'}
+      - if @next_node.question.kind == 'q'
+        .col-md-12
+          %h4= @next_node.question.content
       .col-md-12
-        %div= @next_node.summary
+        %div= @next_node.question.summary
       = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f|
         %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
         %input{ type: 'hidden', name: 'node_id', id: 'node_id', value: @next_node.id }
@@ -33,10 +40,7 @@
         %input{ type: 'hidden', name: 'response_value', id: 'response_value', value: '' }
         %input{ type: 'hidden', name: 'target_node', id: 'target_node', value: '' }
         %input{ type: 'hidden', name: 'return_node', id: 'return_node', value: '' }
-        - if @next_node.kind == 'q'
-          .col-md-12
-            %h4= @next_node.content
-        .col-md-12
+        .col-md-12.spacer
           %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Enter comments related to this node here', style: 'min-width: 100%', value: @next_node.comment }
         .col-md-12
           - if @next_node.response_1.present?
@@ -47,12 +51,13 @@
             = f.submit @next_node.response_3, { class: 'btn btn-primary node-response', onclick: "$('#response_value').val('3');$('#target_node').val('#{@next_node.target_3}');$('#return_node').val('#{@next_node.return_node}')" }
     .col-md-6.info-container
       .info-buttons
-        %button{ id: 'asc', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.asc}').show()" }
-          ASC
-        %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.examples}').show()" }
-          Examples
-        %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.faq}').show()" }
-          FAQ
-        %button{ id: 'halp', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.help}').show()" }
-          Help
+        .btn-group
+          %button{ id: 'asc', class: 'btn btn-success', data: { content: @next_node.question.asc } }
+            ASC
+          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.examples}').show();" }
+            Examples
+          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.faq}').show();" }
+            FAQ
+          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.help}').show();" }
+            Help
       .col-md-12#container.bg-info.hidden

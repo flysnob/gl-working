@@ -44,9 +44,12 @@ class ProjectsController < ApplicationController
     @logger.info("@project_params: #{@project_params}")
 
 
-    @project_nodes = Node.where(project_id: @project.id).to_a
+    @project_nodes = Node.includes(:question)
+                         .where(project_id: @project.id)
+                         .to_a
 
-    @response_nodes = Node.where(project_id: @project.id)
+    @response_nodes = Node.includes(:question)
+                          .where(project_id: @project.id)
                           .where('response_value IS NOT NULL')
                           .to_a
 
@@ -77,7 +80,8 @@ class ProjectsController < ApplicationController
   def previous
     @project_nodes = Node.where(project_id: @project.id).to_a
 
-    @response_nodes = Node.where(project_id: @project.id)
+    @response_nodes = Node.includes(:question)
+                          .where(project_id: @project.id)
                           .where('response_value IS NOT NULL')
                           .to_a
 
@@ -169,15 +173,6 @@ class ProjectsController < ApplicationController
         question: n[:question],
         module_code: n[:question][:module_code],
         question_code: n[:question][:question_code],
-        content: n[:question][:content],
-        sort: n[:question][:sort],
-        kind: n[:question][:kind],
-        summary: n[:question][:summary],
-        report_summary: n[:question][:report_summary],
-        help: n[:question][:help],
-        faq: n[:question][:faq],
-        asc: n[:question][:asc],
-        examples: n[:question][:examples],
         conclusion_1: n[:question][:conclusion_1],
         conclusion_2: n[:question][:conclusion_2],
         conclusion_3: n[:question][:conclusion_3],

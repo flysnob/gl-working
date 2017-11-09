@@ -25,7 +25,7 @@
         - if current_user.admin?
           = link_to edit_question_path(@next_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
             %span.glyphicon.glyphicon-edit{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit question'}
-      - if @next_node.kind == 'q'
+      - if @next_node.question.kind == 'q'
         .col-md-12
           %h4= @next_node.question.content
       .col-md-12
@@ -38,7 +38,7 @@
         %input{ type: 'hidden', name: 'target_node', id: 'target_node', value: '' }
         %input{ type: 'hidden', name: 'return_node', id: 'return_node', value: '' }
         .col-md-12.spacer
-          %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Enter comments related to this node here', style: 'min-width: 100%' }
+          %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Enter comments related to this node here', style: 'min-width: 100%', onclick: "$(this).wysihtml5({'toolbar':{'font-styles':false,'color':false,'image':false,'link':false}};" }
         .col-md-12
           - if @next_node.response_1.present?
             = f.submit @next_node.response_1, { class: 'btn btn-primary node-response', onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')" }
@@ -49,12 +49,12 @@
     .col-md-6.info-container
       .info-buttons
         .btn-group
-          %button{ id: 'asc', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.asc}').show();" }
+          %button{ id: 'asc', class: 'btn btn-success', onclick: "$('#info-container').html('#{@next_node.question.asc.html_safe}').removeClass('hidden');" }
             ASC
-          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.examples}').show();" }
+          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#info-container').html('#{@next_node.question.examples}').removeClass('hidden');" }
             Examples
-          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.faq}').show();" }
+          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#info-container').html('#{@next_node.question.faq.html_safe}').removeClass('hidden');" }
             FAQ
-          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.help}').show();" }
+          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#info-container').html('#{@next_node.question.help}').removeClass('hidden');" }
             Help
-      .col-md-12#container.bg-info.hidden
+      .col-md-12#info-container.bg-info.hidden
