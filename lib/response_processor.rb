@@ -112,6 +112,7 @@ class ResponseProcessor
       if @last_node.kind == 'q'
         # nothing special, so make next_node = target_node
         next_node = fetch_node(@last_node.target_node)
+        @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       elsif @last_node.kind == 'd'
         # makes @response_hash
@@ -120,6 +121,7 @@ class ResponseProcessor
         # update with result of the last response
         update_return_node
         next_node = fetch_node(@return_node.target_node)
+        @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       end
     end

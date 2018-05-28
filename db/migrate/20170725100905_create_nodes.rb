@@ -5,7 +5,7 @@ class CreateNodes < ActiveRecord::Migration[5.0]
       t.string :module_code
       t.string :question_code
       t.text :content
-      t.string :sort
+      t.integer :sort
       t.string :kind
       t.text :summary
       t.text :report_summary
@@ -33,7 +33,7 @@ class CreateNodes < ActiveRecord::Migration[5.0]
       t.string :response_value
       t.string :response_text
       t.string :target_node
-      t.string :index
+      t.integer :index
       t.string :comment
       t.string :conclusion
 
