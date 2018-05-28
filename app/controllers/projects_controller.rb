@@ -23,7 +23,6 @@ class ProjectsController < ApplicationController
 
   def update
     project_params = params.require(:project).permit!
-    @logger.info("#{project_params}")
     
     if @project.update(project_params)
       flash[:success] = 'Project "' + @project.name + '" successfully updated.'
@@ -35,14 +34,7 @@ class ProjectsController < ApplicationController
   end
 
   def work
-    @logger.info("params: #{params}")
-    params.each do |p, v|
-      @logger.info("p-v: #{p}-#{v}")
-    end
-    @logger.info("@last_node[:target_node]: #{@last_node[:target_node]}") if @last_node
     @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id)
-    @logger.info("@project_params: #{@project_params}")
-
 
     @project_nodes = Node.includes(:question)
                          .where(project_id: @project.id)
@@ -56,7 +48,7 @@ class ProjectsController < ApplicationController
     raise Exception.new('No nodes for this project.') if @project_nodes.length.zero?
 
     @length = @response_nodes.length
-    @logger.info("@length: #{@length}")
+
     if @length.zero?
       # first node in the project
       @next_node = @project_nodes.first
@@ -67,13 +59,7 @@ class ProjectsController < ApplicationController
       make_next_node
     else
       # next node in the project
-      @logger.info("@last_node.kind: #{@last_node.kind}")
-      @logger.info("@last_node.return_node: #{@last_node.return_node}")
       make_next_node
-
-      # if the next node is also a decision node, run make_next_node again (recursive)
-      @logger.info("@next_node.kind: #{@next_node.kind}")
-      @logger.info("@next_node.return_node: #{@next_node.return_node}")
     end
   end
 
@@ -91,23 +77,23 @@ class ProjectsController < ApplicationController
   end
   
   def make_next_node
-    return_node_code = @last_node.return_node
+    returns = Return.where(project_id: @project.id)
+
+    return_node_code = returns.length.zero? ? nil : returns.last.return_node_code
+
     @next_node = ResponseProcessor.perform(@last_node, @project_nodes, return_node_code)
+
     if @next_node.kind == 'd'
-      @logger.info("'d' loop")
       # we have a new last node now
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
                             .to_a
-      @logger.info("@response_nodes.length: #{@response_nodes.length}")
       # if @next_node already has an index (from page reload or coming from index)
       @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
-      @logger.info("@index: #{@index}")
       @next_node.update(
         index: @index,
         return_node: params[:return_node]
       )
-      @logger.info("@last_node.return_node: #{@last_node.return_node}")
       @last_node = @next_node
       make_next_node
     else
@@ -118,12 +104,10 @@ class ProjectsController < ApplicationController
                             .where('response_value IS NOT NULL')
                             .to_a
       @index = @response_nodes.length + 1
-      @logger.info("@index: #{@index}")
     end
   end
 
   def destroy
-    @logger.info("'delete")
     @project.destroy if @project
 
     redirect_to projects_path
@@ -166,11 +150,10 @@ class ProjectsController < ApplicationController
 
   def create_node_set
     @nodes.each do |n|
-      @logger.info("n: #{n}")
-
       node_hash = {
         project: @project,
         question: n[:question],
+        kind: n[:question][:kind],
         module_code: n[:question][:module_code],
         question_code: n[:question][:question_code],
         conclusion_1: n[:question][:conclusion_1],
@@ -189,11 +172,9 @@ class ProjectsController < ApplicationController
         boolean: n[:version]['boolean'],
         return: n[:version]['return']
       }
-      @logger.info("node_hash: #{node_hash}")
       Node.create(
         node_hash
       )
-      @logger.info("node[:target_1]: #{Node.last[:target_1]}")
     end
   end
 
@@ -267,7 +248,6 @@ class ProjectsController < ApplicationController
 
   def update_node
     # update with return node if not na. when/how is it cleared?
-    @logger.info("params[:target_node]: #{params[:target_node]}")
     return if params[:response_value].nil?
 
     @last_node.update(
@@ -278,10 +258,6 @@ class ProjectsController < ApplicationController
       comment: params[:comment],
       return_node: params[:return_node]
     )
-    @last_node.save
-    @last_node.reload
-    @logger.info("@last_node[:target_node]: #{@last_node[:target_node]}")
-    @logger.info("@last_node[:index]: #{@last_node[:index]}")
   end
 
   def make_logger
@@ -292,11 +268,7 @@ class ProjectsController < ApplicationController
   def drop_subsequent_nodes
     # Only need to valaluate this if the index of the last node is less than @response_nodes.last.index.
     # This avoids running this when the last node is a decision node
-    @logger.info("@last_node[:index]: #{@last_node[:index]}")
-    @logger.info("@response_nodes.last.index: #{@response_nodes.last.index}")
-    @logger.info("@last_node.kind: #{@last_node.kind}")
     return if @last_node.kind == 'd' || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
-    @logger.info('now drop nodes')
     # if the node already has an answer, and it has now changed, drop all subsequent nodes
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|
@@ -307,6 +279,11 @@ class ProjectsController < ApplicationController
           n.index = nil
           n.save
           @response_nodes - [n]
+        end
+        # destroy any return whose response_node has been reset
+        r = Return.find_by(node_index: n.question_code)
+        if r
+          r.destory
         end
       end
       @response_nodes = Node.where(project_id: @project.id)
