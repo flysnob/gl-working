@@ -171,6 +171,7 @@ class ProjectsController < ApplicationController
       node_hash = {
         project: @project,
         question: n[:question],
+        kind: n[:question][:kind],
         module_code: n[:question][:module_code],
         question_code: n[:question][:question_code],
         conclusion_1: n[:question][:conclusion_1],
@@ -204,7 +205,7 @@ class ProjectsController < ApplicationController
     @project.version.version_nodes.each do |n|
       question = Question.find(n.question_id)
 
-      @nodes.push({question: question, version: n})
+      @nodes.push({ question: question, version: n })
 
       if n.target_module.present?
         build_module_version_nodes(n)
@@ -221,7 +222,7 @@ class ProjectsController < ApplicationController
     module_version.version_nodes.each do |n|
       question = Question.find(n.question_id)
 
-      @nodes.push({question: question, version: n})
+      @nodes.push({ question: question, version: n })
     end
   end
 
@@ -275,9 +276,10 @@ class ProjectsController < ApplicationController
       response_text: params[:commit],
       target_node: params[:target_node],
       index: params[:index].to_f.round(0),
-      comment: params[:comment],
-      return_node: params[:return_node]
+      comment: params[:comment]
     )
+    #update return_node if we're in a submodule
+    @last_node.update(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
     @last_node.save
     @last_node.reload
     @logger.info("@last_node[:target_node]: #{@last_node[:target_node]}")
@@ -298,6 +300,7 @@ class ProjectsController < ApplicationController
     return if @last_node.kind == 'd' || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
     @logger.info('now drop nodes')
     # if the node already has an answer, and it has now changed, drop all subsequent nodes
+    # @TODO: uses unix so if dropped node is 10, it doesn't drop node 2
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|
         if n.index > @last_node.index
@@ -305,6 +308,7 @@ class ProjectsController < ApplicationController
           n.response_text = nil
           n.target_node = nil
           n.index = nil
+          n.return_node = nil
           n.save
           @response_nodes - [n]
         end

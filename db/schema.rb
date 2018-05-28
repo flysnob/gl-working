@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20170916182807) do
     t.string   "module_code"
     t.string   "question_code"
     t.text     "content"
-    t.string   "sort"
+    t.integer  "sort"
     t.string   "kind"
     t.text     "summary"
     t.text     "report_summary"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20170916182807) do
     t.string   "response_value"
     t.string   "response_text"
     t.string   "target_node"
-    t.string   "index"
+    t.integer  "index"
     t.string   "comment"
     t.string   "conclusion"
     t.datetime "created_at",                     null: false
