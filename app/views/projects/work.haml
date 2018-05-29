@@ -14,6 +14,9 @@
     .row.spacer
       .col-md-12
         %h4.panel-title Previous Questions
+      .col-md-12
+        %small
+          %em.text-muted Click on a node to see a previous question and your response.
       .col-md-12.spacer
         %div{ class: 'btn-group', role: 'group' }
           - @response_nodes.each do |n|
@@ -28,9 +31,13 @@
           %h4= "Question #{@index}"
         - if @next_node.question.kind == 'r'
           %h4 Accounting Recommendation
-      - if @next_node.question.kind == 'q'
+        - if @next_node.question.kind == 'd'
+          %h4 Decision
+      - if current_user.admin?
         .col-md-12
-          %h4= @next_node.question.content
+          = "Node #{@next_node.question_code}"
+      .col-md-12
+        %h4= @next_node.question.content
       .col-md-12
         %div= @next_node.question.summary
       = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f|

@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916182807) do
+ActiveRecord::Schema.define(version: 20180526220745) do
 
   create_table "nodes", force: :cascade do |t|
     t.string   "module_code"
     t.string   "question_code"
     t.text     "content"
-    t.integer  "sort"
+    t.string   "sort"
     t.string   "kind"
     t.text     "summary"
     t.text     "report_summary"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20170916182807) do
     t.string   "response_value"
     t.string   "response_text"
     t.string   "target_node"
-    t.integer  "index"
+    t.string   "index"
     t.string   "comment"
     t.string   "conclusion"
     t.datetime "created_at",                     null: false
@@ -104,6 +104,17 @@ ActiveRecord::Schema.define(version: 20170916182807) do
     t.text    "boolean"
     t.integer "project_id"
     t.index ["project_id"], name: "index_responses_on_project_id"
+  end
+
+  create_table "returns", force: :cascade do |t|
+    t.integer  "node_index"
+    t.string   "question_code"
+    t.string   "return_node_code"
+    t.integer  "status",           default: 1, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "project_id"
+    t.index ["project_id"], name: "index_returns_on_project_id"
   end
 
   create_table "subjects", force: :cascade do |t|

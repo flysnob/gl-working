@@ -14,6 +14,9 @@
     .row.spacer
       .col-md-12
         %h4.panel-title Previous Questions
+      .col-md-12
+        %small
+          %em.text-muted Click on a node to see a previous question and your response.
       .col-md-12.spacer
         %div{ class: 'btn-group', role: 'group' }
           - @response_nodes.each do |n|
@@ -24,15 +27,22 @@
   .node.spacer
     .col-md-6.question-container
       .col-md-12
-        %h4= "Question #{@index}"
         - if current_user.admin?
           = link_to edit_question_path(@next_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
             %span.glyphicon.glyphicon-edit{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit question'}
-      - if @next_node.question.kind == 'q'
+        - if @next_node.question.kind == 'q'
+          %h4= "Question #{@index}"
+        - if @next_node.question.kind == 'r'
+          %h4 Accounting Recommendation
+        - if @next_node.question.kind == 'd'
+          %h4 Decision
+      - if current_user.admin?
         .col-md-12
-          %h4= @next_node.question.content
+          = "Node #{@next_node.question_code}"
       .col-md-12
-        %div= @next_node.question.summary
+        %h4= @next_node.question.content
+      .col-md-12
+        %div= simple_format(@next_node.question.summary, {}, wrapper_tag: 'div')
       = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f|
         %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
         %input{ type: 'hidden', name: 'node_id', id: 'node_id', value: @next_node.id }
@@ -55,12 +65,12 @@
     .col-md-6.info-container
       .info-buttons
         .btn-group
-          %button{ id: 'asc', class: 'btn btn-success', data: { content: @next_node.question.asc } }
+          %button{ id: 'asc', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.asc)}').removeClass('hidden');" }
             ASC
-          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.examples}').show();" }
+          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.examples)}').removeClass('hidden');" }
             Examples
-          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.faq}').show();" }
+          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.faq)}').removeClass('hidden');" }
             FAQ
-          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#container').html('#{@next_node.question.help}').show();" }
+          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.help)}').removeClass('hidden');" }
             Help
       .col-md-12#container.bg-info.hidden
