@@ -1,12 +1,16 @@
 %td
   = link_to project, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = project.name
-%td
-%td
+%td= project.date
+%td= project.subject.name
+%td= project.created_at.strftime('%m/%d/%Y %H:%m')
+%td= project.updated_at.strftime('%m/%d/%Y %H:%m')
 %td.actions
   = link_to work_project_path(project), class: 'work-project-link' do
-    %span.glyphicon.glyphicon-tasks{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Process'}
+    %span.glyphicon.glyphicon-folder-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Open'}
   = link_to edit_project_path(project), class: 'edit-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
+  = link_to edit_project_path(project), class: 'edit-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-duplicate{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Copy'}
   = link_to delete_modal_project_path(project), class: 'delete-modal-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-trash{ data: { toggle: 'tooltip', placement: 'top' }, title: 'Delete' }

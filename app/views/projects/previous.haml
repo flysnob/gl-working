@@ -12,6 +12,7 @@
         .col-md-12= "Started on #{@project.created_at.strftime('%m/%d/%Y')}"
   - unless @response_nodes.length.zero?
     .row.spacer
+      .col-md-12.previous-container
       .col-md-12
         %h4.panel-title Previous Questions
       .col-md-12
@@ -64,13 +65,35 @@
             = "You previously answered '#{@next_node.response_text}'"
     .col-md-6.info-container
       .info-buttons
-        .btn-group
-          %button{ id: 'asc', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.asc)}').removeClass('hidden');" }
-            ASC
-          %button{ id: 'examples', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.examples)}').removeClass('hidden');" }
-            Examples
-          %button{ id: 'faq', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.faq)}').removeClass('hidden');" }
-            FAQ
-          %button{ id: 'help', class: 'btn btn-success', onclick: "$('#info-container').html('#{simple_format(@next_node.question.help)}').removeClass('hidden');" }
-            Help
-      .col-md-12#container.bg-info.hidden
+        %ul.nav.nav-tabs{ id: 'infotabs', role: 'tablist' }
+          - if @next_node.question.summary.present?
+            %li{ role: 'presentation', class: 'active' }
+              %a{ href: 'summary', id: 'help-tab', role: 'tab', 'data-toggle': 'tab' } Summary
+          - if @next_node.question.help.present?
+            %li{ role: 'presentation' }
+              %a{ href: 'help', id: 'help-tab', role: 'tab', 'data-toggle': 'tab' } Help
+          - if @next_node.question.examples.present?
+            %li{ role: 'presentation' }
+              %a{ href: 'examples', id: 'examples-tab', role: 'tab', 'data-toggle': 'tab' } Examples
+          - if @next_node.question.faq.present?
+            %li{ role: 'presentation' }
+              %a{ href: 'faq', id: 'faq-tab', role: 'tab', 'data-toggle': 'tab' } FAQ
+          - if @next_node.question.asc.present?
+            %li{ role: 'presentation' }
+              %a{ href: 'asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab' } ASC
+        .tab-content
+          - if @next_node.question.summary.present?
+            .tab-pane{ id: 'summary', role: 'tabpanel', class: 'active' }
+              = simple_format(@next_node.question.summary)
+          - if @next_node.question.help.present?
+            .tab-pane{ id: 'help', role: 'tabpanel' }
+              = simple_format(@next_node.question.help)
+          - if @next_node.question.examples.present?
+            .tab-pane{ id: 'examples', role: 'tabpanel' }
+              = simple_format(@next_node.question.examples)
+          - if @next_node.question.faq.present?
+            .tab-pane{ id: 'faq', role: 'tabpanel' }
+              = simple_format(@next_node.question.faq)
+          - if @next_node.question.asc.present?
+            .tab-pane{ id: 'asc', role: 'tabpanel' }
+              = simple_format(@next_node.question.asc)
