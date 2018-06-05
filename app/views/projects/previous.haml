@@ -24,7 +24,7 @@
             = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{n.kind == 'd' ? 'btn btn-info' : 'btn btn-default'}", title: "Node question(ID #{n.question_code}): #{n.kind == 'd' ? n.summary : n.content}" }
     .row.spacer
       .col-md-12
-        =link_to 'Return to Last Node', work_project_path, { class: 'btn btn-default' }
+        =link_to "Return to Question #{@response_nodes.length + 1}", work_project_path, { class: 'btn btn-default' }
   .node.spacer
     .col-md-6.question-container
       .col-md-12
@@ -42,6 +42,7 @@
           = "Node #{@next_node.question_code}"
       .col-md-12
         %h4= @next_node.question.content
+      .col-md-12= simple_format(@next_node.question.summary)
       = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f|
         %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
         %input{ type: 'hidden', name: 'node_id', id: 'node_id', value: @next_node.id }
@@ -51,7 +52,7 @@
         %input{ type: 'hidden', name: 'return_node', id: 'return_node', value: '' }
         - if @next_node.question.kind != 'd'
           .col-md-12.spacer
-            %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Enter comments related to this node here', style: 'min-width: 100%', value: @next_node.comment }
+            %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Enter comments related to this question here. Your comments will appear in the printed report.', style: 'min-width: 100%', value: simple_format(@next_node.comment) }
           .col-md-12
             - if @next_node.response_1.present?
               = f.submit @next_node.response_1, { class: "btn #{@next_node.response_text == @next_node.response_1 ? 'btn-primary' : 'btn-default'} node-response", onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')" }
@@ -65,9 +66,6 @@
       - if @next_node.question.has_contents?
         .info-buttons
           %ul.nav.nav-tabs{ id: 'infotabs', role: 'tablist' }
-            - if @next_node.question.summary.present?
-              %li{ role: 'presentation', class: 'active' }
-                %a{ href: '#summary', id: 'summary-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'summary' } Summary
             - if @next_node.question.help.present?
               %li{ role: 'presentation' }
                 %a{ href: '#help', id: 'help-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'help' } Help
@@ -81,9 +79,6 @@
               %li{ role: 'presentation' }
                 %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
           .tab-content
-            - if @next_node.question.summary.present?
-              .tab-pane{ id: 'summary', role: 'tabpanel', class: 'active' }
-                = simple_format(@next_node.question.summary)
             - if @next_node.question.help.present?
               .tab-pane{ id: 'help', role: 'tabpanel' }
                 = simple_format(@next_node.question.help)

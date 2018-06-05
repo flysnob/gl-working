@@ -1,0 +1,147 @@
+@import "colors";
+
+.subjects-table {
+  margin: 10px auto 10px auto;
+
+  .subjects-header {
+    th.ytd {
+      padding-right: 15px;
+      text-align: right;
+    }
+
+    th.actions {
+      text-align: center;
+    }
+  }
+
+  td.actions {
+    text-align: center;
+    a {
+      &:hover {
+        text-decoration: none;
+      }
+      &:focus {
+        text-decoration: none;
+      }
+    }
+    .glyphicon {
+      padding-left: 5px;
+    }
+  }
+}
+
+tr.subject {
+  border-bottom: 3px solid $faint_gray;
+
+  .code {
+  }
+
+  .name {
+    color: $menu_header;
+  }
+
+  .description {
+    color: $color_mountain_mist_approx;
+  }
+
+  .category {
+
+  }
+
+  .balance {
+    color: $menu_header;
+    padding-right: 15px;
+    text-align: right;
+  }
+
+  .actions {
+    text-align: center;
+
+    .open-subject {
+      color: $warning_color;
+    }
+  }
+}
+
+.section.subject {
+  h1 {
+    margin-top: 10px !important;
+    margin-bottom: 0px !important;
+  }
+
+  h3 {
+    color: $color_mountain_mist_approx;
+    margin-top: -5px !important;
+    margin-bottom: 20px;
+
+    .date {
+      color: $charcoal;
+      font-weight: 500;
+    }
+  }
+
+  .category {
+    color: $color_mountain_mist_approx;
+    font-size: 21px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+
+  .transactions {
+    margin-top: 10px;
+
+    .transactions-header {
+      border-bottom: 1px solid $color_mountain_mist_approx;
+    }
+
+    .transactions-footer {
+      border-top: 1px solid $color_mountain_mist_approx;
+      .balance {
+        float: right;
+      }
+    }
+
+    .transactions-table {
+      .currency {
+        text-align: right;
+        padding-right: 30px;
+        width: 150px;
+      }
+
+      tr.summary td {
+        font-size: 21px;
+        border-top: 1px solid $color_mountain_mist_approx;
+      }
+
+      td.summary {
+        padding-left: 0px;
+      }
+
+      .padding {
+        width: 150px;
+      }
+
+      .office {
+        text-align: center;
+        width: 65px;
+      }
+
+      .journal-number {
+        text-align: right;
+        padding-right: 10px;
+      }
+
+      .voided {
+        text-align: center;
+      }
+
+      .head {
+        font-size: 21px;
+      }
+
+      th.actions {
+        text-align: left;
+      }
+    }
+  }
+}

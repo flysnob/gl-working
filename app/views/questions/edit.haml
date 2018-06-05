@@ -25,19 +25,19 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :content
-        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } } , class: 'form-control'
+        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :summary
-        = f.text_area :summary, class: 'form-control wysihtml5'
+        = f.text_area :summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :report_summary
-        = f.text_area :report_summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } } , class: 'form-control wysihtml5'
+        = f.text_area :report_summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
@@ -50,25 +50,25 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :help
-        = f.text_area :help, class: 'form-control'
+        = f.text_area :help, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :faq
-        = f.text_area :faq, class: 'form-control'
+        = f.text_area :faq, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :asc
-        = f.text_area :asc, class: 'form-control'
+        = f.text_area :asc, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :examples
-        = f.text_area :examples, class: 'form-control'
+        = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
