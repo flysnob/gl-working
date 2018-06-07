@@ -111,7 +111,8 @@ class ResponseProcessor
       @logger.info("evaluate_target_node_return if @last_node.kind: #{@last_node.kind}")
       if @last_node.kind == 'q'
         # nothing special, so make next_node = target_node
-        next_node = fetch_node(@last_node.target_node)
+        update_return_node
+        next_node = fetch_node(@return_node.target_node)
         @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       elsif @last_node.kind == 'd'

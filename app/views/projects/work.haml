@@ -21,7 +21,7 @@
       .col-md-12.spacer
         %div{ class: 'btn-group', role: 'group' }
           - @response_nodes.each do |n|
-            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{n.kind == 'd' ? 'btn btn-info' : 'btn btn-default'}", title: "Node question(ID #{n.question_code}): #{n.kind == 'd' ? n.summary : n.content}" }
+            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{n.question.kind == 'd' ? 'btn btn-info' : 'btn btn-default'}", title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}" }
   .node.spacer
     .col-md-6.question-container
       .col-md-12
