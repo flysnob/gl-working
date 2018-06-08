@@ -1,0 +1,21 @@
+.section.home
+  .col-md-12
+    .jumbotron
+      .text-center
+        .col-md-12
+          %h1 GAAP Logic
+        .row
+          - if user_signed_in?
+            =link_to "Start a Project", projects_path, { class: 'btn navbar-btn btn-primary' }
+          - else
+            =link_to "Please sign in to start a project. Registration is free!", new_user_session_path, { class: 'btn navbar-btn btn-primary' }
+      %p GAAP Logic is...
+  .col-md-12
+    .well
+      %h2 Live Modules
+      .live
+        .panel.panel-default
+          %table
+            .list-group
+              - @live_subjects.each do |subject|
+                = render partial: 'subjects/subject_home', locals: { subject: subject }

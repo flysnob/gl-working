@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   authenticate :user do
-    root to: 'projects#index'
+    root to: 'pages#index'
 
     resources :users
 
@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     end
 
     resources :subjects, except: [] do
+      get 'home', to: 'subjects#subject_home'
       member do
         get 'delete_modal', to: 'subjects#delete_modal'
         patch 'delete', to: 'subjects#delete'
