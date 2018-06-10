@@ -31,6 +31,7 @@
 }
 
 tr.project {
+
   border-bottom: 3px solid $faint_gray;
 
   .code {
@@ -70,7 +71,7 @@ tr.project {
   }
 
   h3 {
-    color: $color_mountain_mist_approx;
+    color: $brand-primary;
     margin-top: -5px !important;
     margin-bottom: 20px;
 

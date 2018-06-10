@@ -5,13 +5,15 @@
     border-right: 3px #e7e7e7 solid;
     border-top: 3px #e7e7e7 solid;
     padding-right: 5px;
-    min-height: 500px;
+    overflow: scroll;
+    max-height: 50vh;
   }
   .info-container {
     border-top: 3px #e7e7e7 solid;
     padding-left: 15px;
     padding-top: 10px;
-    min-height: 500px;
+    overflow: scroll;
+    max-height: 50vh;
   }
   .info-elements {
     margin-left: 10px !important;

@@ -1,3 +1,9 @@
+$brand-primary: #2a69a2;
+$brand-success: #6ea952;
+$brand-info: #9f70bc;
+$brand-warning: #f4ae5c;
+$brand-danger: #db634e;
+
 // import the CSS framework
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -130,4 +136,9 @@ main {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+body {
+  padding-bottom: 40px;
+  padding-top: 40px;
 }

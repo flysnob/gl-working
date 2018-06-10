@@ -1,6 +1,6 @@
 -# navigation styled for Bootstrap 3.0
 - if current_user
-  %nav.navbar.navbar-default
+  %nav.navbar.navbar-default.navbar-fixed-top
     .container-fluid
       .navbar-header
         %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
@@ -27,3 +27,15 @@
                 %li.divider
                 %li
                   = link_to("Sign out", destroy_user_session_path, method: :delete)
+
+%nav.navbar.navbar-default.navbar-fixed-bottom
+  .container-fluid
+    .navbar-header
+      %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+    .collapse.navbar-collapse
+      %ul.nav.navbar-nav
+        = render 'layouts/footer_links'

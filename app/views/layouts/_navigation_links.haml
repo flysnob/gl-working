@@ -1,10 +1,11 @@
 %ul.nav.navbar-nav
-  =link_to "Projects", projects_path, { class: 'btn navbar-btn btn-primary spacer' }
+  %li
+    =link_to "Projects", projects_path
 - if current_user.try(:admin?)
-  %ul.nav.navbar-nav
-    =link_to "Questions", questions_path, { class: 'btn navbar-btn btn-primary spacer' }
-  %ul.nav.navbar-nav
-    =link_to "Subjects", subjects_path, { class: 'btn navbar-btn btn-primary spacer' }
-  %ul.nav.navbar-nav
-    =link_to "Versions", versions_path, { class: 'btn navbar-btn btn-primary spacer' }
+  %li.nav.navbar-nav
+    =link_to "Questions", questions_path
+  %li.nav.navbar-nav
+    =link_to "Subjects", subjects_path
+  %li.nav.navbar-nav
+    =link_to "Versions", versions_path
 %ul.nav.navbar-nav= render 'layouts/nav_links_for_auth'
