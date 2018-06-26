@@ -7,4 +7,8 @@ class Question < ActiveRecord::Base
   def has_contents?
     help.present? || examples.present? || faq.present? || asc.present?
   end
+
+  def has_summary?
+    summary.present?
+  end
 end
