@@ -15,8 +15,6 @@
         .navbar-right
           %span.navbar-text<
             = link_to "#{current_user.try(:name) || current_user.try(:email)}", edit_user_registration_path
-            %span{style: 'margin-right:5px;'}='|'
-            = Time.now.strftime('%A, %B %d, %Y')
           %ul.nav.navbar-nav.navbar-icon-list
             %li.dropdown
               %a.dropdown-toggle{href: "#", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
@@ -37,5 +35,5 @@
         %span.icon-bar
         %span.icon-bar
     .collapse.navbar-collapse
-      %ul.nav.navbar-nav
+      %ul.nav.navbar-nav.navbar-right
         = render 'layouts/footer_links'

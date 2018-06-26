@@ -25,7 +25,7 @@
     .row.spacer
       .col-md-12
         =link_to "Return to Question #{@response_nodes.length + 1}", work_project_path, { class: 'btn btn-default' }
-  .node.spacer
+  .previous-node.spacer
     .col-md-6.question-container
       .col-md-12
         - if current_user.admin?
@@ -33,16 +33,24 @@
             %span.glyphicon.glyphicon-edit{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit question'}
         - if @next_node.question.kind == 'q'
           %h4= "Question #{@index}"
-        - if @next_node.question.kind == 'r'
-          %h4 Accounting Recommendation
-        - if @next_node.question.kind == 'd'
-          %h4 Decision
       - if current_user.admin?
         .col-md-12
           = "Node #{@next_node.question_code}"
       .col-md-12
-        %h4= @next_node.question.content
-      .col-md-12= simple_format(@next_node.question.summary)
+        - if @next_node.question.kind == 'q'
+          %h4= @next_node.question.content
+        - if @next_node.question.kind == 'd'
+          .panel.panel-info
+            .panel-heading
+              %h4 Decision
+            .panel-body
+              = @next_node.question.content
+        - if @next_node.question.kind == 'r'
+          .panel.panel-success
+            .panel-heading
+              %h4 Accounting Recommendation
+            .panel-body
+              = @next_node.question.content
       = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f|
         %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
         %input{ type: 'hidden', name: 'node_id', id: 'node_id', value: @next_node.id }
@@ -66,6 +74,9 @@
       - if @next_node.question.has_contents?
         .info-buttons
           %ul.nav.nav-tabs{ id: 'infotabs', role: 'tablist' }
+            - if @next_node.question.summary.present?
+              %li{ role: 'presentation', class: 'active' }
+                %a{ href: '#summary', id: 'summary-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'summary' } Summary 
             - if @next_node.question.help.present?
               %li{ role: 'presentation' }
                 %a{ href: '#help', id: 'help-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'help' } Help
@@ -79,6 +90,9 @@
               %li{ role: 'presentation' }
                 %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
           .tab-content
+            - if @next_node.question.summary.present?
+              .tab-pane{ id: 'summary', class: 'active', role: 'tabpanel' }
+                = simple_format(@next_node.question.summary)
             - if @next_node.question.help.present?
               .tab-pane{ id: 'help', role: 'tabpanel' }
                 = simple_format(@next_node.question.help)
