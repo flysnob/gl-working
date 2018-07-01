@@ -19,7 +19,6 @@ modalize = ->
     $form = $('#modal form')
     
     $form.find('textarea').each (index, element) ->
-      console.log('index')
       $(element).wysihtml5(
         { 'toolbar': {
           'font-styles': false,
@@ -30,7 +29,6 @@ modalize = ->
       )
   
   $(document).on 'change', '#project_subject', (evt) ->
-    console.log('change')
     subject = $('#project_subject').val()
     $.ajax "/subjects/#{subject}/versions",
       datatype: 'json',

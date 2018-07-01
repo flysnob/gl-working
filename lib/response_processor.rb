@@ -121,6 +121,7 @@ class ResponseProcessor
 
         # update with result of the last response
         update_return_node
+
         next_node = fetch_node(@return_node.target_node)
         @logger.info("next_node.code: #{next_node.question_code}")
         next_node
@@ -177,6 +178,7 @@ class ResponseProcessor
     end
 
     def evaluate_decision_node
+      @logger.info("evaluate_decision_node")
       # Get all responses related to decision
       decision_responses = @responses.select { |r| r[:decision_node] == @last_node.question_code }
 
@@ -195,10 +197,10 @@ class ResponseProcessor
             meets = true
           end
         
-        # Test 'and' only if meets is truthy because you are looking for a single failure. Must pass all nodes, so any false response (fails?) means the
-        # entire decision is falsy (i.e., meets == false).
-        # Note: Have to test condition meets == nil even though it is falsy (versus meets == false) in case meets is still the start value, otherwise
-        # meets never has the possibility of ever being truthy.
+          # Test 'and' only if meets is truthy because you are looking for a single failure. Must pass all nodes, so any false response (fails?) means the
+          # entire decision is falsy (i.e., meets == false).
+          # Note: Have to test condition meets == nil even though it is falsy (versus meets == false) in case meets is still the start value, otherwise
+          # meets never has the possibility of ever being truthy.
         when 'and'
           if meets == nil && r.pass?
             meets = true
@@ -215,6 +217,7 @@ class ResponseProcessor
         make_response_hash(@last_node.response_2, @last_node.target_2, 2)
       end
         
+      @logger.info("@response_hash: #{@response_hash}")
       update_decision_node
     end
 
@@ -232,6 +235,9 @@ class ResponseProcessor
       @last_node.response_text = @response_hash[:response_text]
       @last_node.return_node = @last_node.return_node unless @last_node.return
       @last_node.save
+      @logger.info("@last_node.question_code: #{@last_node.question_code}")
+      @logger.info("@last_node.response_value: #{@last_node.response_value}")
+      @logger.info("@last_node.response_text: #{@last_node.response_text}")
     end
 
     def make_logger

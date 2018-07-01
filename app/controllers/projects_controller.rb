@@ -290,7 +290,7 @@ class ProjectsController < ApplicationController
         # destroy any return whose response_node has been reset
         r = Return.find_by(node_index: n.question_code)
         if r
-          r.destory
+          r.destroy
         end
       end
       @response_nodes = Node.where(project_id: @project.id)

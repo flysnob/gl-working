@@ -1,0 +1,68 @@
+- if @next_node.question.kind != 'i'
+  - if @next_node.question.has_contents? || @next_node.question.has_summary?
+    .info-buttons
+      %ul.nav.nav-tabs{ id: 'infotabs', role: 'tablist' }
+        - if @next_node.question.summary.present?
+          %li{ role: 'presentation', class: 'active' }
+            %a{ href: '#summary', id: 'summary-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'summary' } Summary 
+        - if @next_node.question.help.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#help', id: 'help-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'help' } Help
+        - if @next_node.question.examples.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#examples', id: 'examples-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'examples' } Examples
+        - if @next_node.question.faq.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#faq', id: 'faq-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'faq' } FAQ
+        - if @next_node.question.asc.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
+- else
+  - if @next_node.question.has_contents?
+    .info-buttons
+      %ul.nav.nav-tabs{ id: 'infotabs', role: 'tablist' }
+        - if @next_node.question.help.present?
+          %li{ role: 'presentation', class: 'active' }
+            %a{ href: '#help', id: 'help-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'help' } Help
+        - if @next_node.question.examples.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#examples', id: 'examples-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'examples' } Examples
+        - if @next_node.question.faq.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#faq', id: 'faq-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'faq' } FAQ
+        - if @next_node.question.asc.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
+- if @next_node.question.kind != 'i'
+  - if @next_node.question.has_contents? || @next_node.question.has_summary?
+    .tab-content
+      - if @next_node.question.summary.present?
+        .tab-pane{ id: 'summary', class: 'active', role: 'tabpanel' }
+          = simple_format(@next_node.question.summary)
+      - if @next_node.question.help.present?
+        .tab-pane{ id: 'help', role: 'tabpanel' }
+          = simple_format(@next_node.question.help)
+      - if @next_node.question.examples.present?
+        .tab-pane{ id: 'examples', role: 'tabpanel' }
+          = simple_format(@next_node.question.examples)
+      - if @next_node.question.faq.present?
+        .tab-pane{ id: 'faq', role: 'tabpanel' }
+          = simple_format(@next_node.question.faq)
+      - if @next_node.question.asc.present?
+        .tab-pane{ id: 'asc', role: 'tabpanel' }
+          = simple_format(@next_node.question.asc)
+- else
+  - if @next_node.question.has_contents?
+    .tab-content
+      - if @next_node.question.help.present?
+        .tab-pane{ id: 'help', role: 'tabpanel', class: 'active' }
+          = simple_format(@next_node.question.help)
+      - if @next_node.question.examples.present?
+        .tab-pane{ id: 'examples', role: 'tabpanel' }
+          = simple_format(@next_node.question.examples)
+      - if @next_node.question.faq.present?
+        .tab-pane{ id: 'faq', role: 'tabpanel' }
+          = simple_format(@next_node.question.faq)
+      - if @next_node.question.asc.present?
+        .tab-pane{ id: 'asc', role: 'tabpanel' }
+          = simple_format(@next_node.question.asc)
