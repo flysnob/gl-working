@@ -2,7 +2,7 @@ require 'csv'
 # loads version_nodes from csv
 class LoadVersionNodes
   class << self
-    def perform(path = '../../Downloads/Nodes 12-17-2017 - Sheet7.csv')
+    def perform(path = 'app/assets/nodes/nodes.csv')
       CSV.foreach(path, headers: true) do |row|
         next unless VersionNode.where(
 											version: Version.find_by(module_code: row[6]),

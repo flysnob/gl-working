@@ -2,7 +2,7 @@ require 'csv'
 # loads questions from csv file
 class LoadQuestions
   class << self
-    def perform(path = '../../Downloads/Nodes 12-17-2017 - Sheet7.csv')
+    def perform(path = 'app/assets/nodes/nodes.csv')
       CSV.foreach(path, headers: true) do |row|
         Question.find_or_create_by(
           question_code: row[3],
