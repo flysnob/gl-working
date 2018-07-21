@@ -1,0 +1,12 @@
+saveComment = ->
+  comment = $('#comment').val()
+  console.log(comment)
+  $.ajax "nodes/#{node}/comment",
+    datatype: 'json',
+    success: (data) ->
+      console.log(data)
+      true
+    error:
+      false
+
+$('#comment').on('blur', saveComment)

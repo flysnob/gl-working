@@ -4,7 +4,11 @@ class LoadVersionNodes
   class << self
     def perform(path = '../../Downloads/Nodes 12-17-2017 - Sheet7.csv')
       CSV.foreach(path, headers: true) do |row|
-        VersionNode.create(
+        next unless VersionNode.where(
+											version: Version.find_by(module_code: row[6]),
+            					question: Question.find_by(question_code: row[3])
+										).nil?
+        VersionNode.find_or_create_by(
           response_1: row[11],
           target_1: row[12],
           response_2: row[13],

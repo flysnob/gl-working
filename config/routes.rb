@@ -11,6 +11,12 @@ Rails.application.routes.draw do
 
     resources :users
 
+    resources :nodes, only: [] do
+      member do
+        get 'comment', to: 'nodes#comment'
+      end
+    end
+
     resources :projects, except: [] do
       member do
         get 'work', to: 'projects#work'

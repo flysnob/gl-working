@@ -8,7 +8,7 @@
 %td.actions
   = link_to show_version_nodes_version_path(version), class: 'show-json-link' do
     %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Show version nodes'}
-  = link_to edit_version_path(version), class: 'edit-version-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+  = link_to edit_version_path(version), class: 'edit-version-link' do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
   = link_to delete_modal_version_path(version), class: 'delete-modal-version-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-trash{ data: { toggle: 'tooltip', placement: 'top' }, title: 'Delete' }

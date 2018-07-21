@@ -1,0 +1,14 @@
+.col-md-12
+  - if current_user.admin?
+    = link_to edit_question_path(@next_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+      = "Node #{@next_node.question_code}"
+  %h4= "Question #{@index}"
+  = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f| 
+    %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
+    %input{ type: 'hidden', name: 'node_id', id: 'node_id', value: @next_node.id }
+    %input{ type: 'hidden', name: 'index', id: 'index', value: @index }
+    %input{ type: 'hidden', name: 'response_value', id: 'response_value', value: '' }
+    %input{ type: 'hidden', name: 'target_node', id: 'target_node', value: '' }
+    %input{ type: 'hidden', name: 'return_node', id: 'return_node', value: '' }
+    .col-md-12
+      = f.radio 'Exception 1', { class: 'radio', name: 'radios', value: 'radio1' }

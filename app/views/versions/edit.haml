@@ -19,6 +19,6 @@
       %th Return?
       %th.actions Actions
     %tbody
-      - @version.json.each do |json|
+      - @version.version_nodes.each do |json|
         %tr
           = render json

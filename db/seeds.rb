@@ -8,8 +8,16 @@
 # user = CreateAdminService.new.call
 # puts 'CREATED ADMIN USER: ' << user.email
 
-User.find_or_create_by(name: 'flysnob', email: 'flysnob@gmail.com')
-User.find_or_create_by(name: 'mark', email: 'mlefferscpa@yahoo.com')
+def create_user(username, email, password, role, name)
+	u = User.create_with(username: username, email: email, password: password, role: role).find_or_create_by(name: name)
+end
+
+puts 'Creating users'
+
+create_user('flysnob', 'flysnob@gmail.com', 'bgt6yhbg', :user, 'flysnob')
+create_user('mark', 'mlefferscpa@yahoo.com', 'bgt6yhbg', :user, 'mark')
+
+puts 'Creating subjects'
 
 subject_1 = Subject.find_or_create_by(name: 'Equity-Linked Contracts')
 subject_2 = Subject.find_or_create_by(name: 'Freestanding Derivative Exceptions - Equity-Linked Contracts')
@@ -25,6 +33,8 @@ subject_11 = Subject.find_or_create_by(name: "Definition of a Derivative - Embed
 subject_12 = Subject.find_or_create_by(name: "Conventional Convertible Debt")
 subject_13 = Subject.find_or_create_by(name: "Beneficial Conversion Feature")
 
+puts 'Creating versions'
+
 version_1 = Version.find_or_create_by(subject: subject_1, module_code: '10', effective_date: Date.strptime('01/01/2010', '%m/%d/%Y'), version_number: '1')
 version_2 = Version.find_or_create_by(subject: subject_2, module_code: '12', effective_date: Date.strptime('01/01/2010', '%m/%d/%Y'), version_number: '1')
 version_3 = Version.find_or_create_by(subject: subject_3, module_code: '21', effective_date: Date.strptime('01/01/2010', '%m/%d/%Y'), version_number: '1')
@@ -39,3 +49,10 @@ version_11 = Version.find_or_create_by(subject: subject_11, module_code: '19', e
 version_12 = Version.find_or_create_by(subject: subject_12, module_code: '17', effective_date: Date.strptime('01/01/2010', '%m/%d/%Y'), version_number: '1')
 version_13 = Version.find_or_create_by(subject: subject_13, module_code: '18', effective_date: Date.strptime('01/01/2010', '%m/%d/%Y'), version_number: '1')
 
+puts 'Creating questions'
+
+LoadQuestions.perform
+
+puts 'Creating version nodes'
+
+LoadVersionNodes.perform

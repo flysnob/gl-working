@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180526220745) do
+ActiveRecord::Schema.define(version: 20180703185220) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "nodes", force: :cascade do |t|
     t.string   "module_code"
@@ -50,9 +53,9 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.integer  "project_id"
     t.integer  "question_id"
     t.integer  "subject_id"
-    t.index ["project_id"], name: "index_nodes_on_project_id"
-    t.index ["question_id"], name: "index_nodes_on_question_id"
-    t.index ["subject_id"], name: "index_nodes_on_subject_id"
+    t.index ["project_id"], name: "index_nodes_on_project_id", using: :btree
+    t.index ["question_id"], name: "index_nodes_on_question_id", using: :btree
+    t.index ["subject_id"], name: "index_nodes_on_subject_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -65,8 +68,8 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.integer  "user_id"
     t.integer  "subject_id"
     t.integer  "version_id"
-    t.index ["subject_id"], name: "index_projects_on_subject_id"
-    t.index ["version_id"], name: "index_projects_on_version_id"
+    t.index ["subject_id"], name: "index_projects_on_subject_id", using: :btree
+    t.index ["version_id"], name: "index_projects_on_version_id", using: :btree
   end
 
   create_table "questions", force: :cascade do |t|
@@ -88,7 +91,8 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "subject_id"
-    t.index ["subject_id"], name: "index_questions_on_subject_id"
+    t.boolean  "scope"
+    t.index ["subject_id"], name: "index_questions_on_subject_id", using: :btree
   end
 
   create_table "responses", force: :cascade do |t|
@@ -103,7 +107,7 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.text    "conclusion"
     t.text    "boolean"
     t.integer "project_id"
-    t.index ["project_id"], name: "index_responses_on_project_id"
+    t.index ["project_id"], name: "index_responses_on_project_id", using: :btree
   end
 
   create_table "returns", force: :cascade do |t|
@@ -114,7 +118,7 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.integer  "project_id"
-    t.index ["project_id"], name: "index_returns_on_project_id"
+    t.index ["project_id"], name: "index_returns_on_project_id", using: :btree
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -139,8 +143,8 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.datetime "updated_at",                          null: false
     t.string   "name"
     t.integer  "role"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
   create_table "version_nodes", force: :cascade do |t|
@@ -160,8 +164,8 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.datetime "updated_at",                     null: false
     t.integer  "version_id"
     t.integer  "question_id"
-    t.index ["question_id"], name: "index_version_nodes_on_question_id"
-    t.index ["version_id"], name: "index_version_nodes_on_version_id"
+    t.index ["question_id"], name: "index_version_nodes_on_question_id", using: :btree
+    t.index ["version_id"], name: "index_version_nodes_on_version_id", using: :btree
   end
 
   create_table "versions", force: :cascade do |t|
@@ -174,7 +178,19 @@ ActiveRecord::Schema.define(version: 20180526220745) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "subject_id"
-    t.index ["subject_id"], name: "index_versions_on_subject_id"
+    t.index ["subject_id"], name: "index_versions_on_subject_id", using: :btree
   end
 
+  add_foreign_key "nodes", "projects"
+  add_foreign_key "nodes", "questions"
+  add_foreign_key "nodes", "subjects"
+  add_foreign_key "projects", "subjects"
+  add_foreign_key "projects", "users"
+  add_foreign_key "projects", "versions"
+  add_foreign_key "questions", "subjects"
+  add_foreign_key "responses", "projects"
+  add_foreign_key "returns", "projects"
+  add_foreign_key "version_nodes", "questions"
+  add_foreign_key "version_nodes", "versions"
+  add_foreign_key "versions", "subjects"
 end

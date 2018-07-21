@@ -36,14 +36,9 @@ class ProjectsController < ApplicationController
   def work
     @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id)
 
-    @project_nodes = Node.includes(:question)
-                         .where(project_id: @project.id)
-                         .to_a
+		fetch_nodes
 
-    @response_nodes = Node.includes(:question)
-                          .where(project_id: @project.id)
-                          .where('response_value IS NOT NULL')
-                          .to_a
+		@response_nodes.sort_by! { |n| n[:index] }
 
     raise Exception.new('No nodes for this project.') if @project_nodes.length.zero?
 
@@ -51,7 +46,7 @@ class ProjectsController < ApplicationController
 
     if @length.zero?
       # first node in the project
-      @next_node = @project_nodes.first
+      @next_node = @project_nodes.select { |n| n.question_code == "#{@project.version.module_code}-1" }.first
       @index = 1 
     elsif @last_node.nil?
       # coming from project index with existing nodes
@@ -64,17 +59,23 @@ class ProjectsController < ApplicationController
   end
 
   def previous
-    @project_nodes = Node.where(project_id: @project.id).to_a
-
-    @response_nodes = Node.includes(:question)
-                          .where(project_id: @project.id)
-                          .where('response_value IS NOT NULL')
-                          .to_a
-
+		fetch_nodes
     @next_node = @project_nodes.select { |q| q[:question_code] == params[:node_code] }.first
     @current_node = @project_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
     @index = @next_node.index
   end
+
+	def fetch_nodes
+    @project_nodes = Node.includes(:question)
+                         .where(project_id: @project.id)
+                         .to_a
+
+    @response_nodes = Node.includes(:question)
+                          .where(project_id: @project.id)
+                          .where('response_value IS NOT NULL')
+													.order(index: :asc)
+                          .to_a
+	end
   
   def make_next_node
     returns = Return.where(project_id: @project.id)
@@ -87,6 +88,7 @@ class ProjectsController < ApplicationController
       # we have a new last node now
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
+													  .order(index: :asc)
                             .to_a
       # if @next_node already has an index (from page reload or coming from index)
       @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
@@ -102,6 +104,7 @@ class ProjectsController < ApplicationController
 
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
+													  .order(index: :asc)
                             .to_a
       @index = @response_nodes.length + 1
     end

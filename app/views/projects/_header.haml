@@ -1,11 +1,12 @@
 .row
   .col-md-12
     %h2.project-name= @project.name
-    = link_to project_path, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
-      %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'View'}
-    = link_to project_path, class: 'print-project-link' do
-      %span.glyphicon.glyphicon-print{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Print'}
   .col-md-12
   %small
     %em.text-muted
       .col-md-12= "Started on #{@project.created_at.strftime('%m/%d/%Y')}"
+  .col-md-12
+    = link_to project_path, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'View'}
+    = link_to project_path, class: 'print-project-link' do
+      %span.glyphicon.glyphicon-print{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Print'}

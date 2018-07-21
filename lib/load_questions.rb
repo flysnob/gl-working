@@ -4,7 +4,7 @@ class LoadQuestions
   class << self
     def perform(path = '../../Downloads/Nodes 12-17-2017 - Sheet7.csv')
       CSV.foreach(path, headers: true) do |row|
-        Question.create(
+        Question.find_or_create_by(
           question_code: row[3],
           module_code: row[6],
           content: row[9],

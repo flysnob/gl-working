@@ -1,6 +1,6 @@
 # Represents a single version
 class VersionsController < ApplicationController
-  layout 'modal', only: [:show, :delete_modal, :new, :edit]
+  layout 'modal', only: [:show, :delete_modal, :new]
 
   before_action :make_logger
   before_action :find_version, only: [:show, :edit, :destroy, :delete_modal, :update, :show_version_nodes]

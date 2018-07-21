@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
+ruby '2.3.5'
 # gem 'autoprefixer-rails', '7.1.2.1'
 # ---------------------------------------------------------------------------------------
 # BOOTSTRAP
@@ -31,9 +31,12 @@ gem 'jquery-rails'
 gem 'mailboxer'
 # Add ability to have multiple output log files, such as log/audit.log
 gem 'multi_logger'
+# Webform helper
 gem 'nested_form'
 # Passenger is the application server that will run Rails
 # gem 'passenger', require: 'phusion_passenger/rack_handler' # This require will execute passenger start on rails server
+# Postgres because Heroku
+gem 'pg', '~> 0.18'
 # For rendering a pdf
 gem 'prawn'
 # For rendering a table inside the pdf
@@ -51,7 +54,7 @@ gem 'remote_partial'
 gem 'sass-rails', '~> 5.0'
 # Select2 replacement for select boxes
 gem 'select2-rails'
-gem 'sqlite3'
+# gem 'sqlite3'
 # This provides a JS engine that allows us to compile assets
 gem 'therubyracer'
 # Turbolinks allows you to build a multi-page app but have it load pages as if it were single-page

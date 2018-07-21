@@ -17,5 +17,8 @@
     - if @next_node.question.kind == 'd'
       .col-md-6.decision-container
         = render 'content_container'
+    - if @next_node.question.kind == 's'
+      .col-md-6.scope-container
+        = render 'scope_container'
     .col-md-6.help-container
       = render 'help'
