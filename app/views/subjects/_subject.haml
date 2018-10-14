@@ -2,6 +2,12 @@
   = link_to subject, class: 'show-subject-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = subject.name
 %td= subject.description
+%td= subject.status
+%td
+  -if subject.display
+    Yes
+  -else
+    No
 %td.actions
   = link_to edit_subject_path(subject), class: 'edit-subject-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}

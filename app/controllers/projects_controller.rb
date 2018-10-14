@@ -7,8 +7,6 @@ class ProjectsController < ApplicationController
   before_action :find_last_node, only: [:work]
   before_action :update_node
 
-  include DrawingHelpers
-
   def index
     @projects = Project.where(user: current_user)
   end
@@ -61,7 +59,7 @@ class ProjectsController < ApplicationController
   def previous
 		fetch_nodes
     @next_node = @project_nodes.select { |q| q[:question_code] == params[:node_code] }.first
-    @current_node = @project_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
+    @current_node = @response_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
     @index = @next_node.index
   end
 
@@ -90,7 +88,21 @@ class ProjectsController < ApplicationController
                             .where('response_value IS NOT NULL')
 													  .order(index: :asc)
                             .to_a
-      # if @next_node already has an index (from page reload or coming from index)
+      # if @next_node already has an index (from page reload or coming from projects index page)
+      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+      @next_node.update(
+        index: @index,
+        return_node: params[:return_node]
+      )
+      @last_node = @next_node
+      make_next_node
+    elsif @next_node.kind == 'c'
+      # we have a new last node now
+      @response_nodes = Node.where(project_id: @project.id)
+                            .where('response_value IS NOT NULL')
+													  .order(index: :asc)
+                            .to_a
+      # if @next_node already has an index (from page reload or coming from projects index page)
       @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
       @next_node.update(
         index: @index,
@@ -246,15 +258,18 @@ class ProjectsController < ApplicationController
                    nil
                  end
 
-    @logger.info("@last_node: #{@last_node}")
+    @logger.info("@last_node: #{@last_node ? @last_node : 'no @last_node'}")
   end
 
   def update_node
+    @logger.info("update params: #{params.to_h}")
     # update with return node if not na. when/how is it cleared?
-    return if params[:response_value].nil?
+    @logger.info("params[:response_value]: #{params[:response_value]}")
+    return if params[:response_value].blank?
 
     @last_node.update(
       response_value: params[:response_value],
+      display_value: params[:response_value],
       response_text: params[:commit],
       target_node: params[:target_node],
       index: params[:index].to_f.round(0),
@@ -274,24 +289,27 @@ class ProjectsController < ApplicationController
 
   # @TODO: Fix this
   def drop_subsequent_nodes
-    # Only need to valaluate this if the index of the last node is less than @response_nodes.last.index.
-    # This avoids running this when the last node is a decision node
+    # Only need to evalluate this if the index of the last node is less than @response_nodes.last.index.
+    # This avoids running this when the 
+    #   last node is a decision node or
+    #   last response_nodes' index is nil or 
+    #   last_nodes index is not less than response_nodes' last index
     return if @last_node.kind == 'd' || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
     # if the node already has an answer, and it has now changed, drop all subsequent nodes
-    # @TODO: uses unix so if dropped node is 10, it doesn't drop node 2
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|
-        if n.index > @last_node.index
-          n.response_value = nil
-          n.response_text = nil
-          n.target_node = nil
-          n.index = nil
-          n.return_node = nil
-          n.save
-          @response_nodes - [n]
-        end
+        next unless n.index > @last_node.index
+        @logger.info("dropping index: #{n.index}")
+        n.response_value = nil
+        n.display_value = nil
+        n.response_text = nil
+        n.target_node = nil
+        n.index = nil
+        n.return_node = nil
+        n.save
+        @response_nodes - [n]
         # destroy any return whose response_node has been reset
-        r = Return.find_by(node_index: n.question_code)
+        r = Return.find_by(question_code: n.question_code)
         if r
           r.destroy
         end

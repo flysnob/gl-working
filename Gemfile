@@ -48,13 +48,13 @@ gem 'rails', '5.0.4'
 # For running rake tasks, and scripting against the app
 gem 'rake'
 # For rendering dynamic images in SVG
-gem 'rasem'
-# For rendering remote assets (http://www.aljex.com/news) as a partial
 gem 'remote_partial'
 # SASS is syntactically awesome stylesheets, a CSS replacement
 gem 'sass-rails', '~> 5.0'
 # Select2 replacement for select boxes
 gem 'select2-rails'
+# WYSIWIG html editor
+# gem 'summernote-rails', '~> 0.8.10.0'
 # gem 'sqlite3'
 # This provides a JS engine that allows us to compile assets
 gem 'therubyracer'

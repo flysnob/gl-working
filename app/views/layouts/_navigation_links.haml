@@ -1,5 +1,7 @@
 %ul.nav.navbar-nav
   %li
+    =link_to "Home", root_path
+  %li
     =link_to "Projects", projects_path
 - if current_user.try(:admin?)
   %li.nav.navbar-nav
@@ -8,4 +10,6 @@
     =link_to "Subjects", subjects_path
   %li.nav.navbar-nav
     =link_to "Versions", versions_path
+  %li.nav.navbar-nav
+    =link_to "Dashboards", admin_root_path
 %ul.nav.navbar-nav= render 'layouts/nav_links_for_auth'

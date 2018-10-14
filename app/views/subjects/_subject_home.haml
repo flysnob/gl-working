@@ -1,5 +1,3 @@
-%tr
-  %td
-    %h4= subject.name
-  %td
-    = subject.description
+%h5
+  = link_to description_subject_path(subject), class: 'show-subject-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    = subject.name

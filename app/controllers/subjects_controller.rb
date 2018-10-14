@@ -1,8 +1,8 @@
 # Subjects are different areas of GAAP
 class SubjectsController < ApplicationController
-  layout 'modal', only: [:show, :delete_modal, :new, :edit]
+  layout 'modal', only: [:show, :delete_modal, :new, :edit, :description]
   before_action :make_logger
-  before_action :find_subject, only: [:show, :edit, :destroy, :delete_modal, :update]
+  before_action :find_subject, only: [:show, :edit, :destroy, :delete_modal, :update, :description]
 
   def index
     @subjects = Subject.all
@@ -15,6 +15,8 @@ class SubjectsController < ApplicationController
   def show; end 
 
   def edit; end 
+
+  def description; end 
 
   def update
     subject_params = params.require(:subject).permit!
@@ -50,7 +52,8 @@ class SubjectsController < ApplicationController
   def build_subject(subject_params)
     Subject.create(
       name: subject_params[:name],
-      description: subject_params[:description]
+      description: subject_params[:description],
+      display: subject_params[:display] == 'true'
     )   
   end 
 

@@ -1,20 +1,20 @@
-$brand-primary: #3a5487;
-$brand-success: #5c8c9c;
-$brand-info: #c0c4c9;
-$brand-warning: #eb7e24;
-$brand-danger: #ca1e32;
+//$brand-primary: #3a5487;
+//$brand-success: #5c8c9c;
+//$brand-info: #c0c4c9;
+//$brand-warning: #eb7e24;
+//$brand-danger: #ca1e32;
 
-$state-primary-text: darken($brand-primary, 20%);
-$state-success-text: darken($brand-success, 20%);
-$state-info-text: darken($brand-info, 20%);
-$state-warning-text: darken($brand-warning, 20%);
-$state-danger-text: darken($brand-danger, 20%);
+//$state-primary-text: darken($brand-primary, 20%);
+//$state-success-text: darken($brand-success, 20%);
+//$state-info-text: darken($brand-info, 20%);
+//$state-warning-text: darken($brand-warning, 20%);
+//$state-danger-text: darken($brand-danger, 20%);
 
-$state-primary-bg: lighten($brand-primary, 30%);
-$state-success-bg: lighten($brand-success, 30%);
-$state-info-bg: lighten($brand-info, 30%);
-$state-warning-bg: lighten($brand-warning, 30%);
-$state-danger-bg: lighten($brand-danger, 30%);
+//$state-primary-bg: lighten($brand-primary, 30%);
+//$state-success-bg: lighten($brand-success, 30%);
+//$state-info-bg: lighten($brand-info, 30%);
+//$state-warning-bg: lighten($brand-warning, 30%);
+//$state-danger-bg: lighten($brand-danger, 30%);
 
 // import the CSS framework
 @import "bootstrap-sprockets";

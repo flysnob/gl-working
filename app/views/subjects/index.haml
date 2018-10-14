@@ -7,9 +7,11 @@
   %table.table.table-condensed.subjects-table
     %thead.subjects-header
       %tr 
-      %th Subject Name
-      %th Description
-      %th.actions Actions
+        %th Subject Name
+        %th Description
+        %th Status
+        %th Display
+        %th.actions Actions
     %tbody
       - @subjects.each do |subject|
         %tr

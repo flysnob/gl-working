@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :users
+    resources :projects
     root to: 'users#index'
   end
 
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
     resources :subjects, except: [] do
       member do
         get 'versions', to: 'subjects#versions'
+        get 'description', to: 'subjects#description'
       end
     end
 

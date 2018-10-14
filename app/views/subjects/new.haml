@@ -18,6 +18,20 @@
         .help-block A description of how this subject should be used
         = f.text_field :description, class: 'form-control'
       .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :status
+        .help-block Do you want this subject to display in public views?
+        = f.select :status, status_select_options, {}, { class: 'form-control', required: true }
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :display
+        .help-block Do you want this subject to display in public views?
+        = f.select :display, display_select_options, {}, { class: 'form-control', required: true }
+      .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
   %button#add-subject-link.btn.btn-primary{ type: 'submit', form: 'new_subject', href: '#' } Add subject

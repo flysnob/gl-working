@@ -4,17 +4,21 @@
   %h4#modal-title.modal-title= @subject.name
 .modal-body
   = form_for @subject, html: { id: 'edit_subject', class: 'validate' } do |f| 
-    .row.show-row
+    .row
       .col-lg-1
-      .col-lg-4 
-        %label Name
-      .col-lg-6= @subject.name
+      .col-lg-2 
+        %label Description
+      .col-lg-6= @subject.description
       .col-lg-1
     .row
       .col-lg-1
-      .col-lg-4 
-        %label Subject
-      .col-lg-6= @subject.description
+      .col-lg-2 
+        %label Display
+      .col-lg-6
+        -if @subject.display
+          Yes
+        -else
+          No
       .col-lg-1
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close

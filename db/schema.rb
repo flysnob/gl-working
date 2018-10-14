@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180703185220) do
+ActiveRecord::Schema.define(version: 20180803031052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20180703185220) do
     t.integer  "project_id"
     t.integer  "question_id"
     t.integer  "subject_id"
+    t.string   "display_value"
     t.index ["project_id"], name: "index_nodes_on_project_id", using: :btree
     t.index ["question_id"], name: "index_nodes_on_question_id", using: :btree
     t.index ["subject_id"], name: "index_nodes_on_subject_id", using: :btree
@@ -122,10 +123,12 @@ ActiveRecord::Schema.define(version: 20180703185220) do
   end
 
   create_table "subjects", force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",                    null: false
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.boolean  "display"
+    t.integer  "status",      default: 0
   end
 
   create_table "users", force: :cascade do |t|
