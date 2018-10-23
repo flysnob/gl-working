@@ -45,6 +45,8 @@ gem 'prawn-table'
 # The core Rails gem
 gem 'puma'
 gem 'rails', '5.0.4'
+# for logging in heroku
+gem 'rails_12factor', group: :production
 # For running rake tasks, and scripting against the app
 gem 'rake'
 # For rendering dynamic images in SVG
