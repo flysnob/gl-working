@@ -2,7 +2,6 @@
 class QuestionsController < ApplicationController
   layout 'modal', only: [:show, :edit, :delete_modal, :new]
 
-  before_action :make_logger
   before_action :find_question, only: [:show, :edit, :destroy, :delete_modal, :update]
 
   def index
@@ -20,7 +19,6 @@ class QuestionsController < ApplicationController
   def update
     question_params = params.require(:question).permit!
     question_params[:subject] = Subject.find(question_params[:subject])
-    @logger.info("#{question_params}")
     
     if @question.update(question_params)
       flash[:success] = 'Question "' + @question.question_code + '" successfully updated.'
@@ -32,7 +30,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @logger.info("'delete")
     @question.destroy if @question
 
     redirect_to questions_path
@@ -81,9 +78,5 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.find_by(id: params[:id])
-  end
-  
-  def make_logger
-    @logger = Logger.new('log/questions_controller.log')
   end
 end

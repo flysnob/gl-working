@@ -2,7 +2,6 @@
 class VersionsController < ApplicationController
   layout 'modal', only: [:show, :delete_modal, :new]
 
-  before_action :make_logger
   before_action :find_version, only: [:show, :edit, :destroy, :delete_modal, :update, :show_version_nodes]
 
   def index
@@ -21,7 +20,6 @@ class VersionsController < ApplicationController
 
   def update
     version_params = params.require(:version).permit!
-    @logger.info("#{version_params}")
     
     if @version.update(version_params)
       flash[:success] = 'version "' + @version.name + '" successfully updated.'
@@ -33,7 +31,6 @@ class VersionsController < ApplicationController
   end
 
   def destroy
-    @logger.info("'delete")
     @version.destroy if @version
 
     redirect_to versions_path
@@ -66,9 +63,5 @@ class VersionsController < ApplicationController
 
   def find_version
     @version = Version.find_by(id: params[:id])
-  end
-  
-  def make_logger
-    @logger = Logger.new('log/versions_controller.log')
   end
 end

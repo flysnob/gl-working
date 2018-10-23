@@ -1,11 +1,6 @@
 class ResponseProcessor
   class << self
     def perform(last_node, nodes, return_node_code)
-      make_logger
-      @logger.info('=====================perform========================')
-      @logger.info("last_node: #{last_node}")
-      @logger.info("last_node.kind: #{last_node.kind}")
-      @logger.info("return_node_code: #{return_node_code}")
       @last_node = last_node
       @nodes = nodes
 
@@ -24,10 +19,6 @@ class ResponseProcessor
     end
 
     def create_return
-      @logger.info('=====================create_return========================')
-      @logger.info("create_return @return_node_code: #{@return_node_code}")
-      @logger.info("create_return @last_node.project_id: #{@last_node.project_id}")
-      @logger.info("create_return @last_node.id: #{@last_node.id}")
       Return.create(
         project_id: @last_node.project_id,
         node_index: @returns.length + 1,
@@ -47,8 +38,6 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def get_next_node
-      @logger.info('=====================get_next_node========================')
-      @logger.info("get_next_node if @returns.length.zero?: #{@returns.length.zero?}")
       if @returns.length.zero?
         evaluate_last_node
       else
@@ -67,8 +56,6 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_last_node
-      @logger.info('=====================evaluate_last_node========================')
-      @logger.info("evaluate_last_node @last_node.kind: #{@last_node.kind}")
       if @last_node.kind == 'q' || @last_node.kind == 'i'
         next_node = @nodes.select { |q| q[:question_code] == @last_node.target_node }.first
         next_node
@@ -92,8 +79,6 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_return_node_code
-      @logger.info('=====================evaluate_return_node_code========================')
-      @logger.info("evaluate_return_node_code if @last_node.return: #{@last_node.return}")
       if @last_node.return
         # update with result of the last response
         update_return_node
@@ -114,13 +99,10 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_target_node_return
-      @logger.info('=====================evaluate_target_node_return========================')
-      @logger.info("evaluate_target_node_return if @last_node.kind: #{@last_node.kind}")
       if @last_node.kind == 'q'
         # nothing special, so make next_node = target_node
         update_return_node
         next_node = fetch_node(@return_node.target_node)
-        @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       elsif @last_node.kind == 'd'
         # makes @response_hash
@@ -130,7 +112,6 @@ class ResponseProcessor
         update_return_node
 
         next_node = fetch_node(@return_node.target_node)
-        @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       elsif @last_node.kind == 'c'
         # makes @response_hash
@@ -140,18 +121,15 @@ class ResponseProcessor
         update_return_node
 
         next_node = fetch_node(@return_node.target_node)
-        @logger.info("next_node.code: #{next_node.question_code}")
         next_node
       end
     end
 
     def update_return_node
-      @logger.info('=====================update_return_node========================')
       # fetch the return node and then update response_value and target_node based upon pass/fail result
       # i think this is where to get the return node from the database and then run fetch_node on that; it's the last record for this project
       # this currenctly resets the analyze response on the return node. not cool. needs to leave that alone and do something else
       @return_node = fetch_node(@returns.last.return_node_code)
-      @logger.info("update_return_node @return_node: #{@return_node.id}")
 
       if @last_node.pass?
         #pass
@@ -178,7 +156,6 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_target_node_not_return
-      @logger.info('=====================evaluate_target_node_not_return========================')
       # makes response hash
       if @last_node.kind == 'd'
         evaluate_decision_node
@@ -198,7 +175,6 @@ class ResponseProcessor
     end
 
     def evaluate_decision_node
-      @logger.info('=====================evaluate_decision_node========================')
       # Get all responses related to decision
       decision_responses = @responses.select { |r| r[:decision_node] == @last_node.question_code }
 
@@ -237,15 +213,12 @@ class ResponseProcessor
         make_response_hash(@last_node.response_2, @last_node.target_2, 2)
       end
         
-      @logger.info("@response_hash: #{@response_hash}")
       update_decision_node
     end
 
     def evaluate_conclusion_node
-      @logger.info('=====================evaluate_conclusion_node========================')
       make_response_hash(@last_node.response_2, @last_node.target_2, 2)
         
-      @logger.info("@response_hash: #{@response_hash}")
       update_conclusion_node
     end
 
@@ -259,35 +232,21 @@ class ResponseProcessor
     end
 
     def update_decision_node
-      @logger.info('=====================update_decision_node========================')
       @last_node.response_value = @response_hash[:response_value]
       @last_node.display_value = @response_hash[:response_value]
       @last_node.target_node = @response_hash[:target_node]
       @last_node.response_text = @response_hash[:response_text]
       @last_node.return_node = @last_node.return_node unless @last_node.return
       @last_node.save
-      @logger.info("@last_node.question_code: #{@last_node.question_code}")
-      @logger.info("@last_node.response_value: #{@last_node.response_value}")
-      @logger.info("@last_node.display_value: #{@last_node.response_value}")
-      @logger.info("@last_node.response_text: #{@last_node.response_text}")
     end
 
     def update_conclusion_node
-      @logger.info('=====================update_conclusion_node========================')
       @last_node.response_value = @response_hash[:response_value]
       @last_node.display_value = @response_hash[:response_value]
       @last_node.target_node = @response_hash[:target_node]
       @last_node.response_text = @response_hash[:response_text]
       @last_node.return_node = @last_node.return_node unless @last_node.return
       @last_node.save
-      @logger.info("@last_node.question_code: #{@last_node.question_code}")
-      @logger.info("@last_node.response_value: #{@last_node.response_value}")
-      @logger.info("@last_node.display_value: #{@last_node.response_value}")
-      @logger.info("@last_node.response_text: #{@last_node.response_text}")
-    end
-
-    def make_logger
-      @logger = Logger.new('log/response_processor.log')
     end
   end
 end

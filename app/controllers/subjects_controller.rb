@@ -1,7 +1,7 @@
 # Subjects are different areas of GAAP
 class SubjectsController < ApplicationController
   layout 'modal', only: [:show, :delete_modal, :new, :edit, :description]
-  before_action :make_logger
+
   before_action :find_subject, only: [:show, :edit, :destroy, :delete_modal, :update, :description]
 
   def index
@@ -20,7 +20,6 @@ class SubjectsController < ApplicationController
 
   def update
     subject_params = params.require(:subject).permit!
-    @logger.info("#{subject_params}")
     
     if @subject.update(subject_params)
       flash[:success] = 'Subject "' + @subject.name + '" successfully updated.'
@@ -32,7 +31,6 @@ class SubjectsController < ApplicationController
   end 
 
   def destroy
-    @logger.info("'delete")
     @subject.destroy if @subject
 
     redirect_to subjects_path
@@ -72,7 +70,4 @@ class SubjectsController < ApplicationController
     @subject = Subject.find_by(id: params[:id])
   end 
   
-  def make_logger
-    @logger = Logger.new('log/subjects_controller.log')
-  end
 end

@@ -2,7 +2,6 @@
 class ProjectsController < ApplicationController
   layout 'modal', only: [:show, :edit, :delete_modal, :new]
 
-  before_action :make_logger
   before_action :find_project, only: [:show, :edit, :destroy, :delete_modal, :work, :update, :previous]
   before_action :find_last_node, only: [:work]
   before_action :update_node
@@ -257,14 +256,10 @@ class ProjectsController < ApplicationController
                  else
                    nil
                  end
-
-    @logger.info("@last_node: #{@last_node ? @last_node : 'no @last_node'}")
   end
 
   def update_node
-    @logger.info("update params: #{params.to_h}")
     # update with return node if not na. when/how is it cleared?
-    @logger.info("params[:response_value]: #{params[:response_value]}")
     return if params[:response_value].blank?
 
     @last_node.update(
@@ -279,12 +274,6 @@ class ProjectsController < ApplicationController
     @last_node.update(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
     @last_node.save
     @last_node.reload
-    @logger.info("@last_node[:target_node]: #{@last_node[:target_node]}")
-    @logger.info("@last_node[:index]: #{@last_node[:index]}")
-  end
-
-  def make_logger
-    @logger = Logger.new('log/projects_controller.log')
   end
 
   # @TODO: Fix this
@@ -299,7 +288,6 @@ class ProjectsController < ApplicationController
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|
         next unless n.index > @last_node.index
-        @logger.info("dropping index: #{n.index}")
         n.response_value = nil
         n.display_value = nil
         n.response_text = nil
