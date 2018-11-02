@@ -22,9 +22,7 @@
           %h4.content= @next_node.question.conclusion_2
         - if @next_node.response_value == '3' 
           %h4.content= @next_node.question.conclusion_3
-      - if @next_node.question.kind == 'cf' 
-        %h4.content= @next_node.question.content
-      - if @next_node.question.kind == 'cp' 
+      - if @next_node.question.kind == 'c' 
         %h4.content= @next_node.question.content
       - if @next_node.question.kind == 'r' 
         %h4 Accounting Recommendation
@@ -34,18 +32,18 @@
     .col-md-12
       - if @next_node.index.nil?
         - if @next_node.response_1.present?
-          = f.submit @next_node.response_1, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')", title: ''}
+          = f.submit @next_node.response_1, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')" }
         - if @next_node.response_2.present?
           = f.submit @next_node.response_2, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('2');$('#target_node').val('#{@next_node.target_2}');$('#return_node').val('#{@next_node.return_node}')" }
         - if @next_node.response_3.present?
           = f.submit @next_node.response_3, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('3');$('#target_node').val('#{@next_node.target_3}');$('#return_node').val('#{@next_node.return_node}')" }
       - else
-        - if @next_node.response_1.present? && %w[cf cp d i].exclude?(@next_node.question.kind)
-          = f.submit @next_node.response_1, { class: "btn #{@next_node.display_value == '1' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')", title: "#{@next_node.display_value == '1' ? 'This is your previous response' : 'Click to change your response'}" }
-        - if @next_node.response_2.present? && %w[cf cp d i].exclude?(@next_node.question.kind)
-          = f.submit @next_node.response_2, { class: "btn #{@next_node.display_value == '2' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('2');$('#target_node').val('#{@next_node.target_2}');$('#return_node').val('#{@next_node.return_node}')", title: "#{@next_node.display_value == '2' ? 'This is your previous response' : 'Click to change your response'}" }
-        - if @next_node.response_3.present? && %w[cf cp d i].exclude?(@next_node.question.kind)
-          = f.submit @next_node.response_3, { class: "btn #{@next_node.display_value == '3' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('3');$('#target_node').val('#{@next_node.target_3}');$('#return_node').val('#{@next_node.return_node}')", title: "#{@next_node.display_value == '3' ? 'This is your previous response' : 'Click to change your response'}" }
+        - if @next_node.response_1.present? && %w[d i].exclude?(@next_node.question.kind)
+          = f.submit @next_node.response_1, { class: "btn #{@next_node.display_value == '1' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')" }
+        - if @next_node.response_2.present? && %w[d i].exclude?(@next_node.question.kind)
+          = f.submit @next_node.response_2, { class: "btn #{@next_node.display_value == '2' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('2');$('#target_node').val('#{@next_node.target_2}');$('#return_node').val('#{@next_node.return_node}')" }
+        - if @next_node.response_3.present? && %w[d i].exclude?(@next_node.question.kind)
+          = f.submit @next_node.response_3, { class: "btn #{@next_node.display_value == '3' ? 'btn-warning' : 'btn-success'} node-response", onclick: "$('#response_value').val('3');$('#target_node').val('#{@next_node.target_3}');$('#return_node').val('#{@next_node.return_node}')" }
     - if %w[q r].include?@next_node.question.kind
       .col-md-12.spacer.comment-controls
         %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Your notes and comments will save and appear in the printed report.', style: 'width: 99%', class: 'form-control wysihtml5' }

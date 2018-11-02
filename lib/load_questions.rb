@@ -19,7 +19,8 @@ class LoadQuestions
           conclusion_1: row[23] ? row[23].gsub('|', ',') : nil,
           conclusion_2: row[24] ? row[24].gsub('|', ',') : nil,
           meets_response: row[21],
-          subject_id: row[5]
+          subject_id: row[5].to_i,
+          report_content: row[31] ? row[31].gsub('|', ',') : nil
         )
       end
     end

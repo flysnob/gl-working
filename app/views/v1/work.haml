@@ -1,26 +1,26 @@
 .section.process
   = render 'header'
   - unless @response_nodes.length.zero?
-    = render 'previous'
+    = render 'work_previous'
   .spacer
     %span
-  .previous-node
+  .node
     - if @next_node.question.kind == 'q'
       .col-md-6.question-container
         = render 'content_container'
-    - if @next_node.question.kind == 'i' 
+    - if @next_node.question.kind == 'i'
       .col-md-6.info-container
         = render 'content_container'
-    - if @next_node.question.kind == 'r' 
+    - if @next_node.question.kind == 'r'
       .col-md-6.recommendation-container
         = render 'content_container'
-    - if %w[cf cp d].include?(@next_node.question.kind)
+    - if @next_node.question.kind == 'd'
       .col-md-6.decision-container
         = render 'content_container'
-    - if @next_node.question.kind == 'c' 
+    - if @next_node.question.kind == 'c'
       .col-md-6.conclusion-container
         = render 'content_container'
-    - if @next_node.question.kind == 's' 
+    - if @next_node.question.kind == 's'
       .col-md-6.scope-container
         = render 'scope_container'
     .col-md-6.help-container

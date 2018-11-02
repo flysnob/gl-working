@@ -14,7 +14,7 @@
     - if @next_node.question.kind == 'r' 
       .col-md-6.recommendation-container
         = render 'content_container'
-    - if %w[cf cp d].include?(@next_node.question.kind)
+    - if @next_node.question.kind == 'd' 
       .col-md-6.decision-container
         = render 'content_container'
     - if @next_node.question.kind == 'c' 

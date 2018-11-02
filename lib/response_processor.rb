@@ -51,8 +51,9 @@ class ResponseProcessor
     #
     # Only run if @return_node_code is blank (we're in the main subject module)
     # 1) if 'q' or 'i', next node is @last_node target node,
-    # 3) if 'd', evaluate the decision,
-    # 2) if 'r', na (we're done)
+    # 2) if 'd', evaluate the decision,
+    # 3) if 'cf' or 'cp', evaluate the conclusion,
+    # 4) if 'r', na (we're done)
     ##############################################################################################################################################
 
     def evaluate_last_node
@@ -64,6 +65,13 @@ class ResponseProcessor
         evaluate_decision_node
 
         # fetch the next node with the decision target_node
+        next_node = @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
+        next_node
+      elsif %w[cf cp].include?(@last_node.kind)
+        # What is the result of the conclusion node?
+        evaluate_conclusion_node
+
+        # fetch the next node with the conclusion target_node
         next_node = @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
         next_node
       end
@@ -113,7 +121,7 @@ class ResponseProcessor
 
         next_node = fetch_node(@return_node.target_node)
         next_node
-      elsif @last_node.kind == 'c'
+      elsif %w[cf cp].include?(@last_node.kind)
         # makes @response_hash
         evaluate_conclusion_node
 
@@ -217,7 +225,12 @@ class ResponseProcessor
     end
 
     def evaluate_conclusion_node
-      make_response_hash(@last_node.response_2, @last_node.target_2, 2)
+      # always false
+      if @last_node.kind == 'cp'
+        make_response_hash(@last_node.response_1, @last_node.target_1, 1)
+      else
+        make_response_hash(@last_node.response_2, @last_node.target_2, 2)
+      end
         
       update_conclusion_node
     end
@@ -233,7 +246,7 @@ class ResponseProcessor
 
     def update_decision_node
       @last_node.response_value = @response_hash[:response_value]
-      @last_node.display_value = @response_hash[:response_value]
+      @last_node.display_value = @response_hash[:display_value]
       @last_node.target_node = @response_hash[:target_node]
       @last_node.response_text = @response_hash[:response_text]
       @last_node.return_node = @last_node.return_node unless @last_node.return
@@ -242,7 +255,7 @@ class ResponseProcessor
 
     def update_conclusion_node
       @last_node.response_value = @response_hash[:response_value]
-      @last_node.display_value = @response_hash[:response_value]
+      @last_node.display_value = @response_hash[:display_value]
       @last_node.target_node = @response_hash[:target_node]
       @last_node.response_text = @response_hash[:response_text]
       @last_node.return_node = @last_node.return_node unless @last_node.return

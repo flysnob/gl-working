@@ -1,0 +1,58 @@
+!!!
+%html
+  %head
+    %title= 'GAAP Logic'
+    %meta{ charset: 'utf-8' }
+    = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
+    = stylesheet_link_tag 'report'
+  %body
+    .container
+      %h1 Project Report
+      %br
+      %h3= @project.entity
+      %h3= @project.date
+      %h3= @project.name 
+      %h3= @project.description 
+      %h3= "Report generated on #{Date.today}"
+      - @nodes.each do |node|
+        .question
+          - if current_user.admin?
+            = node.question.question_code
+          - if %W[q d].include?(node.question.kind)
+            - if %w[1 2].include?(node.response_value)
+              %h4.col-12-md.question-number= "Question: #{node.question.report_content}"
+              .col-12-md.question
+                - if node.question.report_summary.nil?
+                  = node.question.summary
+                - else
+                  = node.question.report_summary
+              %h5.col-12-md.response= "Response: #{node.response_text}"
+              .col-12-md.comments= node.comment
+              %br
+            - else
+              // need a report version of the question when the user selects 'Analyze'
+              %h3.col-12-md.question-number= node.question.report_content
+              %br
+          - elsif %W[c].include?(node.question.kind)
+            %h3.col-12-md Intermediate Conclusion
+            .col-12-md.question
+              = node.question.content
+            .col-12-md.comments= node.comment
+            %br
+          - elsif %W[i].include?(node.question.kind)
+            .col-12-md.question
+              - if node.question.report_summary.nil?
+                = node.question.summary
+              - else
+                = node.question.report_summary
+            .col-12-md.comments= node.comment
+            %br
+          - elsif %W[r].include?(node.question.kind)
+            %h3.col-12-md Accounting Recommendation
+            .col-12-md.question
+              - if node.question.report_summary.nil?
+                = node.question.summary
+              - else
+                = node.question.report_summary
+            .col-12-md.comments= node.comment
+            %br

@@ -36,6 +36,8 @@ gem 'multi_logger'
 gem 'nested_form'
 # Passenger is the application server that will run Rails
 # gem 'passenger', require: 'phusion_passenger/rack_handler' # This require will execute passenger start on rails server
+# Paypal sdk so we can get paid some cashes
+gem 'paypal-sdk-rest'
 # Postgres because Heroku
 gem 'pg', '~> 0.18'
 # For rendering a pdf
@@ -64,6 +66,8 @@ gem 'therubyracer'
 gem 'turbolinks'
 # Uglifier mimimizes JS assets in production
 gem 'uglifier', '>= 1.3.0'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 group :development do
   # Prints out data outputs nicely
   gem 'awesome_print'

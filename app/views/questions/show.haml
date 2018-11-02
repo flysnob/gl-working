@@ -19,6 +19,12 @@
     .row.show-row
       .col-lg-1
       .col-lg-4 
+        %label Report content
+      .col-lg-6= @question.report_content
+      .col-lg-1
+    .row.show-row
+      .col-lg-1
+      .col-lg-4 
         %label Summary
       .col-lg-6= @question.summary
       .col-lg-1
@@ -79,8 +85,8 @@
     .row
       .col-lg-1
       .col-lg-4 
-        %label Fail response
-      .col-lg-6= @question.fail_response
+        %label Pass/Meets response
+      .col-lg-6= @question.meets_response
       .col-lg-1
     .row
       .col-lg-1

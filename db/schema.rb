@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180803031052) do
+ActiveRecord::Schema.define(version: 20181029103213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20180803031052) do
     t.datetime "updated_at",     null: false
     t.integer  "subject_id"
     t.boolean  "scope"
+    t.string   "report_content"
     t.index ["subject_id"], name: "index_questions_on_subject_id", using: :btree
   end
 
@@ -120,6 +121,12 @@ ActiveRecord::Schema.define(version: 20180803031052) do
     t.datetime "updated_at",                   null: false
     t.integer  "project_id"
     t.index ["project_id"], name: "index_returns_on_project_id", using: :btree
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.boolean  "conclusion_pause",   default: false
+    t.boolean  "analysis_shortcut",  default: true
+    t.datetime "subscription_start"
   end
 
   create_table "subjects", force: :cascade do |t|
