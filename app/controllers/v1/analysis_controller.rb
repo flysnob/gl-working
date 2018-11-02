@@ -72,7 +72,7 @@ module V1
         )
         @last_node = @next_node
         make_next_node
-      elsif %w[ cf cp]include?(@next_node.kind)
+      elsif %w[ cf cp].include?(@next_node.kind)
         # we have a new last node now
         @response_nodes = Node.where(project_id: @project.id)
                               .where('response_value IS NOT NULL')
@@ -123,7 +123,7 @@ module V1
       #   last node is a decision/conclusion node or
       #   last response_nodes' index is nil or 
       #   last_nodes index is not less than response_nodes' last index
-      return if %w[cf cp d]include?(@last_node.kind) || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
+      return if %w[cf cp d].include?(@last_node.kind) || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
       # if the node already has an answer, and it has now changed, drop all subsequent nodes
       if @last_node.response_value.present? && @last_node.response_value != params[:commit]
         @response_nodes.each do |n|
