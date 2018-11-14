@@ -1,0 +1,9 @@
+.section.home
+  .row
+    .col-md-12
+      .well.well-sm
+        %h3.text-primary Content Pages
+        .live
+          .list-group
+            - @contents.each do |content|
+              = render partial: 'content', locals: { content: content }

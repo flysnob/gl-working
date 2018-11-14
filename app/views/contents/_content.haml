@@ -1,0 +1,10 @@
+%td
+  = link_to content, class: 'show-content-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    = content.title
+%td= content.content
+%td= content.effective.strftime('%Y-%m-%d')
+%td.actions
+  = link_to edit_content_path(content), class: 'edit-content-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
+  = link_to delete_modal_content_path(content), class: 'delete-modal-content-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-trash{ data: { toggle: 'tooltip', placement: 'top' }, title: 'Delete' }
