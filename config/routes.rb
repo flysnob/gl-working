@@ -21,17 +21,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :subjects, except: [] do
-      member do
-        get 'versions', to: 'subjects#versions'
-        get 'description', to: 'subjects#description'
-      end
-    end
-
-    resources :pages, only: [] do
-      collection do
-        get 'about', to: 'pages#about'
-      end
+    scope :pages do
+      get 'about', to: 'pages#about'
     end
 
     resources :notifications, only: [:index, :destroy] do
@@ -49,6 +40,8 @@ Rails.application.routes.draw do
       member do
         get 'delete_modal', to: 'subjects#delete_modal'
         patch 'delete', to: 'subjects#delete'
+        get 'versions', to: 'subjects#versions'
+        get 'description', to: 'subjects#description'
       end
     end
 
@@ -63,6 +56,13 @@ Rails.application.routes.draw do
     resources :nodes, only: [] do
       member do
         get 'comment', to: 'nodes#comment'
+      end
+    end
+
+    resources :content, except: [] do
+      member do
+        get 'delete_modal', to: 'contents#delete_modal'
+        patch 'delete', to: 'contents#delete'
       end
     end
 
