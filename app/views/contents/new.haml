@@ -1,0 +1,22 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title Add new content
+.modal-body
+  = form_for @content, { html: { id: 'new_content', class: 'validate' }} do |f|
+    .row
+      .col-lg-2
+      .col-lg-8.form-group.required
+        = f.label :name, class: 'required-label'
+        .help-block A short title for the content (limited to 150 characters)
+        = f.text_field :title, class: 'form-control', required: true
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :content
+        = f.text_area :content, class: 'form-control'
+      .col-lg-2
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
+  %button#add-content-link.btn.btn-primary{ type: 'submit', form: 'new_content', href: '#' } Add content

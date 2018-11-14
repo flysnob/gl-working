@@ -1,6 +1,6 @@
 # Controller for page content
 class ContentsController < ApplicationController
-  layout 'modal', only: [:delete_modal]
+  layout 'modal', only: [:show, :edit, :new, :delete_modal]
 
   before_action :find_content, only: [:show, :edit, :destroy, :delete_modal, :update]
 

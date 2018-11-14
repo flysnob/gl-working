@@ -59,7 +59,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :content, except: [] do
+    resources :contents, except: [] do
       member do
         get 'delete_modal', to: 'contents#delete_modal'
         patch 'delete', to: 'contents#delete'

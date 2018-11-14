@@ -1,14 +1,14 @@
 .modal-header
   %button.close{'data-dismiss': 'modal', type: 'button'}
     %span &times;
-  %h4#modal-title.modal-title= @question.question_code
+  %h4#modal-title.modal-title= @content.title
 .modal-body
   = form_for @content, html: { id: 'show_question', class: 'validate' } do |f| 
     .row.show-row
       .col-lg-1
       .col-lg-4 
         %label Content
-          .col-lg-6= @content.content
+      .col-lg-6= simple_format(@content.content)
       .col-lg-1
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close

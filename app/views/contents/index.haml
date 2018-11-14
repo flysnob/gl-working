@@ -1,9 +1,16 @@
-.section.home
-  .row
-    .col-md-12
-      .well.well-sm
-        %h3.text-primary Content Pages
-        .live
-          .list-group
-            - @contents.each do |content|
-              = render partial: 'content', locals: { content: content }
+.section.contents
+  %h1 Content for Site Pages
+  .pull-right{ style: 'margin-bottom: 10px'}
+    = link_to new_content_path, id: 'new-content-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-plus
+      Content
+  %table.table.table-condensed.contents-table
+    %thead.contents-header
+      %tr 
+        %th Title
+        %th Effective
+        %th.actions Actions
+    %tbody
+      - @contents.each do |content|
+        %tr
+          = render partial: 'content', locals: { content: content }
