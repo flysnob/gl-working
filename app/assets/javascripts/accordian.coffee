@@ -2,9 +2,9 @@
 
 # Because this is a jQuery 'on' method, we have to avoid setting up the handler on page:load as well.
 $ ->
-  $(document).on 'click', '.accordion-container', (evt) ->
+  $(document).on 'click', '.panel-title', (evt) ->
     $evtTarget = $(evt.target)
-    $target = $(evt.target).closest('.accordion-container')
+    $target = $(evt.target).closest('.panel-title')
     $closestLink = $evtTarget.closest('a')
     if $closestLink.length == 0 || !$.contains($target[0], $closestLink[0])
       $intendedTarget = $("##{$target.attr('aria-controls')}")
@@ -16,3 +16,6 @@ $ ->
         $intendedTarget.addClass('in')
         $target.addClass('expanded').removeClass('collapsed')
         $target.find('.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up')
+
+$ ->
+  $('.collapse').collapse()

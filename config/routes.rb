@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
     scope :pages do
       get 'about', to: 'pages#about'
+      get 'terms_of_use', to: 'pages#terms_of_use'
+      get 'privacy_policy', to: 'pages#privacy_policy'
     end
 
     resources :notifications, only: [:index, :destroy] do

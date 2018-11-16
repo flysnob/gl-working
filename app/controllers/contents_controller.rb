@@ -17,7 +17,7 @@ class ContentsController < ApplicationController
   def edit; end
 
   def update
-    content_params = params.require(:content)
+    content_params = params.require(:content).permit!
 
     if @content.update(content_params)
       flash[:success] = 'Content "' + @content.title + '" successfully updated.'

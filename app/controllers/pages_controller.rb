@@ -1,8 +1,17 @@
 # Controller for general site pages
 class PagesController < ApplicationController
-  def index
-    @live_subjects = Subject.all
+  def about; end
+
+  def index; 
+    @subjects = Subject.where(status: 'prod')
+    @content = Content.find_by(title: 'Welcome')
   end
 
-  def about; end
+  def terms_of_use
+    @content = Content.find_by(title: 'Terms of Use')
+  end
+
+  def privacy_policy
+    @content = Content.find_by(title: 'Privacy Policy')
+  end
 end

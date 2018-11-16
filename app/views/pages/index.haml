@@ -1,21 +1,25 @@
 .section.home
   .row
     .col-md-6
-      .col-md-12
-        .well.well-sm
-          .text-center
-            .row
-              - if user_signed_in?
-                =link_to "Start a Project", projects_path, { class: 'btn navbar-btn btn-primary' }
-              - else
-                =link_to "Please sign in to start a project. Registration is free!", new_user_session_path, { class: 'btn navbar-btn btn-primary' }
-          %p GAAP Logic is...
+      %h3 Welcome to GAAP Logic
+    .col-md-4
+      %h3 Subjects
+    .col-md-2
+      .pull-right
+        = link_to new_project_path, id: 'new-project-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+          %span.glyphicon.glyphicon-plus
+          Start a Project
+  .row
     .col-md-6
-      .col-md-12
-        .well.well-sm
-          %h3.text-primary Modules
-          .live
-            .list-group
-              - @live_subjects.each do |subject|
-                - if subject.display
-                  = render partial: 'subjects/subject_home', locals: { subject: subject }
+      = simple_format(@content.content)
+    .col-md-6
+      .panel-group#accordion{ role: 'tablist', aria: { multiselectable: true } }
+        - @subjects.each do |subject|
+          .panel.panel-default
+            .panel-heading{ id: "heading-#{subject.id}", role: 'tab' }
+              %h4.panel-title
+                %a.collapsed{ role: 'button', data: { toggle: 'collapse', parent: '#accordion' }, href: "#collapse-#{subject.id}", aria: { expanded: false, controls: "collapse-#{subject.id}" } }
+                  = subject.name
+            .panel-collapse.collapse.in{ id: "collapse-#{subject.id}", role: 'tabpanel', aria: { labelledby: "heading-#{subject.id}" } }
+              .panel-body
+                = subject.description

@@ -13,7 +13,7 @@
         %ul.nav.navbar-nav
           = render 'layouts/navigation_links'
         .navbar-right
-          %span.navbar-text<
+          %span.navbar-text
             = link_to "#{current_user.try(:name) || current_user.try(:email)}", edit_user_registration_path
           %ul.nav.navbar-nav.navbar-icon-list
             %li.dropdown
@@ -29,6 +29,8 @@
 %nav.navbar.navbar-default.navbar-fixed-bottom
   .container-fluid
     .navbar-header
+      %span.navbar-text
+        Copyright GAAP Logic 2011-2013
       %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
         %span.sr-only Toggle navigation
         %span.icon-bar
