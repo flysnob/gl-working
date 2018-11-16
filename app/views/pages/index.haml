@@ -11,7 +11,7 @@
           Start a Project
   .row
     .col-md-6
-      = simple_format(@content.content)
+      = simple_format(@content.content) if @content
     .col-md-6
       .panel-group#accordion{ role: 'tablist', aria: { multiselectable: true } }
         - @subjects.each do |subject|
