@@ -5,6 +5,7 @@ class LoadVersionNodes
     def perform(path = 'app/assets/nodes/nodes.csv')
       CSV.foreach(path, quote_char: "~", headers: true) do |row|
         VersionNode.find_or_create_by(
+          kind: row[8],
           response_1: row[11],
           target_1: row[12],
           response_2: row[13],

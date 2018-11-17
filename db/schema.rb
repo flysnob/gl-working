@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181102111534) do
+ActiveRecord::Schema.define(version: 20181116190948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,9 +130,11 @@ ActiveRecord::Schema.define(version: 20181102111534) do
   end
 
   create_table "settings", force: :cascade do |t|
-    t.boolean  "conclusion_pause",   default: false
     t.boolean  "analysis_shortcut",  default: true
     t.datetime "subscription_start"
+    t.boolean  "conclusion_pause",   default: true
+    t.integer  "user_id"
+    t.index ["user_id"], name: "index_settings_on_user_id", using: :btree
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -180,6 +182,7 @@ ActiveRecord::Schema.define(version: 20181102111534) do
     t.datetime "updated_at",                     null: false
     t.integer  "version_id"
     t.integer  "question_id"
+    t.string   "kind"
     t.index ["question_id"], name: "index_version_nodes_on_question_id", using: :btree
     t.index ["version_id"], name: "index_version_nodes_on_version_id", using: :btree
   end
@@ -206,6 +209,7 @@ ActiveRecord::Schema.define(version: 20181102111534) do
   add_foreign_key "questions", "subjects"
   add_foreign_key "responses", "projects"
   add_foreign_key "returns", "projects"
+  add_foreign_key "settings", "users"
   add_foreign_key "version_nodes", "questions"
   add_foreign_key "version_nodes", "versions"
   add_foreign_key "versions", "subjects"

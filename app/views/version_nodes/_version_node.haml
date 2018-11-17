@@ -1,6 +1,7 @@
 %td
   = link_to questions_path(version_node[:question]), class: 'show-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = version_node.question[:question_code]
+%td= version_node[:kind]
 %td= version_node[:response_1]
 %td= version_node[:target_1]
 %td= version_node[:response_2]
