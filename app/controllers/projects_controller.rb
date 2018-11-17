@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   before_action :find_project, only: [:show, :edit, :destroy, :delete_modal, :work, :update, :previous]
   before_action :find_last_node, only: [:work]
   before_action :update_node
+  before_action :find_setting
 
   def index
     @projects = Project.where(user: current_user)
@@ -81,7 +82,7 @@ class ProjectsController < ApplicationController
 
     @next_node = ResponseProcessor.perform(@last_node, @project_nodes, return_node_code)
 
-    if @next_node.kind == 'd'
+    if %w[cf cp d].include?(@next_node.kind) 
       # we have a new last node now
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
@@ -94,21 +95,10 @@ class ProjectsController < ApplicationController
         return_node: params[:return_node]
       )
       @last_node = @next_node
-      make_next_node
-    elsif %w[cf cp].include?(@next_node.kind)
-      # we have a new last node now
-      @response_nodes = Node.where(project_id: @project.id)
-                            .where('response_value IS NOT NULL')
-													  .order(index: :asc)
-                            .to_a
-      # if @next_node already has an index (from page reload or coming from projects index page)
-      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
-      @next_node.update(
-        index: @index,
-        return_node: params[:return_node]
-      )
-      @last_node = @next_node
-      make_next_node
+
+      # generate the next node if we're skipping the decision/conclusion nodes
+      make_next_node if @setting.skip_conclusion?
+    # Need to deal with pause here since next node is the d node and does not have any data yet 
     else
       # have we changed a previous answer?
       drop_subsequent_nodes
@@ -248,6 +238,10 @@ class ProjectsController < ApplicationController
 
   def find_project
     @project = Project.find_by(id: params[:id])
+  end
+  
+  def find_setting
+    @setting = Setting.find_by(id: current_user.setting.id)
   end
   
   def find_last_node

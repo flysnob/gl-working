@@ -11,5 +11,5 @@
           - if @index == n.index
             = link_to n.index, previous_project_path(node_code: n.question_code), { class: 'btn btn-warning', title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}" }
           - else
-            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{%w[c d].include?(n.question.kind) ? 'btn btn-info' : 'btn btn-default'}", title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}" }
+            = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{%w[cf cp d].include?(n.question.kind) ? 'btn btn-info' : 'btn btn-default'}", title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}" }
         =link_to "#{@response_nodes.length + 1}", work_project_path, { class: 'btn btn-primary' }
