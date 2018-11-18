@@ -1,6 +1,7 @@
 class ResponseProcessor
   class << self
     def perform(last_node, nodes, return_node_code)
+      Rails.logger.info("return_node_code: #{return_node_code}")
       @last_node = last_node
       @nodes = nodes
 
@@ -57,10 +58,10 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_last_node
-      if @last_node.kind == 'q' || @last_node.kind == 'i'
+      if %w[i q].include?(@last_node.kind)
         next_node = @nodes.select { |q| q[:question_code] == @last_node.target_node }.first
         next_node
-      elsif @last_node.kind == 'd'
+      elsif %w[d].include?(@last_node.kind)
         # What is the result of the decision node?
         evaluate_decision_node
 
@@ -138,6 +139,9 @@ class ResponseProcessor
       # i think this is where to get the return node from the database and then run fetch_node on that; it's the last record for this project
       # this currenctly resets the analyze response on the return node. not cool. needs to leave that alone and do something else
       @return_node = fetch_node(@returns.last.return_node_code)
+      Rails.logger.info("@return_node.response_value before: #{@return_node.response_value}")
+      Rails.logger.info("@return_node.target_node before: #{@return_node.target_node}")
+      Rails.logger.info("@last_node.pass?: #{@last_node.pass?}")
 
       if @last_node.pass?
         #pass
@@ -150,9 +154,11 @@ class ResponseProcessor
       end
 
       @return_node.save
+      Rails.logger.info("@return_node.response_value after: #{@return_node.response_value}")
+      Rails.logger.info("@return_node.target_node after: #{@return_node.target_node}")
 
       # select the last active return since that's the one we're working on
-      r = Return.where(status: 'active').last
+      r = Return.where(status: 0).last
       if r
         r.status = 1
         r.save
@@ -178,8 +184,8 @@ class ResponseProcessor
 
 
     def fetch_node(node_code)
-      node = @nodes.select { |q| q[:question_code] == node_code }.first
-      node
+      Rails.logger.info("fetch_node node_code: #{node_code}")
+      @nodes.select { |q| q[:question_code] == node_code }.first
     end
 
     def evaluate_decision_node
@@ -225,7 +231,7 @@ class ResponseProcessor
     end
 
     def evaluate_conclusion_node
-      # always false
+      # cp is always false, cf is always pass
       if @last_node.kind == 'cp'
         make_response_hash(@last_node.response_1, @last_node.target_1, 1)
       else

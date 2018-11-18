@@ -32,8 +32,6 @@ class ProjectsController < ApplicationController
   end
 
   def work
-    @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id)
-
 		fetch_nodes
 
 		@response_nodes.sort_by! { |n| n[:index] }
@@ -63,6 +61,13 @@ class ProjectsController < ApplicationController
     @index = @next_node.index
   end
 
+  def set_previous
+    @current_node = @response_nodes.select { |q| q.index == @response_nodes.length - 1 }.first
+    @index = @next_node.index
+
+    render 'previous'
+  end
+
 	def fetch_nodes
     @project_nodes = Node.includes(:question)
                          .where(project_id: @project.id)
@@ -76,7 +81,7 @@ class ProjectsController < ApplicationController
 	end
   
   def make_next_node
-    returns = Return.where(project_id: @project.id)
+    returns = Return.where(project_id: @project.id, status: 0)
 
     return_node_code = returns.length.zero? ? nil : returns.last.return_node_code
 
@@ -97,8 +102,8 @@ class ProjectsController < ApplicationController
       @last_node = @next_node
 
       # generate the next node if we're skipping the decision/conclusion nodes
-      make_next_node if @setting.skip_conclusion?
-    # Need to deal with pause here since next node is the d node and does not have any data yet 
+      make_next_node
+    # Need to deal with pause here since next node is the d node and does not have any data yet
     else
       # have we changed a previous answer?
       drop_subsequent_nodes
@@ -108,6 +113,15 @@ class ProjectsController < ApplicationController
 													  .order(index: :asc)
                             .to_a
       @index = @response_nodes.length + 1
+      
+      if %w[cf cp d].include?(@last_node.kind)
+        if @last_node.display_value == '1'
+          flash[:notice] = @last_node.question.conclusion_1 || @last_node.question.content
+        elsif @last_node.display_value == '2'
+          flash[:notice] = @last_node.question.conclusion_2 || @last_node.question.content
+
+        end
+      end
     end
   end
 
@@ -128,8 +142,12 @@ class ProjectsController < ApplicationController
     ActiveRecord::Base.transaction do
       build_nodes(project_params)
 
-      flash[:error] = @project.errors.full_messages.to_sentence unless @project.errors.empty?
-      flash.keep
+      if @project.errors.empty?
+        flash[:success] = "Project #{@project.name} successfully created."
+      else
+        flash[:error] = @project.errors.full_messages.to_sentence
+        flash.keep
+      end
 
       redirect_to projects_path
     end
@@ -253,6 +271,9 @@ class ProjectsController < ApplicationController
   end
 
   def update_node
+    @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id, :target_node,
+                                    :return_node, :commit, :comment, :id)
+
     # update with return node if not na. when/how is it cleared?
     return if params[:response_value].blank?
 

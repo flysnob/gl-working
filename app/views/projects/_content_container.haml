@@ -33,13 +33,11 @@
         %h5.content= @next_node.question.summary
     .col-md-12
       - if @next_node.index.nil?
-        - if @next_node.response_1.present? && @setting.skip_conclusion?
+        - if @next_node.response_1.present? && %w[cf cp d].exclude?(@next_node.question.kind)
           = f.submit @next_node.response_1, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')", title: ''}
-        - else @next_node.response_1.present? && %w[i].exclude?(@next_node.question.kind)
-          = f.submit @next_node.response_1, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('1');$('#target_node').val('#{@next_node.target_1}');$('#return_node').val('#{@next_node.return_node}')", title: ''}
-        - if @next_node.response_2.present? && @setting.skip_conclusion?
+        - if @next_node.response_2.present? && %w[cf cp d].exclude?(@next_node.question.kind)
           = f.submit @next_node.response_2, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('2');$('#target_node').val('#{@next_node.target_2}');$('#return_node').val('#{@next_node.return_node}')" }
-        - if @next_node.response_3.present?
+        - if @next_node.response_3.present? && %w[cf cp d].exclude?(@next_node.question.kind)
           = f.submit @next_node.response_3, { class: 'btn btn-success node-response', onclick: "$('#response_value').val('3');$('#target_node').val('#{@next_node.target_3}');$('#return_node').val('#{@next_node.return_node}')" }
       - else
         - if @next_node.response_1.present? && %w[cf cp d i].exclude?(@next_node.question.kind)
