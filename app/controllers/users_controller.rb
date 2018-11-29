@@ -1,7 +1,9 @@
 # the users controller
 class UsersController < ApplicationController
+  layout 'modal', only: [:subscribe]
+
   before_action :authenticate_user!
-  before_action :admin_only, except: :show
+  before_action :admin_only, except: [:show, :subscribe]
 
   def index
     @users = User.all
@@ -27,6 +29,10 @@ class UsersController < ApplicationController
     redirect_to users_path, notice: 'User deleted.'
   end
 
+  def subscribe
+    @user = User.find(params[:user])
+  end
+
   private
 
   def admin_only
@@ -34,6 +40,6 @@ class UsersController < ApplicationController
   end
 
   def secure_params
-    params.require(:user).permit(:role)
+    params.require(:user).permit(:role, :user)
   end
 end

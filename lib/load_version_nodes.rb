@@ -12,6 +12,8 @@ class LoadVersionNodes
           target_2: row[14],
           response_3: row[15],
           target_3: row[16],
+          response_fatal: row[32],
+          target_fatal: row[33],
           target_module: row[18],
           return_node: row[17],
           decision_node: row[20],

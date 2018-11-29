@@ -1,12 +1,10 @@
 .row
   .col-md-12.previous-container
     .row.col-md-12
-      %h4.panel-title Previous Questions
-    .row.col-md-12
       %small
         %em.text-muted Click to see a previous question and your response.
     .row.col-md-12.spacer
       %div{ class: 'btn-group', role: 'group' }
         - @response_nodes.each do |n|
-          = link_to n.index, previous_project_path(node_code: n.question_code), { class: "#{%w[cf cp d].include?(n.question.kind) ? 'btn btn-info' : 'btn btn-default'}", title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}", onclick: 'comment;' }
-        =link_to "#{@response_nodes.length + 1}", work_project_path, { class: 'btn btn-primary', disabled: 'disabled' }
+          = link_to n.index, previous_project_path(node_code: n.question_code, previous: true), { class: "#{%w[cf cp d].include?(n.question.kind) ? 'btn btn-info' : 'btn btn-default'}", title: "Question #{n.index}: #{n.question.kind == 'd' ? n.question.summary : n.question.content}", onclick: 'comment;' }
+        = link_to "#{@response_nodes.length + 1}", work_project_path(previous: true), { class: 'btn btn-warning', disabled: true }

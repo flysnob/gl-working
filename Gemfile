@@ -36,8 +36,6 @@ gem 'multi_logger'
 gem 'nested_form'
 # Passenger is the application server that will run Rails
 # gem 'passenger', require: 'phusion_passenger/rack_handler' # This require will execute passenger start on rails server
-# Paypal sdk so we can get paid some cashes
-gem 'paypal-sdk-rest'
 # Postgres because Heroku
 gem 'pg', '~> 0.18'
 # For rendering a pdf
@@ -60,6 +58,8 @@ gem 'select2-rails'
 # WYSIWIG html editor
 # gem 'summernote-rails', '~> 0.8.10.0'
 # gem 'sqlite3'
+# Square for profit
+gem 'square_connect'
 # This provides a JS engine that allows us to compile assets
 gem 'therubyracer'
 # Turbolinks allows you to build a multi-page app but have it load pages as if it were single-page

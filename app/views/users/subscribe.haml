@@ -1,0 +1,46 @@
+.modal-header
+  %button.close{ 'aria-label': 'Close', 'data-dismiss': 'modal', type: 'button'}
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title Please select your preferred option
+.modal-body
+  #form
+    #sq-ccbox
+      %form.form-horizontal#nonce-form{ novalidate: true, action: 'subscribe', method: "post" }
+        .form-group
+          = label_tag 'subscribe', 'Purchase Subscription', class: 'control-label col-md-3'
+          .col-md-1
+            = radio_button_tag 'purchase', 'subscribe', true, onchange: "$('#sq-creditcard').text('Pay $125');"
+          .col-md-7
+            All you can eat for 12 months!
+
+        .form-group
+          = label_tag 'report', 'Purchase Report', class: 'control-label col-md-3'
+          .col-md-1
+            = radio_button_tag 'purchase', 'report', false, onchange: "$('#sq-creditcard').text('Pay $25');"
+          .col-md-7
+            Purchase just this report. You can generate this report as many times as you need.
+
+        .form-group
+          = label_tag 'sq-card-number', 'Credit Card Number', class: 'control-label col-md-3'
+          .col-md-8
+            = text_field_tag 'sq-card-number', '', id: 'sq-card-number', class: 'form-control', placeholder: 'Credit Card Number', required: true
+
+        .form-group
+          = label_tag 'sq-expiration-date', 'Expiration Date', class: 'control-label col-md-3'
+          .col-md-8
+            = text_field_tag 'sq-expiration-date', '', id: 'sq-expiration-date', class: 'form-control', placeholder: 'Expiration Date', required: true
+
+        .form-group
+          = label_tag 'sq-ccv', 'CCV', class: 'control-label col-md-3'
+          .col-md-8
+            = text_field_tag 'sq-ccv', '', id: 'sq-ccv', class: 'form-control', placeholder: 'CCV', required: true
+        .form-group
+          = label_tag 'sq-postal-code', 'Postal Code', class: 'control-label col-md-3'
+          .col-md-8
+            = text_field_tag 'sq-postal-code', '', id: 'sq-postal-code', class: 'form-control', placeholder: 'Postal Code', required: true
+
+      #error
+
+      - hidden_field :nonce, { id: 'care-conce' }
+.modal-footer
+  %button#sq-creditcard.btn.btn-primary.button-credit-card{ onclick: 'requestCardNonce(event)' } Pay $125

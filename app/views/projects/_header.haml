@@ -4,9 +4,13 @@
   .col-md-12
   %small
     %em.text-muted
-      .col-md-12= "Started on #{@project.created_at.strftime('%m/%d/%Y')}"
+      .col-md-12= "Started on #{@project.created_at.strftime('%m/%d/%Y')}; updated on #{@project.updated_at.strftime('%m/%d/%Y')}"
   .col-md-12
     = link_to project_path, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
       %span.glyphicon.glyphicon-eye-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'View project summary'}
-    = link_to "/reports/project/#{@project.id}.html", target: '_blank', class: 'print-project-link' do
-      %span.glyphicon.glyphicon-new-window{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Generate report'}
+    - if current_user.admin? || (@setting.subscription_start && @setting.subscription_start > Date.today)
+      = link_to "/reports/project/#{@project.id}.html", target: '_blank', class: 'print-project-link' do
+        %span.glyphicon.glyphicon-new-window{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Generate report'}
+    - else
+      = link_to subscribe_user_path(user: current_user.id), class: 'user-subscribe-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+        %span.glyphicon.glyphicon-new-window{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Generate report'}
