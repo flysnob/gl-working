@@ -2,8 +2,9 @@
 class UsersController < ApplicationController
   layout 'modal', only: [:subscribe]
 
-  before_action :authenticate_user!
-  before_action :admin_only, except: [:show, :subscribe]
+  skip_before_filter :verify_authenticity_token, :only => [:purchase]
+  before_action :authenticate_user!, except: [:purchase]
+  before_action :admin_only, except: [:show, :subscribe, :purchase]
 
   def index
     @users = User.all
@@ -31,6 +32,23 @@ class UsersController < ApplicationController
 
   def subscribe
     @user = User.find(params[:user])
+    @project = Project.find(params[:id])
+    @content = Content.find_by(title: 'please_pay') || ''
+  end
+
+  def purchase
+    user = User.find_by(id: params[:id])
+    purchase_params = params.permit!
+    result = ProcessPayment.perform(user, purchase_params)
+    if purchase_params[:amount] == '12500'
+      user.subscription_start = Date.current
+    else
+      project = Project.find(purchase_params[:project])
+      project.update_attributes(paid: true)
+    end
+    Rails.logger.error(result)
+
+    render json: result
   end
 
   private

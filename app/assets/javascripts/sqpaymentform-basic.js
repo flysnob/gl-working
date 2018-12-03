@@ -1,8 +1,8 @@
 // Set the application ID
-var applicationId = "REPLACE_ME";
+var applicationId = 'sandbox-sq0idp-AMzdqvzUmqHq7gpXvbw7ZQ';
 
 // Set the location ID
-var locationId = "REPLACE_ME";
+var locationId = 'CBASEAp-s-ney5JcIe5Z5e8kp8sgAQ';
 
 
 function buildForm(form) {
@@ -59,9 +59,17 @@ var paymentForm = new SqPaymentForm({
   masterpass: false,
 
   // Initialize the credit card placeholders
+  givenName: {
+    elementId: 'sq-given-name',
+    placeholder: 'First name'
+  },
+  familyName: {
+    elementId: 'sq-family-name',
+    placeholder: 'Last name'
+  },
   cardNumber: {
     elementId: 'sq-card-number',
-    placeholder: '• • • •  • • • •  • • • •  • • • •'
+    placeholder: 'Card number'
   },
   cvv: {
     elementId: 'sq-cvv',
@@ -125,8 +133,29 @@ var paymentForm = new SqPaymentForm({
       document.getElementById('card-nonce').value = nonce;
 
       // POST the nonce form to the payment processing page
-      document.getElementById('nonce-form').submit();
-
+      // document.getElementById('nonce-form').submit();
+      var $form = $('#nonce-form');
+      $.ajax({
+        type: 'post',
+        url: 'http://localhost:3000/users/' + $('#user').val() + '/purchase',
+        data: $form.serialize(),
+        error: function(result) {
+          alert('there was a problem');
+          console.log(result);
+        },
+        success: function(result) {
+          $('#modal-title').text('Success!')
+          $('#cancel').text('Close')
+          $('#form-container').addClass('hidden');
+          var amount = $('#amount').val();
+          if (amount == 12500) {
+            $('#payment-type').text('Your subscription to GAAP Logic will expire 1 year from today. During that time you will be able to generate and print an unlimited number of reports on all projects that you create.');
+          } else {
+            $('#payment-type').text('You may print an unlimited number of reports for this project at any time.');
+          }
+          $('#payment-success').removeClass('hidden');
+        }
+      });
     },
 
     /*
