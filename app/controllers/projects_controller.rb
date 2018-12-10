@@ -83,9 +83,7 @@ class ProjectsController < ApplicationController
   def make_next_node
     returns = Return.where(project_id: @project.id, status: 0)
 
-    return_node_code = returns.length.zero? ? nil : returns.last.return_node_code
-
-    @next_node = ResponseProcessor.perform(@last_node, @project_nodes, return_node_code)
+    @next_node = ResponseProcessor.perform(@last_node, @project_nodes)
 
     if %w[cf cp d].include?(@next_node.kind) 
       # we have a new last node now
