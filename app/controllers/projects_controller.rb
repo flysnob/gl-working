@@ -140,7 +140,7 @@ class ProjectsController < ApplicationController
     @project = build_project(project_params)
 
     ActiveRecord::Base.transaction do
-      build_nodes(project_params)
+      NodeGenerator::build_nodes(@project, project_params)
 
       if @project.errors.empty?
         flash[:success] = "Project #{@project.name} successfully created."
@@ -174,66 +174,6 @@ class ProjectsController < ApplicationController
     flash.clear
   end
 
-  def create_node_set
-    @nodes.each do |n|
-      node_hash = {
-        project: @project,
-        question: n[:question],
-        kind: n[:question][:kind],
-        module_code: n[:question][:module_code],
-        question_code: n[:question][:question_code],
-        conclusion_1: n[:question][:conclusion_1],
-        conclusion_2: n[:question][:conclusion_2],
-        conclusion_3: n[:question][:conclusion_3],
-        meets_response: n[:version]['meets_response'],
-        response_1: n[:version]['response_1'],
-        response_2: n[:version]['response_2'],
-        response_3: n[:version]['response_3'],
-        response_fatal: n[:version]['response_fatal'],
-        target_1: n[:version]['target_1'],
-        target_2: n[:version]['target_2'],
-        target_3: n[:version]['target_3'],
-        target_fatal: n[:version]['target_fatal'],
-        target_module: n[:version]['target_module'],
-        return_node: n[:version]['return_node'],
-        decision_node: n[:version]['decision_node'],
-        boolean: n[:version]['boolean'],
-        return: n[:version]['return']
-      }
-      Node.create(
-        node_hash
-      )
-    end
-  end
-
-  # core project questions
-  def build_nodes(project_params)
-    @nodes = []
-
-    @project.version.version_nodes.each do |n|
-      question = Question.find(n.question_id)
-
-      @nodes.push({ question: question, version: n })
-
-      if n.target_module.present?
-        build_module_version_nodes(n)
-      end
-    end
-
-    create_node_set
-  end
-
-  # submodule questions for analyze buttons
-  def build_module_version_nodes(core_node)
-    module_version = select_module_version(core_node)
-
-    module_version.version_nodes.each do |n|
-      question = Question.find(n.question_id)
-
-      @nodes.push({ question: question, version: n })
-    end
-  end
-
   def select_core_version(params)
     versions = if params[:date].nil?
                  Version.where(subject: @subject)
@@ -245,19 +185,6 @@ class ProjectsController < ApplicationController
     raise Exception.new("No version available for subject #{@subject.name}.") if versions.length.zero?
     @core_version = versions.first
     @core_version
-  end
-
-  def select_module_version(v)
-    versions = if @project[:date].nil?
-                 Version.where(module_code: v.target_module)
-                        .where('expiration_date IS NULL')
-
-               else
-                 Version.where(module_code: v.target_module)
-                        .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
-               end
-    raise Exception.new("No version available for module code #{v['target_module']}.") if versions.length.zero?
-    versions.first
   end
 
   def find_project
@@ -341,7 +268,9 @@ class ProjectsController < ApplicationController
                             .to_a
     end
     last_return = Return.last
-    last_return.status = 0 if last_return
-    last_return.save
+    if last_return
+      last_return.status = 0
+      last_return.save
+    end
   end
 end

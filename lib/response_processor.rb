@@ -145,11 +145,13 @@ class ResponseProcessor
 
       if @last_node.pass?
         #pass
-        @return_node.response_value = @return_node.response_1
+        @return_node.response_text = @return_node.response_1
+        @return_node.response_value = 1
         @return_node.target_node = @return_node.target_1
       else
         #fail
-        @return_node.response_value = @return_node.response_2
+        @return_node.response_text = @return_node.response_2
+        @return_node.response_value = 2
         @return_node.target_node = @return_node.target_2
       end
 
@@ -178,7 +180,17 @@ class ResponseProcessor
 
     def fetch_node(node_code)
       Rails.logger.info("fetch_node node_code: #{node_code}")
-      @nodes.select { |q| q[:question_code] == node_code }.first
+      if module_exists?(node_code)
+        @nodes.select { |q| q[:question_code] == node_code }.first
+      else
+        module_code = node_code.split('-').first
+        @nodes = NodeGenerator::build_additional_nodes(@last_node.project_id, module_code)
+        @nodes.select { |q| q[:question_code] == node_code }.first
+      end      
+    end
+
+    def module_exists?(node_code)
+      @nodes.select { |q| q[:module_code] == node_code.split('-').first }.first
     end
 
     def evaluate_decision_node
@@ -199,7 +211,7 @@ class ResponseProcessor
           if !meets && r.pass?
             meets = true
           end
-        
+
           # Test 'and' only if meets is truthy because you are looking for a single failure. Must pass all nodes, so any false response (fails?) means the
           # entire decision is falsy (i.e., meets == false).
           # Note: Have to test condition meets == nil even though it is falsy (versus meets == false) in case meets is still the start value, otherwise
@@ -226,9 +238,9 @@ class ResponseProcessor
     def evaluate_conclusion_node
       # cp is always false, cf is always pass
       if @last_node.kind == 'cp'
-        make_response_hash(@last_node.response_1, @last_node.target_1, 1)
+        make_response_hash(@return_node.response_1, @return_node.question_code, 1)
       else
-        make_response_hash(@last_node.response_2, @last_node.target_2, 2)
+        make_response_hash(@return_node.response_2, @return_node.question_code, 2)
       end
         
       update_conclusion_node

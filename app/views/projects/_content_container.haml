@@ -15,23 +15,27 @@
     %input{ type: 'hidden', name: 'comment_save', id: 'comment_save', value: '' }
     .col-md-12
       - if @next_node.question.kind == 'q' 
-        %h4.content= @next_node.question.content
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'd'
+        %h4 Intermediate Conclusion
         - if @next_node.response_value == '1' 
-          %h4.content= @next_node.question.conclusion_1
+          %h5.content= @next_node.question.conclusion_1
         - if @next_node.response_value == '2' 
-          %h4.content= @next_node.question.conclusion_2
+          %h5.content= @next_node.question.conclusion_2
         - if @next_node.response_value == '3' 
-          %h4.content= @next_node.question.conclusion_3
+          %h5.content= @next_node.question.conclusion_3
       - if @next_node.question.kind == 'cf' 
-        %h4.content= @next_node.question.content
+        %h4 Intermediate Conclusion
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'cp' 
-        %h4.content= @next_node.question.content
+        %h4 Intermediate Conclusion
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'r' 
         %h4 Accounting Recommendation
-        .recommendation= @next_node.question.content
+        %h5.recommendation= @next_node.question.content
       - if @next_node.question.kind == 'i' 
-        %h5.content= @next_node.question.content
+        %h4 Background
+        %h5.content= @next_node.question.content || @next_node.question.summary
     .col-md-12
       - if @next_node.index.nil?
         - if @next_node.response_1.present? && %w[cf cp d].exclude?(@next_node.question.kind)
