@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController
   before_action :find_last_node, only: [:work]
   before_action :update_node
   before_action :find_setting
+  before_action :clear_flash
 
   def index
     @projects = Project.where(user: current_user)
@@ -81,17 +82,17 @@ class ProjectsController < ApplicationController
 	end
   
   def make_next_node
-    returns = Return.where(project_id: @project.id, status: 0)
-
-    return_node_code = returns.length.zero? ? nil : returns.last.return_node_code
-
-    @next_node = ResponseProcessor.perform(@last_node, @project_nodes, return_node_code)
+    if params[:comment_save] == 'true'
+      @next_node = @last_node
+    else
+      @next_node = ResponseProcessor.perform(@last_node, @project_nodes)
+    end
 
     if %w[cf cp d].include?(@next_node.kind) 
       # we have a new last node now
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
-													  .order(index: :asc)
+                            .order(index: :asc)
                             .to_a
       # if @next_node already has an index (from page reload or coming from projects index page)
       @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
@@ -115,11 +116,10 @@ class ProjectsController < ApplicationController
       @index = @response_nodes.length + 1
       
       if %w[cf cp d].include?(@last_node.kind)
-        if @last_node.display_value == '1'
+        if @last_node.display_value == '1' && @project_params[:previous].nil?
           flash[:notice] = @last_node.question.conclusion_1 || @last_node.question.content
-        elsif @last_node.display_value == '2'
+        elsif @last_node.display_value == '2' && @project_params[:previous].nil?
           flash[:notice] = @last_node.question.conclusion_2 || @last_node.question.content
-
         end
       end
     end
@@ -140,7 +140,7 @@ class ProjectsController < ApplicationController
     @project = build_project(project_params)
 
     ActiveRecord::Base.transaction do
-      build_nodes(project_params)
+      NodeGenerator::build_nodes(@project, project_params)
 
       if @project.errors.empty?
         flash[:success] = "Project #{@project.name} successfully created."
@@ -170,62 +170,8 @@ class ProjectsController < ApplicationController
     @subject = Subject.find(subject_id)
   end
 
-  def create_node_set
-    @nodes.each do |n|
-      node_hash = {
-        project: @project,
-        question: n[:question],
-        kind: n[:question][:kind],
-        module_code: n[:question][:module_code],
-        question_code: n[:question][:question_code],
-        conclusion_1: n[:question][:conclusion_1],
-        conclusion_2: n[:question][:conclusion_2],
-        conclusion_3: n[:question][:conclusion_3],
-        meets_response: n[:version]['meets_response'],
-        response_1: n[:version]['response_1'],
-        response_2: n[:version]['response_2'],
-        response_3: n[:version]['response_3'],
-        target_1: n[:version]['target_1'],
-        target_2: n[:version]['target_2'],
-        target_3: n[:version]['target_3'],
-        target_module: n[:version]['target_module'],
-        return_node: n[:version]['return_node'],
-        decision_node: n[:version]['decision_node'],
-        boolean: n[:version]['boolean'],
-        return: n[:version]['return']
-      }
-      Node.create(
-        node_hash
-      )
-    end
-  end
-
-  # core project questions
-  def build_nodes(project_params)
-    @nodes = []
-
-    @project.version.version_nodes.each do |n|
-      question = Question.find(n.question_id)
-
-      @nodes.push({ question: question, version: n })
-
-      if n.target_module.present?
-        build_module_version_nodes(n)
-      end
-    end
-
-    create_node_set
-  end
-
-  # submodule questions for analyze buttons
-  def build_module_version_nodes(core_node)
-    module_version = select_module_version(core_node)
-
-    module_version.version_nodes.each do |n|
-      question = Question.find(n.question_id)
-
-      @nodes.push({ question: question, version: n })
-    end
+  def clear_flash
+    flash.clear
   end
 
   def select_core_version(params)
@@ -239,19 +185,6 @@ class ProjectsController < ApplicationController
     raise Exception.new("No version available for subject #{@subject.name}.") if versions.length.zero?
     @core_version = versions.first
     @core_version
-  end
-
-  def select_module_version(v)
-    versions = if @project[:date].nil?
-                 Version.where(module_code: v.target_module)
-                        .where('expiration_date IS NULL')
-
-               else
-                 Version.where(module_code: v.target_module)
-                        .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
-               end
-    raise Exception.new("No version available for module code #{v['target_module']}.") if versions.length.zero?
-    versions.first
   end
 
   def find_project
@@ -272,26 +205,39 @@ class ProjectsController < ApplicationController
 
   def update_node
     @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id, :target_node,
-                                    :return_node, :commit, :comment, :id)
+                                    :return_node, :commit, :comment, :id, :previous, :comment_save)
 
     # update with return node if not na. when/how is it cleared?
     return if params[:response_value].blank?
 
-    @last_node.update(
-      response_value: params[:response_value],
-      display_value: params[:response_value],
-      response_text: params[:commit],
-      target_node: params[:target_node],
-      index: params[:index].to_f.round(0),
-      comment: params[:comment]
-    )
-    #update return_node if we're in a submodule
-    @last_node.update(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
-    @last_node.save
-    @last_node.reload
+    @returns = Return.where(project_id: @last_node.project_id)
+
+    @target_node = params[:target_node]
+
+    if @returns.length.nonzero? && @last_node.response_fatal == params[:commit]
+      @target_node = @last_node.target_fatal
+    end
+
+    if params[:comment_save] == 'true' && params[:comment] != @last_node.comment
+      @last_node.update_attributes(
+        comment: params[:comment]
+      )
+      flash[:notice] = 'Comment updated.'
+    elsif params[:response_value] != @last_node.response_value
+      @last_node.update_attributes(
+        response_value: params[:response_value],
+        display_value: params[:response_value],
+        response_text: params[:commit],
+        target_node: @target_node,
+        index: params[:index].to_f.round(0),
+        comment: params[:comment]
+      )
+      #update return_node if we're in a submodule
+      @last_node.update_attributes(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
+      flash[:notice] = 'Response updated and all subsequent questions have been deleted'
+    end
   end
 
-  # @TODO: Fix this
   def drop_subsequent_nodes
     # Only need to evalluate this if the index of the last node is less than @response_nodes.last.index.
     # This avoids running this when the 
@@ -320,6 +266,11 @@ class ProjectsController < ApplicationController
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
                             .to_a
+    end
+    last_return = Return.last
+    if last_return
+      last_return.status = 0
+      last_return.save
     end
   end
 end

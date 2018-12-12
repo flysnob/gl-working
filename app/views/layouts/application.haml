@@ -5,6 +5,7 @@
     %title= content_for?(:title) ? yield(:title) : 'Gl Working'
     %meta{name: "description", content: "#{content_for?(:description) ? yield(:description) : 'Gl Working'}"}
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag 'https://js.squareup.com/v2/paymentform'
     = javascript_include_tag 'application', 'data-turbolinks-track' => 'reload'
     = csrf_meta_tags
   %body
@@ -22,3 +23,4 @@
           #modal.modal.fade
             .modal-dialog.modal-lg
               .modal-content
+    = render 'layouts/google_analytics'

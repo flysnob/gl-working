@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181116190948) do
+ActiveRecord::Schema.define(version: 20181203161646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,21 +60,24 @@ ActiveRecord::Schema.define(version: 20181116190948) do
     t.integer  "question_id"
     t.integer  "subject_id"
     t.string   "display_value"
+    t.string   "response_fatal"
+    t.string   "target_fatal"
     t.index ["project_id"], name: "index_nodes_on_project_id", using: :btree
     t.index ["question_id"], name: "index_nodes_on_question_id", using: :btree
     t.index ["subject_id"], name: "index_nodes_on_subject_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",                        null: false
     t.text     "description"
     t.datetime "date"
     t.string   "entity"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "user_id"
     t.integer  "subject_id"
     t.integer  "version_id"
+    t.boolean  "paid",        default: false
     t.index ["subject_id"], name: "index_projects_on_subject_id", using: :btree
     t.index ["version_id"], name: "index_projects_on_version_id", using: :btree
   end
@@ -183,6 +186,8 @@ ActiveRecord::Schema.define(version: 20181116190948) do
     t.integer  "version_id"
     t.integer  "question_id"
     t.string   "kind"
+    t.string   "response_fatal"
+    t.string   "target_fatal"
     t.index ["question_id"], name: "index_version_nodes_on_question_id", using: :btree
     t.index ["version_id"], name: "index_version_nodes_on_version_id", using: :btree
   end

@@ -1,0 +1,71 @@
+<div class='modal-header'>
+  <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
+    <span aria-hidden='true'>x</span>
+  </button>
+  <h4 id='modal-title' class='modal-title'>We charge a nominal fee to print reports</h4>
+</div>
+<div class='modal-body'>
+  <div id='select-form'>
+    <div class='form-group col-md-12'>
+      <div class='col-md-1'></div>
+      <div class='col-md-1 text-right'>
+        <input type='radio' name='subscribe' id='purchase' checked='checked' onchange="$('#sq-creditcard').text('Pay $125');">
+      </div>
+      <div class='col-md-9'>All you can eat for 12 months! Choose this option if you will have more than a few transactions or contracts to evaluate.</div> <!-- end description 1 -->
+      <div class='col-md-1'></div>
+    </div> <!-- end .form-group -->
+    <div class='form-group col-md-12'>
+      <div class='col-md-1'></div>
+      <div class='col-md-1 text-right'>
+        <input type='radio' name='subscribe' id='subscribe' onchange="$('#sq-creditcard').text('Pay $25');">
+      </div>
+      <div class='col-md-9'>Purchase just this report. You can generate the report as many times as you need.</div> <!-- end description 2 -->
+      <div class='col-md-1'></div>
+    </div> <!-- end .form-group -->
+  </div> <!-- end #select-form -->
+  <div id='form-container' class='hidden'>
+    Please enter your credit card information below.
+    <div id="sq-ccbox">
+      <!--
+        Be sure to replace the action attribute of the form with the path of
+        the Transaction API charge endpoint URL you want to POST the nonce to
+        (for example, "/process-card")
+      -->
+      <form id="nonce-form" novalidate action="PATH/TO/PAYMENT/PROCESSING/PAGE" method="post">
+        <fieldset>
+          <span class="label">Card Number</span>
+          <div id="sq-card-number"></div>
+
+          <div class="third">
+            <span class="label">Expiration</span>
+            <div id="sq-expiration-date"></div>
+          </div>
+
+          <div class="third">
+            <span class="label">CVV</span>
+            <div id="sq-cvv"></div>
+          </div>
+
+          <div class="third">
+            <span class="label">Postal</span>
+            <div id="sq-postal-code"></div>
+          </div>
+        </fieldset>
+
+        <button id="sq-creditcard" class="button-credit-card" onclick="requestCardNonce(event)">Pay $125.00</button>
+
+        <div id="error"></div>
+
+        <!--
+          After a nonce is generated it will be assigned to this hidden input field.
+        -->
+        <input type="hidden" id="card-nonce" name="nonce">
+      </form>
+    </div> <!-- end #sq-ccbox -->
+
+  </div> <!-- end #form-container -->
+</div>
+<div class='modal-footer'>
+  <a role='button' class='btn btn-primary' onclick="$('#select-form').addClass('hidden');$('#form-container').removeClass('hidden');buildForm(paymentForm);$(this).addClass('hidden')">Pay with Credit Card</a>
+  <a type='button' class='btn btn-default' data-dismiss='modal'>Cancel</a>
+</div>

@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   authenticate :user do
     root to: 'pages#index'
 
-    resources :users
+    resources :users do
+      member do
+        get 'subscribe', to: 'users#subscribe'
+        post 'purchase', to: 'users#purchase'
+      end
+    end
 
     resources :projects, except: [] do
       member do

@@ -25,3 +25,5 @@
         = render 'scope_container'
     .col-md-6.help-container
       = render 'help'
+- if Rails.env.development?
+  = debug(params)

@@ -13,6 +13,7 @@ modalize = ->
 
   $(document).on('hidden.bs.modal', '.modal', ->
     $(this).removeData('bs.modal')
+    window.location.reload()
   )
     
   $(document).on 'shown.bs.modal', '.modal', (evt) ->

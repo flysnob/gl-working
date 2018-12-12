@@ -1,16 +1,14 @@
 class ResponseProcessor
   class << self
-    def perform(last_node, nodes, return_node_code)
-      Rails.logger.info("return_node_code: #{return_node_code}")
+    def perform(last_node, nodes)
       @last_node = last_node
       @nodes = nodes
 
-      # can get this from the db
-      @return_node_code = return_node_code
-
-      @returns = Return.where(project_id: @last_node.project_id)
+      @returns = Return.where(project_id: @last_node.project_id, status: 0)
       
-      create_return if @last_node.target_module.present? && @last_node.response_value == '3' && @returns.find_by(return_node_code: @return_node_code).nil?
+      create_return if @last_node.target_module.present? && @last_node.response_value == '3' && @returns.find_by(return_node_code: @last_node.question_code).nil?
+
+      @return_node_code = @returns.last.return_node_code unless @returns.length.zero?
 
       @responses = Node.where(project_id: @last_node.project_id)
                        .where('response_value IS NOT NULL')
@@ -27,7 +25,16 @@ class ResponseProcessor
         return_node_code: @last_node.question_code,
         status: 0
       )
-      @returns = Return.where(project_id: @last_node.project_id)
+      
+      # select the last active return since that's the one we're working on
+      returns = Return.where(status: 0)
+      if returns.length > 1
+        r = returns.first
+        r.status = 1
+        r.save
+      end
+      
+      @returns = Return.where(project_id: @last_node.project_id, status: 0)
     end
 
     ##############################################################################################################################################
@@ -58,23 +65,20 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_last_node
-      if %w[i q].include?(@last_node.kind)
-        next_node = @nodes.select { |q| q[:question_code] == @last_node.target_node }.first
-        next_node
-      elsif %w[d].include?(@last_node.kind)
+      if %w[d].include?(@last_node.kind)
         # What is the result of the decision node?
         evaluate_decision_node
 
         # fetch the next node with the decision target_node
-        next_node = @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
-        next_node
+        @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
       elsif %w[cf cp].include?(@last_node.kind)
         # What is the result of the conclusion node?
         evaluate_conclusion_node
 
         # fetch the next node with the conclusion target_node
-        next_node = @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
-        next_node
+        @nodes.select { |q| q[:question_code] == @response_hash[:target_node] }.first
+      else
+        @nodes.select { |q| q[:question_code] == @last_node.target_node }.first
       end
     end
 
@@ -91,12 +95,10 @@ class ResponseProcessor
       if @last_node.return
         # update with result of the last response
         update_return_node
-        next_node = evaluate_target_node_return
-        next_node
+        evaluate_target_node_return
       else
         @target_node = fetch_node(@last_node.target_node)
-        next_node = evaluate_target_node_not_return
-        next_node
+        evaluate_target_node_not_return
       end
     end
 
@@ -108,11 +110,11 @@ class ResponseProcessor
     ##############################################################################################################################################
 
     def evaluate_target_node_return
-      if @last_node.kind == 'q'
+      if %w[q].include?(@last_node.kind)
         # nothing special, so make next_node = target_node
         update_return_node
-        next_node = fetch_node(@return_node.target_node)
-        next_node
+
+        fetch_node(@return_node.target_node)
       elsif @last_node.kind == 'd'
         # makes @response_hash
         evaluate_decision_node
@@ -120,8 +122,7 @@ class ResponseProcessor
         # update with result of the last response
         update_return_node
 
-        next_node = fetch_node(@return_node.target_node)
-        next_node
+        fetch_node(@return_node.target_node)
       elsif %w[cf cp].include?(@last_node.kind)
         # makes @response_hash
         evaluate_conclusion_node
@@ -129,8 +130,7 @@ class ResponseProcessor
         # update with result of the last response
         update_return_node
 
-        next_node = fetch_node(@return_node.target_node)
-        next_node
+        fetch_node(@return_node.target_node)
       end
     end
 
@@ -145,24 +145,19 @@ class ResponseProcessor
 
       if @last_node.pass?
         #pass
-        @return_node.response_value = @return_node.response_1
+        @return_node.response_text = @return_node.response_1
+        @return_node.response_value = 1
         @return_node.target_node = @return_node.target_1
       else
         #fail
-        @return_node.response_value = @return_node.response_2
+        @return_node.response_text = @return_node.response_2
+        @return_node.response_value = 2
         @return_node.target_node = @return_node.target_2
       end
 
       @return_node.save
       Rails.logger.info("@return_node.response_value after: #{@return_node.response_value}")
       Rails.logger.info("@return_node.target_node after: #{@return_node.target_node}")
-
-      # select the last active return since that's the one we're working on
-      r = Return.where(status: 0).last
-      if r
-        r.status = 1
-        r.save
-      end
     end
 
     ##############################################################################################################################################
@@ -185,7 +180,17 @@ class ResponseProcessor
 
     def fetch_node(node_code)
       Rails.logger.info("fetch_node node_code: #{node_code}")
-      @nodes.select { |q| q[:question_code] == node_code }.first
+      if module_exists?(node_code)
+        @nodes.select { |q| q[:question_code] == node_code }.first
+      else
+        module_code = node_code.split('-').first
+        @nodes = NodeGenerator::build_additional_nodes(@last_node.project_id, module_code)
+        @nodes.select { |q| q[:question_code] == node_code }.first
+      end      
+    end
+
+    def module_exists?(node_code)
+      @nodes.select { |q| q[:module_code] == node_code.split('-').first }.first
     end
 
     def evaluate_decision_node
@@ -206,7 +211,7 @@ class ResponseProcessor
           if !meets && r.pass?
             meets = true
           end
-        
+
           # Test 'and' only if meets is truthy because you are looking for a single failure. Must pass all nodes, so any false response (fails?) means the
           # entire decision is falsy (i.e., meets == false).
           # Note: Have to test condition meets == nil even though it is falsy (versus meets == false) in case meets is still the start value, otherwise
@@ -233,9 +238,9 @@ class ResponseProcessor
     def evaluate_conclusion_node
       # cp is always false, cf is always pass
       if @last_node.kind == 'cp'
-        make_response_hash(@last_node.response_1, @last_node.target_1, 1)
+        make_response_hash(@return_node.response_1, @return_node.question_code, 1)
       else
-        make_response_hash(@last_node.response_2, @last_node.target_2, 2)
+        make_response_hash(@return_node.response_2, @return_node.question_code, 2)
       end
         
       update_conclusion_node

@@ -11,4 +11,8 @@ class Question < ActiveRecord::Base
   def has_summary?
     summary.present?
   end
+
+  def question_number
+    question_code.split('-').last.to_i
+  end
 end

@@ -12,25 +12,30 @@
     %input{ type: 'hidden', name: 'response_value', id: 'response_value', value: '' }
     %input{ type: 'hidden', name: 'target_node', id: 'target_node', value: '' }
     %input{ type: 'hidden', name: 'return_node', id: 'return_node', value: '' }
+    %input{ type: 'hidden', name: 'comment_save', id: 'comment_save', value: '' }
     .col-md-12
       - if @next_node.question.kind == 'q' 
-        %h4.content= @next_node.question.content
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'd'
+        %h4 Intermediate Conclusion
         - if @next_node.response_value == '1' 
-          %h4.content= @next_node.question.conclusion_1
+          %h5.content= @next_node.question.conclusion_1
         - if @next_node.response_value == '2' 
-          %h4.content= @next_node.question.conclusion_2
+          %h5.content= @next_node.question.conclusion_2
         - if @next_node.response_value == '3' 
-          %h4.content= @next_node.question.conclusion_3
+          %h5.content= @next_node.question.conclusion_3
       - if @next_node.question.kind == 'cf' 
-        %h4.content= @next_node.question.content
+        %h4 Intermediate Conclusion
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'cp' 
-        %h4.content= @next_node.question.content
+        %h4 Intermediate Conclusion
+        %h5.content= @next_node.question.content
       - if @next_node.question.kind == 'r' 
         %h4 Accounting Recommendation
-        .recommendation= @next_node.question.content
+        %h5.recommendation= @next_node.question.content
       - if @next_node.question.kind == 'i' 
-        %h5.content= @next_node.question.summary
+        %h4 Background
+        %h5.content= @next_node.question.content || @next_node.question.summary
     .col-md-12
       - if @next_node.index.nil?
         - if @next_node.response_1.present? && %w[cf cp d].exclude?(@next_node.question.kind)
@@ -50,3 +55,6 @@
       .col-md-12.spacer.comment-controls
         %textarea{ rows: '4', name: 'comment', id: 'comment', placeholder: 'Your notes and comments will save and appear in the printed report.', style: 'width: 99%', class: 'form-control wysihtml5' }
           = @next_node.comment
+        - if @next_node.index
+          .col-md-12.spacer
+          = f.submit 'Save Comment', { class: 'btn btn-success node-response', onclick: "$('#response_value').val('#{@next_node.response_value}');$('#target_node').val('#{@next_node.target_node}');$('#return_node').val('#{@next_node.return_node}');$('#comment_save').val('true')" }

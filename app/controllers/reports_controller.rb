@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
                layout: nil
       end
       format.pdf do
-				render layout: 'report',
+        render layout: 'report',
                pdf: "GAAP Logic Project Report #{@project.id}",
                page_size: 'Letter',
                margin: { top: 15, bottom: 15, left: 15, right: 15 }

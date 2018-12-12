@@ -20,4 +20,8 @@ module ApplicationHelper
   def status_select_options(subject = nil)
     options_for_select([['Production', 'prod'], ['Development', 'dev'], ['Beta', 'beta']], selected: subject.try(:status) || '')
   end
+  
+  def subject_select_options_for_question(subject = nil)
+    options_for_select(Subject.all.map { |s| [s.name, s.id, {onclick: "select_versions(this)"}] }.compact, selected: subject.try(:id) || '')
+  end
 end

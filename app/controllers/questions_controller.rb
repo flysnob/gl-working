@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   before_action :find_question, only: [:show, :edit, :destroy, :delete_modal, :update]
 
   def index
-    @questions = Question.all
+    @questions = Question.all.order(:module_code, 'sort::integer')
   end
 
   def new

@@ -1,0 +1,50 @@
+.modal-header
+  %button.close{ 'aria-label': 'Close', 'data-dismiss': 'modal', type: 'button'}
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title Please select your preferred option
+.modal-body
+  .select-form
+    .form-group
+      = label_tag 'subscribe', 'Purchase Subscription', class: 'control-label col-md-3'
+      .col-md-1
+        = radio_button_tag 'purchase', 'subscribe', true, onchange: "$('#sq-creditcard').text('Pay $125');"
+      .col-md-7
+        All you can eat for 12 months!
+
+    .form-group
+      = label_tag 'report', 'Purchase Report', class: 'control-label col-md-3'
+      .col-md-1
+        = radio_button_tag 'purchase', 'report', false, onchange: "$('#sq-creditcard').text('Pay $25');"
+      .col-md-7
+        Purchase just this report. You can generate this report as many times as you need.
+
+  #form-container.hidden{ style: { position: 'absolute', top: '50px !important' } } 
+    #sq-ccbox
+      %form.form-horizontal#nonce-form{ novalidate: true, action: "/user/#{@user.id}/subscribe/", method: "post" }
+        %fieldset
+          %span.label Card Number
+          #sq-card-cumber
+
+          .third
+            %span.label Expiration
+            #sq-expiration-date
+
+          .third
+            %span.label CCV
+            #sq-ccv
+
+          .third
+            %span.label Postal
+           #sq-postal-code
+
+        = hidden_field_tag :nonce, '', id: 'card-nonce'
+        = hidden_field_tag :project, @project.id, id: "project-#{@project.id}"
+        = hidden_field_tag :sq_card_number, '', id: 'sq_card_number'
+        = hidden_field_tag :sq_expiration_date, '', id: 'sq_expiration_date'
+        = hidden_field_tag :sq_ccv, '', id: 'sq_ccv'
+        = hidden_field_tag :sq_postal_code, '', id: 'sq_postal_code'
+
+      #error
+
+.modal-footer
+  %button#sq-creditcard.btn.btn-primary.button-credit-card{ onclick: 'buildForm($(paymentForm));requestCardNonce(event);' } Pay $125

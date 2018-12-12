@@ -1,0 +1,60 @@
+.modal-header
+  %button.close{ 'aria-label': 'Close', 'data-dismiss': 'modal', type: 'button'}
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title Please select your preferred option
+.modal-body{ style: 'min-height: 100px' }
+  #select-form.col-md-12
+    .col-md-12
+      - if @content.blank?
+        = simple_format(@content)
+      - else
+        Creating projects on the GAAP Logic platform is currently free of charge to users. To help cover our costs, including keeping each module update-to-date with current accounting standards, we do charge a $25 fee to print each report. We believe this a nominal fee compared to the value of the GAAP Logic service and the comparable cost of traditional research tools in terms of both out-of-pocket cost and the cost of your time, and the high cost of subject matter expert consulting fees. Please help us sustain the GAAP Logic service by purchasing the report or subscribing the annual service. Thank you!
+    .form-group.col-md-12
+      .col-md-1
+      .col-md-1.text-right
+        = radio_button_tag 'purchase', 'subscribe', true, onchange: "$('#sq-creditcard').text('Pay $125');$('#amount').val('12500');;"
+      .col-md-9 All you can eat for 12 months!
+      .col-md-1
+
+    .form-group.col-md-12
+      .col-md-1
+      .col-md-1.text-right
+        = radio_button_tag 'purchase', 'report', false, onchange: "$('#sq-creditcard').text('Pay $25');$('#amount').val('2500');"
+      .col-md-9 Purchase just this report. You can generate this report as many times as you need.
+      .col-md-1
+
+  #form-container.hidden 
+    #sq-ccbox
+      %form.form-horizontal#nonce-form{ novalidate: true, action: "/users/#{@user.id}/purchase", method: "post" }
+        %fieldset
+          %span.label Card Number
+          #sq-card-number
+
+          .third
+            %span.label Expiration
+            #sq-expiration-date
+
+          .third
+            %span.label CVV
+            #sq-cvv
+
+          .third
+            %span.label Postal
+            #sq-postal-code
+
+          = hidden_field_tag :nonce, '', id: 'card-nonce'
+          = hidden_field_tag :amount, '12500', id: 'amount'
+          = hidden_field_tag :project, @project.id, id: "project-#{@project.id}"
+          = hidden_field_tag :user, @user.id, id: "user"
+
+      #error
+    %button#sq-creditcard.btn.btn-primary.button-credit-card{ onclick: 'requestCardNonce(event);' } Pay $125
+
+  #payment-success.hidden
+    %h3 Your payment was successfully processed. Thank you!
+    %h4#payment-type
+    %h4 You may now print your report. Please close this window to proceed.
+
+.modal-footer
+  %a.btn.btn-default#cancel{ 'data-dismiss': 'modal', type: 'button' } Cancel
+  %a.btn.btn-primary{ role: 'button', onclick: "$('#select-form').addClass('hidden');$('#form-container').removeClass('hidden');buildForm(paymentForm);$(this).addClass('hidden');$('#modal-title').text('Please enter your credit card information');" } Pay with Credit Card
