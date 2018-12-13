@@ -1,8 +1,8 @@
 // Set the application ID
-var applicationId = 'sandbox-sq0idp-AMzdqvzUmqHq7gpXvbw7ZQ';
+var applicationId = 'sq0idp-AMzdqvzUmqHq7gpXvbw7ZQ';
 
 // Set the location ID
-var locationId = 'CBASEAp-s-ney5JcIe5Z5e8kp8sgAQ';
+var locationId = '';
 
 
 function buildForm(form) {
