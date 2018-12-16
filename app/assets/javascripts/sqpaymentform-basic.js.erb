@@ -1,8 +1,8 @@
 // Set the application ID
-var applicationId = 'sq0idp-AMzdqvzUmqHq7gpXvbw7ZQ';
+var applicationId = "<%= Rails.application.secrets.square_application_id %>";
 
 // Set the location ID
-var locationId = '';
+var locationId = "<%= Rails.application.secrets.square_location_id %>";
 
 
 function buildForm(form) {

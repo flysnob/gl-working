@@ -6,7 +6,7 @@ class ProcessPayment
       # Setup authorization
       SquareConnect.configure do |config|
         # Configure OAuth2 access token for authorization: oauth2
-        config.access_token = 'sq0atp-TOh8GfGlhJ3Hyelmm32Nlw'
+        config.access_token = Rails.application.secrets.square_access_token
       end
 
       # The SDK throws an exception if a Connect endpoint responds with anything besides 200 (success).
