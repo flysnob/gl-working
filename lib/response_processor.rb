@@ -139,9 +139,6 @@ class ResponseProcessor
       # i think this is where to get the return node from the database and then run fetch_node on that; it's the last record for this project
       # this currenctly resets the analyze response on the return node. not cool. needs to leave that alone and do something else
       @return_node = fetch_node(@returns.last.return_node_code)
-      Rails.logger.info("@return_node.response_value before: #{@return_node.response_value}")
-      Rails.logger.info("@return_node.target_node before: #{@return_node.target_node}")
-      Rails.logger.info("@last_node.pass?: #{@last_node.pass?}")
 
       if @last_node.pass?
         #pass
@@ -156,8 +153,6 @@ class ResponseProcessor
       end
 
       @return_node.save
-      Rails.logger.info("@return_node.response_value after: #{@return_node.response_value}")
-      Rails.logger.info("@return_node.target_node after: #{@return_node.target_node}")
     end
 
     ##############################################################################################################################################
@@ -179,7 +174,6 @@ class ResponseProcessor
 
 
     def fetch_node(node_code)
-      Rails.logger.info("fetch_node node_code: #{node_code}")
       if module_exists?(node_code)
         @nodes.select { |q| q[:question_code] == node_code }.first
       else
