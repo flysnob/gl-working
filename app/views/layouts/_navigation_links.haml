@@ -1,6 +1,7 @@
 %ul.nav.navbar-nav
   %li
     =link_to "Home", root_path
+- if current_user
   %li
     =link_to "My Projects", projects_path
 - if current_user.try(:admin?)

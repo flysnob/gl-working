@@ -7,9 +7,19 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  authenticate :user do
-    root to: 'pages#index'
+  root to: 'pages#index'
 
+  scope :pages do
+    get 'about', to: 'pages#about'
+    get 'terms_of_use', to: 'pages#terms_of_use'
+    get 'privacy_policy', to: 'pages#privacy_policy'
+  end
+
+  resources :subjects, only: [] do
+    get 'description_modal', to: 'subjects#description_modal'
+  end
+
+  authenticate :user do
     resources :users do
       member do
         get 'subscribe', to: 'users#subscribe'
@@ -24,12 +34,6 @@ Rails.application.routes.draw do
         get 'work', to: 'projects#work'
         get 'previous', to: 'projects#previous'
       end
-    end
-
-    scope :pages do
-      get 'about', to: 'pages#about'
-      get 'terms_of_use', to: 'pages#terms_of_use'
-      get 'privacy_policy', to: 'pages#privacy_policy'
     end
 
     resources :notifications, only: [:index, :destroy] do

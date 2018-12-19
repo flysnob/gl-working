@@ -5,21 +5,17 @@
     .col-md-4
       %h3 Subjects
     .col-md-2
-      .pull-right
-        = link_to new_project_path, id: 'new-project-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
-          %span.glyphicon.glyphicon-plus
-          Start a Project
+      - if current_user
+        .pull-right
+          = link_to new_project_path, id: 'new-project-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+            %span.glyphicon.glyphicon-plus
+            Start a Project
   .row
     .col-md-6
       = simple_format(@content.content) if @content
     .col-md-6
       .panel-group#accordion{ role: 'tablist', aria: { multiselectable: true } }
         - @subjects.each do |subject|
-          .panel.panel-default
-            .panel-heading{ id: "heading-#{subject.id}", role: 'tab' }
-              %h4.panel-title
-                %a.collapsed{ role: 'button', data: { toggle: 'collapse', parent: '#accordion' }, href: "#collapse-#{subject.id}", aria: { expanded: false, controls: "collapse-#{subject.id}" } }
-                  = subject.name
-            .panel-collapse.collapse.in{ id: "collapse-#{subject.id}", role: 'tabpanel', aria: { labelledby: "heading-#{subject.id}" } }
-              .panel-body
-                = subject.description
+          %h4
+            = link_to subject_description_modal_path(subject), class: 'description-subject-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+              = subject.name

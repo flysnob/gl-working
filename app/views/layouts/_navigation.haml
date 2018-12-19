@@ -26,6 +26,32 @@
                 %li
                   = link_to("Sign out", destroy_user_session_path, method: :delete)
 
+- else
+  %nav.navbar.navbar-default.navbar-fixed-top
+    .container-fluid
+      .navbar-header
+        %button.navbar-toggle{"data-target": ".navbar-collapse", "data-toggle": "collapse", type: "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      .navbar-brand= link_to 'GAAP Logic', 'http://gaaplogic.com', style: 'text-decoration: none; color: #777'
+      .collapse.navbar-collapse
+        %ul.nav.navbar-nav
+          = render 'layouts/navigation_links'
+        - if current_user
+          .navbar-right
+            %ul.nav.navbar-nav.navbar-icon-list
+              %li.dropdown
+                %a.dropdown-toggle{href: "#", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}
+                  %span.glyphicon.glyphicon-option-vertical
+                %ul.dropdown-menu
+                  / %li
+                  / %a{href: '#'} Help
+                  / %li.divider
+                  %li
+                    = link_to("Sign in", user_session_path)
+
 %nav.navbar.navbar-default.navbar-fixed-bottom
   .container-fluid
     .navbar-header

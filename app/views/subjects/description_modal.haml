@@ -1,0 +1,12 @@
+.modal-header
+  %button.close{'data-dismiss': 'modal', type: 'button'}
+    %span &times;
+  %h4#modal-title.modal-title= @subject.name
+.modal-body
+  = form_for @subject, html: { id: 'edit_subject', class: 'validate' } do |f| 
+    .row
+      .col-lg-1
+      .col-lg-10= @subject.description
+      .col-lg-1
+.modal-footer
+  %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Close
