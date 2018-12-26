@@ -105,6 +105,11 @@ class ProjectsController < ApplicationController
       # generate the next node if we're skipping the decision/conclusion nodes
       make_next_node
     # Need to deal with pause here since next node is the d node and does not have any data yet
+    elsif %w[r].include?(@next_node.kind)
+      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+      @next_node.update(
+        index: @index
+      )
     else
       # have we changed a previous answer?
       drop_subsequent_nodes
@@ -248,7 +253,7 @@ class ProjectsController < ApplicationController
     # if the node already has an answer, and it has now changed, drop all subsequent nodes
     if @last_node.response_value.present? && @last_node.response_value != params[:commit]
       @response_nodes.each do |n|
-        next unless n.index > @last_node.index
+        next unless n.index > @last_node.index || n.index.nil?
         n.response_value = nil
         n.display_value = nil
         n.response_text = nil

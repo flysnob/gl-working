@@ -14,6 +14,9 @@
       %h3= @project.name 
       %h3= @project.description 
       %h3= "Report generated on #{Date.today}"
+      -if @recommendation.present?
+        %h4 Accounting Recommendation
+        = @recommendation
       - @nodes.each do |node|
         .question
           - if current_user.admin?
@@ -41,15 +44,7 @@
             %br
           - elsif %W[i].include?(node.question.kind)
             .col-12-md.question
-              - if node.question.report_summary.nil?
-                = node.question.summary
-              - else
-                = node.question.report_summary
-            .col-12-md.comments= node.comment
-            %br
-          - elsif %W[r].include?(node.question.kind)
-            %h3.col-12-md Accounting Recommendation
-            .col-12-md.question
+              %h4 Topic Background
               - if node.question.report_summary.nil?
                 = node.question.summary
               - else
