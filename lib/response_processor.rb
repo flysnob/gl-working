@@ -97,7 +97,6 @@ class ResponseProcessor
         update_return_node
         evaluate_target_node_return
       else
-        @target_node = fetch_node(@last_node.target_node)
         evaluate_target_node_not_return
       end
     end

@@ -1,0 +1,7 @@
+.question {
+  margin-right: 25px;
+}
+
+.separator {
+  .border-bottom: 1px solid black;
+}
