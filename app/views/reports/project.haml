@@ -25,7 +25,7 @@
         %hr
         .module
           %h4= "Topic - #{Subject.find_by(module_code: k).name}"
-          = Subject.find_by(module_code: k).description
+          = Subject.find_by(module_code: k).report_summary
         - node_set.each do |node|
           - if current_user.admin?
             / = node.question.question_code
