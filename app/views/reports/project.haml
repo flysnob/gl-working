@@ -21,51 +21,51 @@
       %h4 Basis for Recommendation
       %p The above Accounting Recommendation is reached based upon user responses to a series of questions. The questions are grouped within topics, each topic representing a component of generally accepted accounting principles (GAAP). The topics are ranked by priority, in descending order, in accordance with the GAAP hierarchy. Thus, the highest priority topic applicable to a contract or transaction is addressed first, then the second and so forth until a final accounting recommendation can be reached. The questions in each topic, and the related user responses, serve to determine whether the topic is applicable to the contract or transaction or can be eliminated due to a scope exception. 
       %p In many instances, the response to a single question may determine whether a topic is applicable or not. In other instances, a response may lead to a new question, or set of questions, that ultimately determines the applicability of a topic. Lastly, in some cases a set of questions and related responses must be grouped and evaluated together. When this occurs, an Intermediate Conclusion is provided in this report which shows the result of the grouped responses.
-      - @node_sets.each do |k, node_set|
-        %hr
-        .module
-          %h4= "Topic - #{Subject.find_by(module_code: k).name}"
-          = Subject.find_by(module_code: k).report_summary
-        - node_set.each do |node|
-          - if current_user.admin?
-            / = node.question.question_code
-          - if %W[q d].include?(node.question.kind)
-            - if %w[1 2].include?(node.response_value)
-              .col-md-12
-                .col-md-1
-                .col-md-11
-                  %h4.question-number= "Question: #{node.question.report_content}"
-              .col-md-12
-                .col-md-1
-                .col-md-11
-                  - if node.question.report_summary.nil?
-                    = node.question.summary
-                  - else
-                    = node.question.report_summary
-              .col-md-12
-                .col-md-1
-                .col-md-11
-                  %h5.response= "Response: #{node.response_text}"
-              .col-md-12
-                .col-md-1
-                .col-md-11
-                  .comments= node.comment
-              %br
-            - else
-              // need a report version of the question when the user selects 'Analyze'
-              %h3.col-12-md.question-number= node.question.report_content
-              %br
-          - elsif %W[cp cf].include?(node.question.kind)
+      %hr
+      - @nodes.each do |node|
+        - if current_user.admin?
+          / = node.question.question_code
+        - if %W[q d].include?(node.question.kind)
+          - if %w[1 2].include?(node.response_value)
             .col-md-12
               .col-md-1
               .col-md-11
-                %h4 Intermediate Conclusion
+                %h4.question-number<
+                  = "Question: #{node.question.report_content}"
+                  %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
             .col-md-12
               .col-md-1
               .col-md-11
-                .question= node.question.content
+                - if node.question.report_summary.nil?
+                  = node.question.summary
+                - else
+                  = node.question.report_summary
+            .col-md-12
+              .col-md-1
+              .col-md-11
+                %h5.response= "Response: #{node.response_text}"
             .col-md-12
               .col-md-1
               .col-md-11
                 .comments= node.comment
             %br
+          - else
+            // need a report version of the question when the user selects 'Analyze'
+            %h4.col-12-md.question-number= node.question.report_content
+            %br
+        - elsif %W[cp cf].include?(node.question.kind)
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              %h4< 
+                Intermediate Conclusion
+                %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              .question= node.question.content
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              .comments= node.comment
+          %br
