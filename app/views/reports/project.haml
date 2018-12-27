@@ -25,10 +25,10 @@
             - if %w[1 2].include?(node.response_value)
               %h4.col-12-md.question-number= "Question: #{node.question.report_content}"
               .col-12-md.question
-                - if node.question.report_summary.nil?
-                  = node.question.summary
+                - if node.question.report_content.nil?
+                  = node.question.content
                 - else
-                  = node.question.report_summary
+                  = node.question.report_content
               %h5.col-12-md.response= "Response: #{node.response_text}"
               .col-12-md.comments= node.comment
               %br
@@ -45,9 +45,9 @@
           - elsif %W[i].include?(node.question.kind)
             .col-12-md.question
               %h4 Topic Background
-              - if node.question.report_summary.nil?
-                = node.question.summary
+              - if node.question.report_content.nil?
+                = node.question.content
               - else
-                = node.question.report_summary
+                = node.question.report_content
             .col-12-md.comments= node.comment
             %br
