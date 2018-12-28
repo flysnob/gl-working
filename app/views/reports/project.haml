@@ -25,7 +25,7 @@
       - @nodes.each do |node|
         - if current_user.admin?
           / = node.question.question_code
-        - if %W[q d].include?(node.question.kind)
+        - if %W[q].include?(node.question.kind)
           - if %w[1 2].include?(node.response_value)
             .col-md-12
               .col-md-1
@@ -49,10 +49,29 @@
               .col-md-11
                 .comments= node.comment
             %br
-          - else
-            // need a report version of the question when the user selects 'Analyze'
-            %h4.col-12-md.question-number= node.question.report_content
-            %br
+        - elsif %W[d].include?(node.question.kind)
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              %h4< 
+                Intermediate Conclusion
+                %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              - if node.response_value == '1'
+                = node.question.conclusion_1
+              - else
+                = node.question.conclusion_2
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              %h5.response= "Response: #{node.response_text}"
+          .col-md-12
+            .col-md-1
+            .col-md-11
+              .comments= node.comment
+          %br
         - elsif %W[cp cf].include?(node.question.kind)
           .col-md-12
             .col-md-1
