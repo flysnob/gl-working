@@ -66,10 +66,6 @@
           .col-md-12
             .col-md-1
             .col-md-11
-              %h5.response= "Response: #{node.response_text}"
-          .col-md-12
-            .col-md-1
-            .col-md-11
               .comments= node.comment
           %br
         - elsif %W[cp cf].include?(node.question.kind)
