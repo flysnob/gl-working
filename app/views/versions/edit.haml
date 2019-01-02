@@ -11,14 +11,16 @@
       %th Target 2
       %th Response 3
       %th Target 3
+      %th Fatal reasponse
+      %th Fatal target
       %th Return node
       %th Decision node
-      %th Faile response
+      %th Fail response
       %th Boolean
       %th Target module
       %th Return?
       %th.actions Actions
     %tbody
-      - @version.version_nodes.each do |json|
+      - @version.version_nodes.each do |edit_node|
         %tr
-          = render json
+          = render edit_node

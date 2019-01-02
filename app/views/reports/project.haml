@@ -28,7 +28,7 @@
         - if current_user.admin?
           / = node.question.question_code
         - if %W[q].include?(node.question.kind)
-          - if %w[3].include?(node.response_value)
+          - if %w[3].include?(node.display_value)
             - if node.target_module.present?
               .col-md-12
                 %h4.question-number<
@@ -49,7 +49,7 @@
                   - else
                     = node.question.report_summary
             %br
-          - elsif %w[1 2].include?(node.response_value)
+          - elsif %w[1 2].include?(node.display_value)
             - if node.module_code == @base_module_code
               .col-md-12
                 %h4.question-number<

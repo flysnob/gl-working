@@ -11,15 +11,16 @@
       %th Target 2
       %th Response 3
       %th Target 3
+      %th Fatal response
+      %th Fatal target
       %th Return node
       %th Decision node
       %th Meets response
       %th Boolean
       %th Target module
       %th Return?
-      %th Question kind
       %th.actions Actions
     %tbody
       - @version.version_nodes.map do |version_node|
         %tr
-          = render version_node
+          = render 'version_node', version_node: version_node
