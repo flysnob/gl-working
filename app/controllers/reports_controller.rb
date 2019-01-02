@@ -4,6 +4,7 @@ class ReportsController < ApplicationController
     @project = Project.find(params[:id])
     @description = "#{@project.name}" << (@project.description.present? ? @project.description : '')
     @nodes = Node.where(project: @project).where.not(index: nil).order(:index)
+    @base_module_code = @nodes.first.module_code
     recommendation_node = Node.where(project: @project).order(:index).map { |node| node if node.index.present? && node.kind == 'r' }.compact.first
     @recommendation = recommendation_node.question.report_content if recommendation_node
 

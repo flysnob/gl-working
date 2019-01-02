@@ -13,10 +13,12 @@
       %h4= "Date: #{@project.date}"
       %h4= "Description: #{@description}"
       %h4= "Generated on #{Date.today}"
-      -if @recommendation.present?
-        %hr
-        %h4 Accounting Recommendation
+      %hr
+      %h4 Accounting Recommendation
+      - if @recommendation.present?
         = @recommendation
+      - else
+        None
       %hr
       %h4 Basis for Recommendation
       %p The above Accounting Recommendation is reached based upon user responses to a series of questions. The questions are grouped within topics, each topic representing a component of generally accepted accounting principles (GAAP). The topics are ranked by priority, in descending order, in accordance with the GAAP hierarchy. Thus, the highest priority topic applicable to a contract or transaction is addressed first, then the second and so forth until a final accounting recommendation can be reached. The questions in each topic, and the related user responses, serve to determine whether the topic is applicable to the contract or transaction or can be eliminated due to a scope exception. 
@@ -26,61 +28,95 @@
         - if current_user.admin?
           / = node.question.question_code
         - if %W[q].include?(node.question.kind)
-          - if %w[1 2].include?(node.response_value)
-            .col-md-12
-              .col-md-1
-              .col-md-11
+          - if %w[3].include?(node.response_value)
+            - if node.target_module.present?
+              .col-md-12
                 %h4.question-number<
-                  = "Question: #{node.question.report_content}"
-                  %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
-            .col-md-12
-              .col-md-1
-              .col-md-11
+                  = "#{Subject.find_by(module_code: node.target_module).name}"
+              .col-md-12
+                = "#{Subject.find_by(module_code: node.target_module).report_summary}"
+            - else
+              .col-md-12
+                .col-md-1
+                .col-md-11
+                  %h4.question-number<
+                    = "#{node.question.report_content}"
+              .col-md-12
+                .col-md-1
+                .col-md-11
+                  - if node.question.report_summary.nil?
+                    = node.question.summary
+                  - else
+                    = node.question.report_summary
+            %br
+          - elsif %w[1 2].include?(node.response_value)
+            - if node.module_code == @base_module_code
+              .col-md-12
+                %h4.question-number<
+                  = node.question.report_content
+              .col-md-12
                 - if node.question.report_summary.nil?
                   = node.question.summary
                 - else
                   = node.question.report_summary
-            .col-md-12
-              .col-md-1
-              .col-md-11
+              .col-md-12
                 %h5.response= "Response: #{node.response_text}"
-            .col-md-12
-              .col-md-1
-              .col-md-11
+              .col-md-12
                 .comments= node.comment
+            - else
+              .col-md-12
+                .col-md-2
+                .col-md-10
+                  %h4.question-number<
+                    = node.question.report_content
+              .col-md-12
+                .col-md-2
+                .col-md-10
+                  - if node.question.report_summary.nil?
+                    = node.question.summary
+                  - else
+                    = node.question.report_summary
+              .col-md-12
+                .col-md-2
+                .col-md-10
+                  %h5.response= "Response: #{node.response_text}"
+              .col-md-12
+                .col-md-2
+                .col-md-10
+                  .comments= node.comment
             %br
         - elsif %W[d].include?(node.question.kind)
           .col-md-12
-            .col-md-1
-            .col-md-11
+            .col-md-2
+            .col-md-10
               %h4< 
                 Intermediate Conclusion
                 %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
           .col-md-12
-            .col-md-1
-            .col-md-11
+            .col-md-2
+            .col-md-10
               - if node.response_value == '1'
                 = node.question.conclusion_1
               - else
                 = node.question.conclusion_2
           .col-md-12
-            .col-md-1
-            .col-md-11
+            .col-md-2
+            .col-md-10
               .comments= node.comment
           %br
         - elsif %W[cp cf].include?(node.question.kind)
           .col-md-12
-            .col-md-1
-            .col-md-11
+            .col-md-2
+            .col-md-10
               %h4< 
                 Intermediate Conclusion
                 %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
           .col-md-12
-            .col-md-1
-            .col-md-11
-              .question= node.question.content
+            .col-md-2
+            .col-md-10
+              %strong.question= node.question.content
           .col-md-12
-            .col-md-1
-            .col-md-11
-              .comments= node.comment
+            .col-md-2
+            .col-md-10
+              %strong.comments= node.comment
           %br
