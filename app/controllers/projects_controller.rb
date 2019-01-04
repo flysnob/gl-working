@@ -4,9 +4,10 @@ class ProjectsController < ApplicationController
 
   before_action :find_project, only: [:show, :edit, :destroy, :delete_modal, :work, :update, :previous]
   before_action :find_last_node, only: [:work]
+  before_action :clear_flash
   before_action :update_node
   before_action :find_setting
-  before_action :clear_flash
+  before_action :set_params, only: [:work, :previous]
 
   def index
     @projects = Project.where(user: current_user)
@@ -83,48 +84,48 @@ class ProjectsController < ApplicationController
   
   def make_next_node
     if params[:comment_save] == 'true'
-      @next_node = @last_node
+      update_comment
     else
       @next_node = ResponseProcessor.perform(@last_node, @project_nodes)
-    end
 
-    if %w[cf cp d].include?(@next_node.kind) 
-      # we have a new last node now
-      @response_nodes = Node.where(project_id: @project.id)
-                            .where('response_value IS NOT NULL')
-                            .order(index: :asc)
-                            .to_a
-      # if @next_node already has an index (from page reload or coming from projects index page)
-      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
-      @next_node.update(
-        index: @index,
-        return_node: params[:return_node]
-      )
-      @last_node = @next_node
+      if %w[cf cp d].include?(@next_node.kind) 
+        # we have a new last node now
+        @response_nodes = Node.where(project_id: @project.id)
+                              .where('response_value IS NOT NULL')
+                              .order(index: :asc)
+                              .to_a
+        # if @next_node already has an index (from page reload or coming from projects index page)
+        @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+        @next_node.update(
+          index: @index,
+          return_node: params[:return_node]
+        )
+        @last_node = @next_node
 
-      # generate the next node if we're skipping the decision/conclusion nodes
-      make_next_node
-    # Need to deal with pause here since next node is the d node and does not have any data yet
-    elsif %w[r].include?(@next_node.kind)
-      @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
-      @next_node.update(
-        index: @index
-      )
-    else
-      # have we changed a previous answer?
-      drop_subsequent_nodes
+        # generate the next node if we're skipping the decision/conclusion nodes
+        make_next_node
+      # Need to deal with pause here since next node is the d node and does not have any data yet
+      elsif %w[r].include?(@next_node.kind)
+        @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+        @next_node.update(
+          index: @index
+        )
+      else
+        # have we changed a previous answer?
+        drop_subsequent_nodes
 
-      @response_nodes = Node.where(project_id: @project.id)
-                            .where('response_value IS NOT NULL')
-													  .order(index: :asc)
-                            .to_a
-      @index = @response_nodes.length + 1
-      
-      if %w[cf cp d].include?(@last_node.kind)
-        if @last_node.display_value == '1' && @project_params[:previous].nil?
-          flash[:notice] = @last_node.question.conclusion_1 || @last_node.question.content
-        elsif @last_node.display_value == '2' && @project_params[:previous].nil?
-          flash[:notice] = @last_node.question.conclusion_2 || @last_node.question.content
+        @response_nodes = Node.where(project_id: @project.id)
+                              .where('response_value IS NOT NULL')
+                              .order(index: :asc)
+                              .to_a
+        @index = @response_nodes.length + 1
+        
+        if %w[cf cp d].include?(@last_node.kind)
+          if @last_node.display_value == '1' && @project_params[:previous].nil?
+            flash[:notice] = (@last_node.question.conclusion_1 || @last_node.question.content)
+          elsif @last_node.display_value == '2' && @project_params[:previous].nil?
+            flash[:notice] = (@last_node.question.conclusion_2 || @last_node.question.content)
+          end
         end
       end
     end
@@ -176,7 +177,10 @@ class ProjectsController < ApplicationController
   end
 
   def clear_flash
+    Rails.logger.info(flash.as_json)
+    flash.delete(:alert)
     flash.clear
+    Rails.logger.info(flash.as_json)
   end
 
   def select_core_version(params)
@@ -209,9 +213,6 @@ class ProjectsController < ApplicationController
   end
 
   def update_node
-    @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id, :target_node,
-                                    :return_node, :commit, :comment, :id, :previous, :comment_save)
-
     # update with return node if not na. when/how is it cleared?
     return if params[:response_value].blank?
 
@@ -223,12 +224,7 @@ class ProjectsController < ApplicationController
       @target_node = @last_node.target_fatal
     end
 
-    if params[:comment_save] == 'true' && params[:comment] != @last_node.comment
-      @last_node.update_attributes(
-        comment: params[:comment]
-      )
-      flash[:notice] = 'Comment updated.'
-    elsif params[:response_value] != @last_node.response_value
+    if params[:response_value] != @last_node.response_value
       @last_node.update_attributes(
         response_value: params[:response_value],
         display_value: params[:response_value],
@@ -239,8 +235,24 @@ class ProjectsController < ApplicationController
       )
       #update return_node if we're in a submodule
       @last_node.update_attributes(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
-      flash[:notice] = 'Response updated and all subsequent questions have been deleted'
+      flash[:alert] = 'You have changed a previous response. Your response has been updated and all subsequent responeses have been reset.'
     end
+  end
+
+  def update_comment  
+    Rails.logger.info('comment save only')
+    @last_node.update_attributes(
+      comment: params[:comment]
+    )
+
+    @next_node = @last_node
+
+    @current_node = @last_node
+    @index = @next_node.index
+
+    flash[:notice] = 'Comment updated.'
+
+    render 'previous'
   end
 
   def drop_subsequent_nodes
@@ -277,5 +289,10 @@ class ProjectsController < ApplicationController
       last_return.status = 0
       last_return.save
     end
+  end
+
+  def set_params
+    @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id, :target_node,
+                                    :return_node, :commit, :comment, :id, :previous, :comment_save)
   end
 end
