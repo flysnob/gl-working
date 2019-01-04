@@ -45,9 +45,9 @@
                 .col-md-1
                 .col-md-11
                   - if node.question.report_summary.nil?
-                    = node.question.summary
+                    = simple_format(node.question.summary)
                   - else
-                    = node.question.report_summary
+                    = simple_format(node.question.report_summary)
             %br
           - elsif %w[1 2].include?(node.display_value)
             - if node.module_code == @base_module_code
@@ -56,13 +56,13 @@
                   = node.question.report_content
               .col-md-12
                 - if node.question.report_summary.nil?
-                  = node.question.summary
+                  = simple_format(node.question.summary)
                 - else
-                  = node.question.report_summary
+                  = simple_format(node.question.report_summary)
               .col-md-12
                 %h5.response= "Response: #{node.response_text}"
               .col-md-12
-                .comments= node.comment
+                .comments= simple_format(node.comment)
             - else
               .col-md-12
                 .col-md-2
@@ -73,9 +73,9 @@
                 .col-md-2
                 .col-md-10
                   - if node.question.report_summary.nil?
-                    = node.question.summary
+                    = simple_format(node.question.summary)
                   - else
-                    = node.question.report_summary
+                    = simple_format(node.question.report_summary)
               .col-md-12
                 .col-md-2
                 .col-md-10
@@ -83,7 +83,7 @@
               .col-md-12
                 .col-md-2
                 .col-md-10
-                  .comments= node.comment
+                  .comments= simple_format(node.comment)
             %br
         - elsif %W[d].include?(node.question.kind)
           .col-md-12
@@ -102,7 +102,7 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              .comments= node.comment
+              .comments= simple_format(node.comment)
           %br
         - elsif %W[cp cf].include?(node.question.kind)
           .col-md-12
@@ -118,7 +118,7 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              %strong.comments= node.comment
+              %strong.comments= simple_format(node.comment)
           %br
         - elsif %W[i].include?(node.question.kind) && node.module_code != @base_module_code
           .col-md-12
@@ -130,5 +130,5 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              %strong.question= node.question.content
+              %strong.question= simple_format(node.question.content)
           %br
