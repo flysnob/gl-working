@@ -14,7 +14,9 @@ class SubjectsController < ApplicationController
 
   def show; end 
 
-  def edit; end 
+  def edit
+    @display_text = @subject.display ? 'yes' : 'no'
+  end
 
   def description; end 
 

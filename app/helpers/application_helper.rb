@@ -13,12 +13,12 @@ module ApplicationHelper
     options_for_select( kinds.map { |t| [t[:long], t[:short], {onclick: "select_kinds(this)"}] }, selected: kind || '')
   end
   
-  def display_select_options(subject = nil)
-    options_for_select([['Yes', 'yes'], ['No', 'no']], selected: subject.try(:display) || '')
+  def display_select_options(display = nil)
+    options_for_select([['Yes', true], ['No', false]], selected: display ? 'true' : 'false')
   end
 
-  def status_select_options(subject = nil)
-    options_for_select([['Production', 'prod'], ['Development', 'dev'], ['Beta', 'beta']], selected: subject.try(:status) || '')
+  def status_select_options(status = nil)
+    options_for_select([['Production', 'prod'], ['Development', 'dev'], ['Beta', 'beta']], selected: status || '')
   end
   
   def subject_select_options_for_question(subject = nil)

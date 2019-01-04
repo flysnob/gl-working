@@ -17,21 +17,27 @@
       .col-lg-8.form-group
         = f.label :description
         .help-block A description of for this subject
-        = f.text_field :description, class: 'form-control'
+        = f.text_area :description, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :status
         .help-block Do you want this subject to display in public views?
-        = f.select :status, status_select_options, {}, { class: 'form-control', required: true }
+        = f.select :status, status_select_options(f.object.status), {}, { class: 'form-control', required: true }
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :display
         .help-block Do you want this subject to display in public views?
-        = f.select :display, display_select_options, {}, { class: 'form-control', required: true }
+        = f.select :display, display_select_options(f.object.display), {}, { class: 'form-control', required: true }
+      .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :report_summary
+        = f.text_area :report_summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
