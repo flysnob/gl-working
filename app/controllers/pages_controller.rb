@@ -1,5 +1,7 @@
 # Controller for general site pages
 class PagesController < ApplicationController
+  before_action :clear_flash
+
   def about; end
 
   def index; 
@@ -14,4 +16,12 @@ class PagesController < ApplicationController
   def privacy_policy
     @content = Content.find_by(title: 'Privacy Policy')
   end
+
+  private
+
+  def clear_flash
+    flash.delete(:alert)
+    flash.clear
+  end
+
 end

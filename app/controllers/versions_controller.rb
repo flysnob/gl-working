@@ -3,6 +3,7 @@ class VersionsController < ApplicationController
   layout 'modal', only: [:show, :delete_modal, :new]
 
   before_action :find_version, only: [:show, :edit, :destroy, :delete_modal, :update, :show_version_nodes]
+  before_action :clear_flash
 
   def index
     @versions = Version.all
@@ -63,5 +64,10 @@ class VersionsController < ApplicationController
 
   def find_version
     @version = Version.find_by(id: params[:id])
+  end
+
+  def clear_flash
+    flash.delete(:alert)
+    flash.clear
   end
 end

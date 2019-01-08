@@ -177,10 +177,8 @@ class ProjectsController < ApplicationController
   end
 
   def clear_flash
-    Rails.logger.info(flash.as_json)
     flash.delete(:alert)
     flash.clear
-    Rails.logger.info(flash.as_json)
   end
 
   def select_core_version(params)

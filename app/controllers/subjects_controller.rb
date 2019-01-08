@@ -3,6 +3,7 @@ class SubjectsController < ApplicationController
   layout 'modal', only: [:show, :delete_modal, :new, :edit, :description, :description_modal]
 
   before_action :find_subject, only: [:show, :edit, :destroy, :delete_modal, :update, :description]
+  before_action :clear_flash
 
   def index
     @subjects = Subject.all
@@ -73,5 +74,9 @@ class SubjectsController < ApplicationController
   def find_subject
     @subject = Subject.find_by(id: params[:id])
   end 
-  
+
+  def clear_flash
+    flash.delete(:alert)
+    flash.clear
+  end
 end

@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   layout 'modal', only: [:show, :edit, :delete_modal, :new]
 
   before_action :find_question, only: [:show, :edit, :destroy, :delete_modal, :update]
+  before_action :clear_flash
 
   def index
     @questions = Question.all.order(:module_code, 'sort::integer')
@@ -79,4 +80,10 @@ class QuestionsController < ApplicationController
   def find_question
     @question = Question.find_by(id: params[:id])
   end
+
+  def clear_flash
+    flash.delete(:alert)
+    flash.clear
+  end
+
 end
