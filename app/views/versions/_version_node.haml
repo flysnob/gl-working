@@ -17,3 +17,5 @@
 %td.actions
   = link_to edit_version_node_path(version_node), class: 'edit-version-node-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
+  = link_to edit_question_path(version_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+    %span.glyphicon.glyphicon-question-sign{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}

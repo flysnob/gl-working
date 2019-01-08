@@ -124,11 +124,9 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              %h4< 
-                Intermediate Conclusion
-                %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
+              %h4= Subject.find_by(module_code: node.module_code).name
           .col-md-12
             .col-md-2
             .col-md-10
-              %strong.question= simple_format(node.question.content)
+              .question= simple_format(Subject.find_by(module_code: node.module_code).report_summary)
           %br

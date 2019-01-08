@@ -67,6 +67,97 @@
         = f.label :return, class: 'required-label'
         = f.text_field :return, class: 'form-control'
       .col-lg-1
+    - if @version_node.kind == 'q'
+      .row
+        .col-lg-1
+        %strong.col-lg-10 UI
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-10= @version_node.question.content
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-5 Content (if applicable)
+        %strong.col-lg-5 Summary
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report content for 1/2 in main module
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-5= @version_node.question.report_content
+        .col-lg-5= @version_node.question.report_summary || @version_node.question.summary
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report content for 1/2 in submodule
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-5= @version_node.question.report_content
+        .col-lg-5= @version_node.question.report_summary || @version_node.question.summary
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report content for 3 in main module
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-5= @version_node.question.report_content
+        .col-lg-5= @version_node.question.report_summary || @version_node.question.summary
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report content for 3 in submodule
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-5
+        .col-lg-5=@version_node.question.report_summary
+        .col-lg-1
+    - if @version_node.kind == 'd'
+      .row
+        .col-lg-1
+        %strong.col-lg-5 Conclusion 1
+        %strong.col-lg-5 Conclusion 2
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-5= @version_node.question.conclusion_1
+        .col-lg-5= @version_node.question.conclusion_2
+        .col-lg-1
+    - if %w[cf cp].include?(@version_node.kind)
+      .row
+        .col-lg-1
+        %strong.col-lg-10 UI and report Content
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-10= @version_node.question.content
+        .col-lg-1
+    - if %w[i].include?(@version_node.kind)
+      .row
+        .col-lg-1
+        %strong.col-lg-10 UI
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-10= @version_node.question.content
+        .col-lg-1
+      .row
+        .col-lg-1
+        %strong.col-lg-10 Report content
+        .col-lg-1
+      .row
+        .col-lg-1
+        .col-lg-10= Subject.find_by(module_code: @version_node.question.module_code).report_summary
+        .col-lg-1
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
   %button#edit-version_node-link.btn.btn-primary{ type: 'submit', form: 'edit_version_node', href: '#' } Save

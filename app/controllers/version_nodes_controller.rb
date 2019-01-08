@@ -21,6 +21,6 @@ class VersionNodesController < ApplicationController
   private
 
   def find_version_node
-    @version_node = VersionNode.find(params[:id])
+    @version_node = VersionNode.where(id: params[:id]).includes(:question).first
   end 
 end
