@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
 
   def update
     project_params = params.require(:project).permit!
-    
+
     if @project.update(project_params)
       flash[:success] = 'Project "' + @project.name + '" successfully updated.'
     else
@@ -34,9 +34,9 @@ class ProjectsController < ApplicationController
   end
 
   def work
-		fetch_nodes
+    fetch_nodes
 
-		@response_nodes.sort_by! { |n| n[:index] }
+    @response_nodes.sort_by! { |n| n[:index] }
 
     raise Exception.new('No nodes for this project.') if @project_nodes.length.zero?
 
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
     if @length.zero?
       # first node in the project
       @next_node = @project_nodes.select { |n| n.question_code == "#{@project.version.module_code}-1" }.first
-      @index = 1 
+      @index = 1
     elsif @last_node.nil?
       # coming from project index with existing nodes
       @last_node = @response_nodes.last
@@ -57,20 +57,13 @@ class ProjectsController < ApplicationController
   end
 
   def previous
-		fetch_nodes
+    fetch_nodes
     @next_node = @project_nodes.select { |q| q[:question_code] == params[:node_code] }.first
     @current_node = @response_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
     @index = @next_node.index
   end
 
-  def set_previous
-    @current_node = @response_nodes.select { |q| q.index == @response_nodes.length - 1 }.first
-    @index = @next_node.index
-
-    render 'previous'
-  end
-
-	def fetch_nodes
+  def fetch_nodes
     @project_nodes = Node.includes(:question)
                          .where(project_id: @project.id)
                          .to_a
@@ -78,17 +71,17 @@ class ProjectsController < ApplicationController
     @response_nodes = Node.includes(:question)
                           .where(project_id: @project.id)
                           .where('response_value IS NOT NULL')
-													.order(index: :asc)
+                          .order(index: :asc)
                           .to_a
-	end
-  
+  end
+
   def make_next_node
     if params[:comment_save] == 'true'
       update_comment
     else
       @next_node = ResponseProcessor.perform(@last_node, @project_nodes)
 
-      if %w[cf cp d].include?(@next_node.kind) 
+      if %w[cf cp d].include?(@next_node.kind)
         # we have a new last node now
         @response_nodes = Node.where(project_id: @project.id)
                               .where('response_value IS NOT NULL')
@@ -119,7 +112,7 @@ class ProjectsController < ApplicationController
                               .order(index: :asc)
                               .to_a
         @index = @response_nodes.length + 1
-        
+
         if %w[cf cp d].include?(@last_node.kind)
           if @last_node.display_value == '1' && @project_params[:previous].nil?
             flash[:notice] = (@last_node.question.conclusion_1 || @last_node.question.content)
@@ -199,11 +192,11 @@ class ProjectsController < ApplicationController
   def find_project
     @project = Project.find_by(id: params[:id])
   end
-  
+
   def find_setting
     @setting = Setting.find_by(id: current_user.setting.id)
   end
-  
+
   def find_last_node
     @last_node = if params[:node_id].present?
                    Node.find(params[:node_id])
@@ -228,7 +221,7 @@ class ProjectsController < ApplicationController
     if params[:response_value] != @last_node.response_value
       flash[:alert] = 'You have changed a previous response. Your response has been updated and all subsequent responeses have been reset.' if
         @last_node.index
-      
+
       @last_node.update_attributes(
         response_value: params[:response_value],
         display_value: params[:response_value],
@@ -242,7 +235,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def update_comment  
+  def update_comment
     @last_node.update_attributes(
       comment: params[:comment]
     )
@@ -259,9 +252,9 @@ class ProjectsController < ApplicationController
 
   def drop_subsequent_nodes
     # Only need to evalluate this if the index of the last node is less than @response_nodes.last.index.
-    # This avoids running this when the 
+    # This avoids running this when the
     #   last node is a decision/conclusion node or
-    #   last response_nodes' index is nil or 
+    #   last response_nodes' index is nil or
     #   last_nodes index is not less than response_nodes' last index
     return if %w[cf cp d].include?(@last_node.kind) || @response_nodes.last.index.nil? || @last_node.index >= @response_nodes.last.index
     # if the node already has an answer, and it has now changed, drop all subsequent nodes

@@ -2,7 +2,7 @@
 class PagesController < ApplicationController
   def about; end
 
-  def index; 
+  def index
     @subjects = Subject.where(status: 'prod').order(:name)
     @content = Content.find_by(title: 'Welcome')
   end

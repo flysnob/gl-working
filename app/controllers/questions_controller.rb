@@ -19,7 +19,7 @@ class QuestionsController < ApplicationController
   def update
     question_params = params.require(:question).permit!
     question_params[:subject] = Subject.find(question_params[:subject])
-    
+
     if @question.update(question_params)
       flash[:success] = 'Question "' + @question.question_code + '" successfully updated.'
     else

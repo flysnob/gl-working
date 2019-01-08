@@ -6,58 +6,58 @@ class SubjectsController < ApplicationController
 
   def index
     @subjects = Subject.all
-  end 
+  end
 
-  def new 
+  def new
     @subject = Subject.new
-  end 
+  end
 
-  def show; end 
+  def show; end
 
-  def edit;  end
+  def edit; end
 
-  def description; end 
+  def description; end
 
   def description_modal
     @subject = Subject.find(params[:subject_id])
-  end 
+  end
 
   def update
     subject_params = params.require(:subject).permit!
-    
+
     if @subject.update(subject_params)
       flash[:success] = 'Subject "' + @subject.name + '" successfully updated.'
     else
       flash[:error] = 'There was an error updating the subject information'
-    end 
+    end
 
     redirect_to subjects_path
-  end 
+  end
 
   def destroy
     @subject.destroy if @subject
 
     redirect_to subjects_path
-  end 
+  end
 
-  def delete_modal; end 
+  def delete_modal; end
 
   def create
     subject_params = params[:subject]
     subject_params[:created_by] = current_user
 
     @subject = build_subject(subject_params)
-    
+
     redirect_to subjects_path
-  end 
+  end
 
   def build_subject(subject_params)
     Subject.create(
       name: subject_params[:name],
       description: subject_params[:description],
       display: subject_params[:display] == 'true'
-    )   
-  end 
+    )
+  end
 
   def versions
     @versions = Version.where(subject_id: params[:id])
@@ -72,6 +72,5 @@ class SubjectsController < ApplicationController
 
   def find_subject
     @subject = Subject.find_by(id: params[:id])
-  end 
-  
+  end
 end

@@ -20,7 +20,7 @@ class VersionsController < ApplicationController
 
   def update
     version_params = params.require(:version).permit!
-    
+
     if @version.update(version_params)
       flash[:success] = 'version "' + @version.name + '" successfully updated.'
     else
@@ -43,7 +43,7 @@ class VersionsController < ApplicationController
     version_params[:created_by] = current_user
 
     @version = build_version(version_params)
-    
+
     redirect_to versions_path
   end
 

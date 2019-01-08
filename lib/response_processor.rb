@@ -5,7 +5,7 @@ class ResponseProcessor
       @nodes = nodes
 
       @returns = Return.where(project_id: @last_node.project_id, status: 0)
-      
+
       create_return if @last_node.target_module.present? && @last_node.response_value == '3' && @returns.find_by(return_node_code: @last_node.question_code).nil?
 
       @return_node_code = @returns.last.return_node_code unless @returns.length.zero?
@@ -25,7 +25,7 @@ class ResponseProcessor
         return_node_code: @last_node.question_code,
         status: 0
       )
-      
+
       # select the last active return since that's the one we're working on
       returns = Return.where(status: 0)
       if returns.length > 1
@@ -33,12 +33,12 @@ class ResponseProcessor
         r.status = 1
         r.save
       end
-      
+
       @returns = Return.where(project_id: @last_node.project_id, status: 0)
     end
 
     ##############################################################################################################################################
-    # The next node is either: 
+    # The next node is either:
     # 1) the @last_node direct target when @last_node kind is 'q' or 'i' (which may be module start node),
     # 2) @return_node_code when kind is 'q' or 'd' and @last_node return_node_code value is 'return' (we're done with the module, going back now),
     # 3) N/A when @last_node kind is 'r' and @last_node return_node_code value is '' (we're done with the project),
@@ -179,7 +179,7 @@ class ResponseProcessor
         module_code = node_code.split('-').first
         @nodes = NodeGenerator::build_additional_nodes(@last_node.project_id, module_code)
         @nodes.select { |q| q[:question_code] == node_code }.first
-      end      
+      end
     end
 
     def module_exists?(node_code)
@@ -224,8 +224,8 @@ class ResponseProcessor
       else
         make_response_hash(@last_node.response_2, @last_node.target_2, 2)
       end
-        
-      update_decision_node
+
+      update_node
     end
 
     def evaluate_conclusion_node
@@ -235,8 +235,8 @@ class ResponseProcessor
       else
         make_response_hash(@return_node.response_2, @return_node.question_code, 2)
       end
-        
-      update_conclusion_node
+
+      update_node
     end
 
     def make_response_hash(text, target, value)
@@ -248,16 +248,7 @@ class ResponseProcessor
       }
     end
 
-    def update_decision_node
-      @last_node.response_value = @response_hash[:response_value]
-      @last_node.display_value = @response_hash[:display_value]
-      @last_node.target_node = @response_hash[:target_node]
-      @last_node.response_text = @response_hash[:response_text]
-      @last_node.return_node = @last_node.return_node unless @last_node.return
-      @last_node.save
-    end
-
-    def update_conclusion_node
+    def update_node
       @last_node.response_value = @response_hash[:response_value]
       @last_node.display_value = @response_hash[:display_value]
       @last_node.target_node = @response_hash[:target_node]
