@@ -24,6 +24,9 @@
       %p The above Accounting Recommendation is reached based upon user responses to a series of questions. The questions are grouped within topics, each topic representing a component of generally accepted accounting principles (GAAP). The topics are ranked by priority, in descending order, in accordance with the GAAP hierarchy. Thus, the highest priority topic applicable to a contract or transaction is addressed first, then the second and so forth until a final accounting recommendation can be reached. The questions in each topic, and the related user responses, serve to determine whether the topic is applicable to the contract or transaction or can be eliminated due to a scope exception. 
       %p In many instances, the response to a single question may determine whether a topic is applicable or not. In other instances, a response may lead to a new question, or set of questions, that ultimately determines the applicability of a topic. Lastly, in some cases a set of questions and related responses must be grouped and evaluated together. When this occurs, an Intermediate Conclusion is provided in this report which shows the result of the grouped responses.
       %hr
+      %h4= @base_module.name
+      %p= simple_format(@base_module.report_summary)
+      %hr
       - @nodes.each do |node|
         - if current_user.admin?
           / = node.question.question_code
