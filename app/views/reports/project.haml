@@ -29,7 +29,7 @@
       %hr
       - @nodes.each do |node|
         - if current_user.admin?
-          / = node.question.question_code
+          %h4= node.question.question_code
         - if %W[q].include?(node.question.kind)
           - if %w[3].include?(node.display_value)
             - if node.target_module.present?
