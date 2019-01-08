@@ -216,6 +216,7 @@ class ProjectsController < ApplicationController
     # update with return node if not na. when/how is it cleared?
     return if params[:response_value].blank?
 
+
     @returns = Return.where(project_id: @last_node.project_id)
 
     @target_node = params[:target_node]
@@ -225,6 +226,9 @@ class ProjectsController < ApplicationController
     end
 
     if params[:response_value] != @last_node.response_value
+      flash[:alert] = 'You have changed a previous response. Your response has been updated and all subsequent responeses have been reset.' if
+        @last_node.index
+      
       @last_node.update_attributes(
         response_value: params[:response_value],
         display_value: params[:response_value],
@@ -235,12 +239,10 @@ class ProjectsController < ApplicationController
       )
       #update return_node if we're in a submodule
       @last_node.update_attributes(return_node: params[:return_node]) unless @last_node.module_code == @project.version.module_code
-      flash[:alert] = 'You have changed a previous response. Your response has been updated and all subsequent responeses have been reset.'
     end
   end
 
   def update_comment  
-    Rails.logger.info('comment save only')
     @last_node.update_attributes(
       comment: params[:comment]
     )
