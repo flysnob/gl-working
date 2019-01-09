@@ -65,13 +65,19 @@
               .col-md-12
                 %h5.response= "Response: #{node.response_text}"
               .col-md-12
-                .comments= simple_format(node.comment)
+                %h5.comments Comment:
+              .col-md-12
+                - if node.comment.present?
+                  .comments= simple_format(node.comment)
+                - else
+                  None
             - else
               .col-md-12
                 .col-md-2
                 .col-md-10
                   %h4.question-number<
-                    = node.question.report_content
+                    %em
+                      = node.question.report_content
               .col-md-12
                 .col-md-2
                 .col-md-10
@@ -86,14 +92,21 @@
               .col-md-12
                 .col-md-2
                 .col-md-10
-                  .comments= simple_format(node.comment)
+                  %h5.comments Comment:
+              .col-md-12
+                .col-md-2
+                .col-md-10
+                  - if node.comment.present?
+                    .comments= simple_format(node.comment)
+                  - else
+                    None
             %br
         - elsif %W[d].include?(node.question.kind)
           .col-md-12
             .col-md-2
             .col-md-10
               %h4< 
-                Intermediate Conclusion
+                %em Intermediate Conclusion
                 %small= " (Subtopic: #{Subject.find_by(module_code: node.module_code).name})"
           .col-md-12
             .col-md-2
@@ -105,15 +118,22 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              .comments= simple_format(node.comment)
+              %h5.comments Comment:
+          .col-md-12
+            .col-md-2
+            .col-md-10
+              - if node.comment.present?
+                .comments= simple_format(node.comment)
+              - else
+                None
           %br
         - elsif %W[cp cf].include?(node.question.kind)
           .col-md-12
             .col-md-2
             .col-md-10
               %h4< 
-                Intermediate Conclusion
-                %small= " (Topic: #{Subject.find_by(module_code: node.module_code).name})"
+                %em Intermediate Conclusion
+                %small= " (Subtopic: #{Subject.find_by(module_code: node.module_code).name})"
           .col-md-12
             .col-md-2
             .col-md-10
@@ -121,7 +141,7 @@
           .col-md-12
             .col-md-2
             .col-md-10
-              %strong.comments= simple_format(node.comment)
+              %strong.comments= "Comment: #{node.comment.present? ? simple_format(node.comment) : 'None'}"
           %br
         - elsif %W[i].include?(node.question.kind) && node.module_code != @base_module_code
           .col-md-12
