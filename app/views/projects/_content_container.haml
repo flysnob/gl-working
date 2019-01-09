@@ -26,7 +26,7 @@
           %h5.content= simple_format(@next_node.question.conclusion_3)
       - if @next_node.question.kind == 'cf' 
         %h4 Intermediate Conclusion
-        %h5.content= @simple_format(next_node.question.content)
+        %h5.content= simple_format(next_node.question.content)
       - if @next_node.question.kind == 'cp' 
         %h4 Intermediate Conclusion
         %h5.content= simple_format(@next_node.question.content)
