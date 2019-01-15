@@ -21,6 +21,6 @@
       %th Return?
       %th.actions Actions
     %tbody
-      - @version.version_nodes.map do |version_node|
+      - @version_nodes.map do |version_node|
         %tr
           = render 'version_node', version_node: version_node

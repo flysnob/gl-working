@@ -15,7 +15,9 @@ class VersionsController < ApplicationController
 
   def show; end
 
-  def show_version_nodes; end
+  def show_version_nodes
+    @version_nodes = VersionNode.where(version_id: @version.id).order(:id)
+  end
 
   def edit; end
 
