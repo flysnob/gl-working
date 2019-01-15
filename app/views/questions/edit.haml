@@ -76,19 +76,19 @@
         = f.label :examples
         = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
-        - if %w[cf cp d q].include?(f.object.kind)
-          .row
-            .col-lg-2
-            .col-lg-8.form-group
-              = f.label :conclusion_1
-              = f.text_area :conclusion_1, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
-            .col-lg-2
-          .row
-            .col-lg-2
-            .col-lg-8.form-group
-              = f.label :conclusion_2
-              = f.text_area :conclusion_2, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
-            .col-lg-2
+    - if %w[cf cp d q].include?(f.object.kind)
+      .row
+        .col-lg-2
+        .col-lg-8.form-group
+          = f.label :conclusion_1
+          = f.text_area :conclusion_1, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        .col-lg-2
+      .row
+        .col-lg-2
+        .col-lg-8.form-group
+          = f.label :conclusion_2
+          = f.text_area :conclusion_2, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
   %button#save-question-link.btn.btn-primary{ type: 'submit', form: 'edit_question', href: '#' } Save
