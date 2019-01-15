@@ -1,7 +1,7 @@
 %td
   = link_to question, class: 'show-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = question.question_code
-%td= question.content
+%td= simple_format(question.content)
 %td= question.kind
 %td.actions
   = link_to edit_question_path(question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
