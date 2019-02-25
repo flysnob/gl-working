@@ -2,6 +2,8 @@
   - if current_user.admin?
     = link_to edit_question_path(@next_node.question), class: 'edit-question-link', 'data-toggle': 'modal', 'data-target': '#modal' do
       = "Node #{@next_node.question_code}: ID #{@next_node.id}"
+    .row.col-md-12
+      %pre= "#{@next_node.as_json}"
   - if @next_node.question.kind == 'q' 
     %h4= "Question #{@index}"
 .row.question-controls
