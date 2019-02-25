@@ -122,10 +122,6 @@ class ProjectsController < ApplicationController
 
         @index = @response_nodes.length + 1
 
-        @next_node.update(
-          index: @index
-        )
-        
         if %w[cf cp d].include?(@last_node.kind)
           if @last_node.display_value == '1' && @project_params[:previous].nil?
             flash[:notice] = (@last_node.question.conclusion_1 || @last_node.question.content)
