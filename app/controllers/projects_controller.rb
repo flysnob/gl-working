@@ -114,11 +114,17 @@ class ProjectsController < ApplicationController
         # have we changed a previous answer?
         drop_subsequent_nodes
 
+        # we may have a new response node set
         @response_nodes = Node.where(project_id: @project.id)
                               .where('response_value IS NOT NULL')
                               .order(index: :asc)
                               .to_a
+
         @index = @response_nodes.length + 1
+
+        @next_node.update(
+          index: @index
+        )
         
         if %w[cf cp d].include?(@last_node.kind)
           if @last_node.display_value == '1' && @project_params[:previous].nil?
