@@ -5,6 +5,8 @@
         %em.text-muted Click to see a previous question and your response.
     .row.col-md-12.spacer
       %div{ class: 'btn-group', role: 'group' }
+        -if current_user.admin?
+          %pre= "#{@index}"
         - @response_nodes.each do |n|
           - if @index == n.index
             = link_to n.index, previous_project_path(node_code: n.question_code, previous: true), { class: 'btn btn-warning', title: "Question #{n.index}: #{%w[d].include?n.question.kind ? n.question.summary : n.question.content}" }

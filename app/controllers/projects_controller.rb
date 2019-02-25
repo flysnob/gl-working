@@ -114,10 +114,12 @@ class ProjectsController < ApplicationController
         # have we changed a previous answer?
         drop_subsequent_nodes
 
+        # we may have a new response node set
         @response_nodes = Node.where(project_id: @project.id)
                               .where('response_value IS NOT NULL')
                               .order(index: :asc)
                               .to_a
+
         @index = @response_nodes.length + 1
         
         if %w[cf cp d].include?(@last_node.kind)
@@ -282,10 +284,13 @@ class ProjectsController < ApplicationController
       end
       @response_nodes = Node.where(project_id: @project.id)
                             .where('response_value IS NOT NULL')
+                            .order(index: :asc)
                             .to_a
     end
+
+    # set last return status if not 0
     last_return = Return.last
-    if last_return
+    if last_return && last_return != 0
       last_return.status = 0
       last_return.save
     end
@@ -293,6 +298,6 @@ class ProjectsController < ApplicationController
 
   def set_params
     @project_params = params.permit(:project, :index, :response_value, :node_id, :question_id, :target_node,
-                                    :return_node, :commit, :comment, :id, :previous, :comment_save)
+                                    :return_node, :commit, :comment, :id, :previous, :comment_save, :node_code)
   end
 end
