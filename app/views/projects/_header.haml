@@ -14,3 +14,5 @@
     - else
       = link_to subscribe_user_path(user: current_user.id), class: 'user-subscribe-link', 'data-toggle': 'modal', 'data-target': '#modal' do
         %span.glyphicon.glyphicon-new-window{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Generate report'}
+    %span.show-nodes{ style: 'cursor: pointer; color: orange' }
+      %span.glyphicon.glyphicon-transfer{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Show/hide project nodes', onclick: "$('.nodes').toggleClass('hidden')"}

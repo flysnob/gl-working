@@ -1,7 +1,8 @@
 .section.process
   = render 'header'
-  - unless @response_nodes.length.zero?
-    = render 'work_previous'
+  .nodes.hidden
+    - unless @response_nodes.length.zero?
+      = render 'work_previous'
   .spacer
     %span
   .node
