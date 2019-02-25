@@ -4,13 +4,16 @@ class NodeGenerator
     def build_nodes(project, project_params)
       @project = project
       @nodes = []
+      @modules = {}
 
       @project.version.version_nodes.each do |n|
         question = Question.find(n.question_id)
+        @modules[question.module_code] = true unless @modules[question.module_code]
 
         @nodes.push({ question: question, version: n })
 
-        if n.target_module.present?
+        if n.target_module.present? && @modules[n.target_module].nil?
+          @modules[n.target_module] = true
           build_module_version_nodes(n.target_module)
         end
       end
