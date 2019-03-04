@@ -87,7 +87,6 @@ class ProjectsController < ApplicationController
       update_comment
     else
       @next_node = ResponseProcessor.perform(@last_node, @project_nodes)
-      @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
 
       if %w[cf cp d].include?(@next_node.kind) 
         # we have a new last node now
@@ -132,6 +131,7 @@ class ProjectsController < ApplicationController
         end
       end
     end
+    @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
   end
 
   def destroy
@@ -249,7 +249,6 @@ class ProjectsController < ApplicationController
     )
 
     @next_node = @last_node
-    @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
 
     @current_node = @last_node
     @index = @next_node.index
