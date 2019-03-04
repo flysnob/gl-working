@@ -45,14 +45,16 @@ class ProjectsController < ApplicationController
     if @length.zero?
       # first node in the project
       @next_node = @project_nodes.select { |n| n.question_code == "#{@project.version.module_code}-1" }.first
-      @index = 1 
+      @index = 1
     elsif @last_node.nil?
       # coming from project index with existing nodes
       @last_node = @response_nodes.last
       make_next_node
+      @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
     else
       # next node in the project
       make_next_node
+      @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
     end
   end
 
