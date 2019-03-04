@@ -59,6 +59,7 @@ class ProjectsController < ApplicationController
   def previous
 		fetch_nodes
     @next_node = @project_nodes.select { |q| q[:question_code] == params[:node_code] }.first
+    @subject_name = @next_node.module_code != @project.subject.module_code ? " Subtopic: #{Subject.find_by(module_code: @next_node.module_code).name}" : ''
     @current_node = @response_nodes.select { |q| q[:question_code] == params[:current_node_code] }.first
     @index = @next_node.index
   end
