@@ -24,25 +24,25 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :content
-        = f.text_area :content, class: 'form-control'
+        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :report_content
-        = f.text_area :report_content, class: 'form-control'
+        = f.text_area :report_content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :summary
-        = f.text_area :summary, class: 'form-control'
+        = f.text_area :summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :report_summary
-        = f.text_area :report_summary, class: 'form-control'
+        = f.text_area :report_summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
     .row
       .col-lg-2
@@ -55,32 +55,45 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :help
-        = f.text_area :help, class: 'form-control'
+        = f.text_area :help, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :faq
-        = f.text_area :faq, class: 'form-control'
+        = f.text_area :faq, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :asc
-        = f.text_area :asc, class: 'form-control'
+        = f.text_area :asc, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :examples
-        = f.text_area :examples, class: 'form-control'
+        = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :articles
-        = f.text_area :articles, class: 'form-control'
+        = f.text_area :articles, as: :wysihtml5, class: 'form-control wysihtml5 allow-link allow-html'
       .col-lg-2
+    - if %w[cf cp d q].include?(f.object.kind)
+      .row
+        .col-lg-2
+        .col-lg-8.form-group
+          = f.label :conclusion_1
+          = f.text_area :conclusion_1, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        .col-lg-2
+      .row
+        .col-lg-2
+        .col-lg-8.form-group
+          = f.label :conclusion_2
+          = f.text_area :conclusion_2, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel
   %button#add-question-link.btn.btn-primary{ type: 'submit', form: 'new_question', href: '#' } Add question

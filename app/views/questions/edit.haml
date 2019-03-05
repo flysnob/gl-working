@@ -25,7 +25,7 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :content
-        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control'
+        = f.text_area :content, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control allow-html'
       .col-lg-2
     .row
       .col-lg-2
@@ -37,7 +37,7 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :summary
-        = f.text_area :summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        = f.text_area :summary, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
