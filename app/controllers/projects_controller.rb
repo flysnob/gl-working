@@ -2,7 +2,7 @@
 class ProjectsController < ApplicationController
   layout 'modal', only: [:show, :edit, :delete_modal, :new]
 
-  before_action :find_project, only: [:show, :edit, :destroy, :delete_modal, :work, :update, :previous]
+  before_action :find_project, only: [:show, :edit, :destroy, :delete_modal, :work, :update, :previous, :copy]
   before_action :find_last_node, only: [:work]
   before_action :clear_flash
   before_action :update_node
@@ -20,6 +20,29 @@ class ProjectsController < ApplicationController
   def show; end
 
   def edit; end
+
+  def copy
+    @dup = @project.dup
+		@dup.name = "Copy of #{@project.name}"
+		@dup.save
+    
+    ActiveRecord::Base.transaction do
+      Node.where(project: @project).each do |node|
+        node_dup = node.dup
+        node_dup.project = @dup
+        node_dup.save
+      end
+
+      if @dup.errors.empty?
+        flash[:success] = "Project #{@project.name} successfully copied to #{@dup.name}."
+      else
+        flash[:error] = @dupe.errors.full_messages.to_sentence
+        flash.keep
+      end
+
+      redirect_to projects_path
+		end
+  end
 
   def update
     project_params = params.require(:project).permit!

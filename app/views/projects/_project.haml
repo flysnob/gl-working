@@ -10,7 +10,7 @@
     %span.glyphicon.glyphicon-folder-open{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Open'}
   = link_to edit_project_path(project), class: 'edit-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-pencil{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Edit'}
-  = link_to edit_project_path(project), class: 'edit-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
+  = link_to copy_project_path(project), class: 'copy-project-link' do
     %span.glyphicon.glyphicon-duplicate{ data: {toggle: 'tooltip', placement: 'top'}, title: 'Copy'}
   = link_to delete_modal_project_path(project), class: 'delete-modal-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     %span.glyphicon.glyphicon-trash{ data: { toggle: 'tooltip', placement: 'top' }, title: 'Delete' }

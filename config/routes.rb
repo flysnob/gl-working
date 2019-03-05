@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         patch 'delete', to: 'projects#delete'
         get 'work', to: 'projects#work'
         get 'previous', to: 'projects#previous'
+        get 'copy', to: 'projects#copy'
       end
     end
 
