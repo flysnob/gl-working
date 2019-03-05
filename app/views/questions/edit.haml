@@ -56,31 +56,31 @@
       .col-lg-2
       .col-lg-8.form-group
         = f.label :help
-        = f.text_area :help, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        = f.text_area :help, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :faq
-        = f.text_area :faq, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        = f.text_area :faq, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :asc
-        = f.text_area :asc, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        = f.text_area :asc, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :examples
-        = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
+        = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5 allow-html'
       .col-lg-2
     .row
       .col-lg-2
       .col-lg-8.form-group
         = f.label :articles
-        = f.text_area :articles, as: :wysihtml5, class: 'form-control wysihtml5 allow-link'
+        = f.text_area :articles, as: :wysihtml5, class: 'form-control wysihtml5 allow-link allow-html'
       .col-lg-2
     - if %w[cf cp d q].include?(f.object.kind)
       .row

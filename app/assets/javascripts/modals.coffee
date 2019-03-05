@@ -21,7 +21,7 @@ modalize = ->
     
     $form.find('textarea').each (index, element) ->
       $link_class = $(element).hasClass('allow-link')
-      console.log($link_class)
+      $html_class = $(element).hasClass('allow-html')
 
       $(element).wysihtml5(
         { 'toolbar': {
@@ -29,7 +29,7 @@ modalize = ->
           'color': false,
           'image': false,
           'link': $link_class,
-          'html': $link_class
+          'html': $html_class
         } }
       )
   
