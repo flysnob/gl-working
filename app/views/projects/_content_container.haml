@@ -4,6 +4,8 @@
       = "Node #{@next_node.question_code}: ID #{@next_node.id}"
     .row.col-md-12
       %pre= "#{@next_node.as_json}"
+    .row.col-md-12
+      %pre= "#{Return.where(project: @project).as_json}"
   %h5= "Topic: #{@project.subject.name}; #{@subject_name}"
   - if @next_node.question.kind == 'q'
     %h4= "Question #{@index}"

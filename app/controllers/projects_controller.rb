@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
 
   def update
     project_params = params.require(:project).permit!
-    
+
     if @project.update(project_params)
       flash[:success] = 'Project "' + @project.name + '" successfully updated.'
     else
@@ -34,9 +34,9 @@ class ProjectsController < ApplicationController
   end
 
   def work
-		fetch_nodes
+    fetch_nodes
 
-		@response_nodes.sort_by! { |n| n[:index] }
+    @response_nodes.sort_by! { |n| n[:index] }
 
     raise Exception.new('No nodes for this project.') if @project_nodes.length.zero?
 
@@ -97,6 +97,7 @@ class ProjectsController < ApplicationController
                               .to_a
         # if @next_node already has an index (from page reload or coming from projects index page)
         @index = @next_node.index.present? ? @next_node.index : @response_nodes.length + 1
+
         @next_node.update(
           index: @index,
           return_node: params[:return_node]
