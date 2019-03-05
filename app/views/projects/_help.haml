@@ -44,19 +44,19 @@
     .tab-content
       - if @next_node.question.summary.present?
         .tab-pane{ id: 'summary', class: 'active', role: 'tabpanel' }
-          = simple_format(@next_node.question.summary)
+          = simple_format(@next_node.question.summary, {}, sanitize: false)
       - if @next_node.question.help.present?
         .tab-pane{ id: 'help', role: 'tabpanel' }
-          = simple_format(@next_node.question.help)
+          = simple_format(@next_node.question.help, {}, sanitize: false)
       - if @next_node.question.examples.present?
         .tab-pane{ id: 'examples', role: 'tabpanel' }
-          = simple_format(@next_node.question.examples)
+          = simple_format(@next_node.question.examples, {}, sanitize: false)
       - if @next_node.question.faq.present?
         .tab-pane{ id: 'faq', role: 'tabpanel' }
-          = simple_format(@next_node.question.faq)
+          = simple_format(@next_node.question.faq, {}, sanitize: false)
       - if @next_node.question.asc.present?
         .tab-pane{ id: 'asc', role: 'tabpanel' }
-          = simple_format(@next_node.question.asc)
+          = simple_format(@next_node.question.asc, {}, sanitize: false)
       - if @next_node.question.articles.present?
         .tab-pane{ id: 'articles', role: 'tabpanel' }
           = simple_format(@next_node.question.articles, {}, sanitize: false)
@@ -65,16 +65,16 @@
     .tab-content
       - if @next_node.question.help.present?
         .tab-pane{ id: 'help', role: 'tabpanel', class: 'active' }
-          = simple_format(@next_node.question.help)
+          = simple_format(@next_node.question.help, {}, sanitize: false)
       - if @next_node.question.examples.present?
         .tab-pane{ id: 'examples', role: 'tabpanel' }
-          = simple_format(@next_node.question.examples)
+          = simple_format(@next_node.question.examples, {}, sanitize: false)
       - if @next_node.question.faq.present?
         .tab-pane{ id: 'faq', role: 'tabpanel' }
-          = simple_format(@next_node.question.faq)
+          = simple_format(@next_node.question.faq, {}, sanitize: false)
       - if @next_node.question.asc.present?
         .tab-pane{ id: 'asc', role: 'tabpanel' }
-          = simple_format(@next_node.question.asc)
+          = simple_format(@next_node.question.asc, {}, sanitize: false)
       - if @next_node.question.articles.present?
         .tab-pane{ id: 'articles', role: 'tabpanel' }
           = simple_format(@next_node.question.articles, {}, sanitize: false)
