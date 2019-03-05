@@ -4,9 +4,9 @@
       = "Node #{@next_node.question_code}: ID #{@next_node.id}"
     .row.col-md-12
       %pre= "#{@next_node.as_json}"
+  %h5= "Topic: #{@project.subject.name}; #{@subject_name}"
   - if @next_node.question.kind == 'q'
     %h4= "Question #{@index}"
-  %h5= "#{@subject_name}"
 .row.question-controls
   = form_for @project, url: { action: 'work' }, method: 'get', html: { id: 'node' } do |f| 
     %input{ type: 'hidden', name: 'question_id', id: 'question_id', value: @next_node.question_id }
