@@ -47,6 +47,8 @@ class ProjectsController < ApplicationController
   def update
     project_params = params.require(:project).permit!
 
+    project_params[:subject] = Subject.find(project_params[:subject])
+
     if @project.update(project_params)
       flash[:success] = 'Project "' + @project.name + '" successfully updated.'
     else
