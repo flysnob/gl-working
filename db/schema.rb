@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181227094812) do
+ActiveRecord::Schema.define(version: 20190305131611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20181227094812) do
     t.integer  "subject_id"
     t.boolean  "scope"
     t.string   "report_content"
+    t.string   "articles"
     t.index ["subject_id"], name: "index_questions_on_subject_id", using: :btree
   end
 

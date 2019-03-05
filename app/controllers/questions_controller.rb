@@ -68,6 +68,7 @@ class QuestionsController < ApplicationController
       examples: question_params[:examples],
       faq: question_params[:faq],
       help: question_params[:help],
+      articles: question_params[:articles],
       conclusion_1: question_params[:conclusion_1],
       conclusion_2: question_params[:conclusion_2],
       conclusion_3: question_params[:conclusion_3],

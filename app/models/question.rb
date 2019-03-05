@@ -5,7 +5,7 @@ class Question < ActiveRecord::Base
   has_many :version_nodes
 
   def has_contents?
-    help.present? || examples.present? || faq.present? || asc.present?
+    help.present? || examples.present? || faq.present? || asc.present? || articles.present?
   end
 
   def has_summary?

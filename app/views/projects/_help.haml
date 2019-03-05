@@ -17,6 +17,9 @@
         - if @next_node.question.asc.present?
           %li{ role: 'presentation' }
             %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
+        - if @next_node.question.articles.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#articles', id: 'articles-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'articles' } Articles
 - else
   - if @next_node.question.has_contents?
     .info-buttons
@@ -33,6 +36,9 @@
         - if @next_node.question.asc.present?
           %li{ role: 'presentation' }
             %a{ href: '#asc', id: 'asc-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'asc' } ASC
+        - if @next_node.question.articles.present?
+          %li{ role: 'presentation' }
+            %a{ href: '#articles', id: 'articles-tab', role: 'tab', 'data-toggle': 'tab', 'aria-controls': 'articles' } Articles
 - if @next_node.question.kind != 'i'
   - if @next_node.question.has_contents? || @next_node.question.has_summary?
     .tab-content
@@ -51,6 +57,9 @@
       - if @next_node.question.asc.present?
         .tab-pane{ id: 'asc', role: 'tabpanel' }
           = simple_format(@next_node.question.asc)
+      - if @next_node.question.articles.present?
+        .tab-pane{ id: 'articles', role: 'tabpanel' }
+          = simple_format(@next_node.question.articles, {}, sanitize: false)
 - else
   - if @next_node.question.has_contents?
     .tab-content
@@ -66,3 +75,6 @@
       - if @next_node.question.asc.present?
         .tab-pane{ id: 'asc', role: 'tabpanel' }
           = simple_format(@next_node.question.asc)
+      - if @next_node.question.articles.present?
+        .tab-pane{ id: 'articles', role: 'tabpanel' }
+          = simple_format(@next_node.question.articles, {}, sanitize: false)

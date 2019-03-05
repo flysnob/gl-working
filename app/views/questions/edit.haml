@@ -76,6 +76,12 @@
         = f.label :examples
         = f.text_area :examples, as: :wysihtml5, wysihtml5: { toolbar: { link: false, image: false, html: true } }, class: 'form-control wysihtml5'
       .col-lg-2
+    .row
+      .col-lg-2
+      .col-lg-8.form-group
+        = f.label :articles
+        = f.text_area :articles, as: :wysihtml5, class: 'form-control wysihtml5 allow-link'
+      .col-lg-2
     - if %w[cf cp d q].include?(f.object.kind)
       .row
         .col-lg-2
