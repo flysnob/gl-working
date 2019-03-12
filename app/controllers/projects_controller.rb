@@ -213,11 +213,12 @@ class ProjectsController < ApplicationController
 
   def select_core_version(params)
     versions = if params[:date].nil?
-                 Version.where(subject: @subject)
+                 Version.where(subject: @subject, status: nil)
                         .where('expiration_date IS NULL')
                else
-                 Version.where(subject: @subject)
+                 Version.where(subject: @subject, status: nil)
                         .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
+                        .where.not(status: 'test')
                end
     raise Exception.new("No version available for subject #{@subject.name}.") if versions.length.zero?
     @core_version = versions.first

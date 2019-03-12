@@ -23,8 +23,9 @@ class VersionsController < ApplicationController
 
   def copy
     @dup = @version.dup
-     @dup.effective_date = Date.current
+    @dup.effective_date = Date.current
     @dup.version_number = 'Copy of version ' + @version.version_number
+    @dup.status = 'test'
     @dup.save
 
     ActiveRecord::Base.transaction do

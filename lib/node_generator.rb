@@ -23,11 +23,11 @@ class NodeGenerator
 
     def select_module_version(target_module)
       versions = if @project[:date].nil?
-                   Version.where(module_code: target_module)
+                   Version.where(module_code: target_module, status: nil)
                           .where('expiration_date IS NULL')
 
                  else
-                   Version.where(module_code: target_module)
+                   Version.where(module_code: target_module, status: nil)
                           .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
                  end
       raise Exception.new("No version available for module code #{target_module}.") if versions.length.zero?
