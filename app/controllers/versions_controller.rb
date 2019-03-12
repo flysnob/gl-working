@@ -48,9 +48,10 @@ class VersionsController < ApplicationController
 
   def update
     version_params = params.require(:version).permit!
+    version_params[:subject] = Subject.find(version_params[:subject])
 
     if @version.update(version_params)
-      flash[:success] = 'version "' + @version.name + '" successfully updated.'
+      flash[:success] = "Version #{@version.subject.name} v.#{@version.version_number} successfully updated."
     else
       flash[:error] = 'There was an error updating the version information'
     end
