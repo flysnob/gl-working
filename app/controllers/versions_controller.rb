@@ -6,7 +6,7 @@ class VersionsController < ApplicationController
   before_action :clear_flash
 
   def index
-    @versions = Version.all
+    @versions = Version.order(:module_code, :version_number)
   end
 
   def new
