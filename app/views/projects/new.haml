@@ -21,9 +21,9 @@
     .row
       .col-lg-2
       .col-lg-8.form-group
-        = f.label :date
+        = f.label :date, class: 'required-label'
         .help-block Enter the transaction date or effective date
-        = f.text_field :date, class: 'form-control'
+        = f.text_field :date, class: 'form-control', 'data-provide': 'datepicker', 'data-date-today-highlight': 'true', 'data-date-autoclose': 'true', autocomplete: 'off', required: true, pattern: '[0-9]{2}/[0-9]{2}/[0-9]{4}', value: f.object.date
       .col-lg-2
     .row
       .col-lg-2
@@ -31,7 +31,7 @@
         %span.form-group.required
           = f.label :subject, 'Subject', class: 'required-label'
           .help-block
-          = f.select :subject, subject_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select Subject' } }
+          = f.select :subject, subject_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select subject' } }
       .col-lg-2
 .modal-footer
   %a.btn.btn-default{'data-dismiss': 'modal', type: 'button'} Cancel

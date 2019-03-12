@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         get 'delete_modal', to: 'versions#delete_modal'
         get 'show_version_nodes', to: 'versions#show_version_nodes'
         patch 'delete', to: 'versions#delete'
+        get 'copy', to: 'versions#copy'
       end
     end
 

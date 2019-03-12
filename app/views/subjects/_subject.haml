@@ -1,6 +1,7 @@
 %td
   = link_to subject, class: 'show-subject-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = subject.name
+%td= subject.module_code
 %td= simple_format(subject.description)
 %td= simple_format(subject.report_summary)
 %td= subject.status

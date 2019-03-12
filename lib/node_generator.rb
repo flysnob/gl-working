@@ -30,7 +30,7 @@ class NodeGenerator
                    Version.where(module_code: target_module)
                           .where('effective_date <= ? AND expiration_date IS NULL OR expiration_date < ?', @project[:date], @project[:date])
                  end
-      raise Exception.new("No version available for module code #{v['target_module']}.") if versions.length.zero?
+      raise Exception.new("No version available for module code #{target_module}.") if versions.length.zero?
       versions.first
     end
 

@@ -1,15 +1,14 @@
 .modal-header
   %button.close{ 'aria-label': "Close", 'data-dismiss': 'modal', type: 'button' }
     %span{ 'aria-hidden': 'true' } &times;
-  %h4#modal-title.modal-title= "Delete this project"
+  %h4#modal-title.modal-title= "Delete this version"
 .modal-body
-  = form_for @project, url: delete_project_path(@project), method: 'post', html: { class: 'validate' } do |f|
-    = hidden_field_tag :project_id, params[:project_id]
+  = form_for @version, url: delete_version_path(@version), method: 'post', html: { class: 'validate' } do |f|
+    = hidden_field_tag :version_id, params[:version_id]
 
   .row{style: 'margin-top: 20px;'}
-  = render partial: 'project_field', locals: { label: 'Name', value: @project.name }
-  = render partial: 'project_field', locals: { label: 'Description', value: @project.description }
+  = render partial: 'version_field', locals: { label: 'Subject name', value: @version.subject.name }
+  = render partial: 'version_field', locals: { label: 'Version number', value: @version.version_number }
 .modal-footer
   %a.btn.btn-default{ 'data-dismiss': 'modal', type: 'button' } Cancel
-  = link_to project_path(@project), method: :destroy, class: 'delete-project-link' do
-    %a#delete-project-confirm-link.btn.btn-danger{ href: '#' } Delete
+  = link_to 'Delete', version_path(@version), method: :delete, class: 'btn btn-danger delete-version-link'
