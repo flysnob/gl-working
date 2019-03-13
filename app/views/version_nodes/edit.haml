@@ -10,7 +10,7 @@
       .col-lg-1
       .col-lg-5.form-group
         = f.label :question_id, class: 'required-label'
-        = f.select :question_id, question_select_options(nil, @version.subject_id), { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select question',} }
+        = f.select :question_id, question_select_options(f.object.question, @version.subject_id), { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select question',} }
       .col-lg-5.form-group
         = f.label :kind, 'Kind', class: 'required-label'
         = f.select :kind, kind_select_options(f.object.kind), { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select kind',} }
