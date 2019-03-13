@@ -1,5 +1,9 @@
 .section.versions
   %h1= "#{@version.subject.name}, ver. #{@version.version_number}"
+  .pull-right{ style: 'margin-bottom: 10px'}
+    = link_to new_version_node_path(version_id: @version), id: 'new-version-node-link', class: 'btn btn-success', 'data-toggle': 'modal', 'data-target': '#modal' do
+      %span.glyphicon.glyphicon-plus
+      version node
   %table.table.table-condensed.versions-table
     %thead.versions-header
       %tr 

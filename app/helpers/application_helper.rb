@@ -1,5 +1,9 @@
 # application helper module
 module ApplicationHelper
+  def question_select_options(question = nil, subject)
+    options_for_select(Question.where(subject: subject).map { |q| [ q.question_code, q.id, {onclick: "select_questions(this)"}] }.compact, selected: question.try(:id) || '')
+  end
+
   def subject_select_options(subject = nil)
     options_for_select(Subject.all.map { |s| [s.name, s.id, {onclick: "select_versions(this)"}] if s.display }.compact, selected: subject.try(:id) || '')
   end

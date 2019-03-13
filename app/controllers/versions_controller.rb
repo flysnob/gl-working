@@ -79,7 +79,7 @@ class VersionsController < ApplicationController
   end
 
   def build_version(version_params)
-    version.create(
+    Version.create(
       module_code: version_params[:module_code],
       version_number: version_params[:version_number],
       effective_date: version_params[:effective_date],
