@@ -1,5 +1,6 @@
 %td= version_node.question.question_code
-%td= version_node.question.content
+%td{ title: version_node.question.content, style: 'overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 0;' }
+  = version_node.question.content
 %td= version_node.sort
 %td= version_node.kind
 %td= version_node.response_1
