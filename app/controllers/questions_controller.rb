@@ -45,12 +45,12 @@ class QuestionsController < ApplicationController
     @question = build_question(question_params)
 
     ActiveRecord::Base.transaction do
-      build_nodes(question_params)
+      build_question(question_params)
 
       flash[:error] = @question.errors.full_messages.to_sentence unless @question.errors.empty?
       flash.keep
 
-      redirect_to questions_path
+      redirect_to :back
     end
   end
 
@@ -63,7 +63,8 @@ class QuestionsController < ApplicationController
       kind: question_params[:kind],
       summary: question_params[:summary],
       report_summary: question_params[:report_summary],
-      subject: find_subject(question_params[:subject]),
+      report_content: question_params[:report_content],
+      subject: Subject.find(question_params[:subject]),
       asc: question_params[:asc],
       examples: question_params[:examples],
       faq: question_params[:faq],
@@ -71,15 +72,14 @@ class QuestionsController < ApplicationController
       articles: question_params[:articles],
       conclusion_1: question_params[:conclusion_1],
       conclusion_2: question_params[:conclusion_2],
-      conclusion_3: question_params[:conclusion_3],
-      fail_result: question_params[:fail_result],
+      conclusion_3: question_params[:conclusion_3]
     )
   end
 
   private
 
   def find_question
-    @question = Question.find_by(id: params[:id])
+    @question = Question.find(params[:id])
   end
 
   def clear_flash

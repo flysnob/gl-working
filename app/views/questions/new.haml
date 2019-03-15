@@ -18,7 +18,7 @@
       .col-lg-8
         %span.form-group.required
           = f.label :subject, 'Subject', class: 'required-label'
-          = f.select :subject, subject_select_options, { include_blank: true }, { class: 'form-control', required: true, data: { placeholder: 'Select Subject',} }
+          = f.select :subject, subject_select_options_for_question(f.object.subject), { }, { class: 'form-control', required: true, 'data-placeholder': 'Select Subject' }
       .col-lg-2
     .row
       .col-lg-2
