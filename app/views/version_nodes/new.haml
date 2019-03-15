@@ -16,6 +16,15 @@
       .col-lg-1
     .row
       .col-lg-1
+      .col-lg-5.form-group
+        = f.label :sort, class: 'required-label'
+        = f.text_field :sort, class: 'form-control'
+      .col-lg-5.form-group
+        = f.label :display, class: 'required-label'
+        = f.select :display, display_select_options, {}, { class: 'form-control' }
+      .col-lg-1
+    .row
+      .col-lg-1
       .col-lg-3.form-group
         = f.label :response_1, class: 'required-label'
         = f.text_field :response_1, class: 'form-control'
