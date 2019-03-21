@@ -52,7 +52,8 @@ class VersionNodesController < ApplicationController
       meets_response: version_node_params[:meets_response],
       boolean: version_node_params[:boolean],
       target_module: version_node_params[:target_module],
-      return: version_node_params[:return]
+      return: version_node_params[:return],
+      sort: version_node_params[:sort]
     )
   end
 
