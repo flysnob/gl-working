@@ -245,7 +245,6 @@ class ProjectsController < ApplicationController
     # update with return node if not na. when/how is it cleared?
     return if params[:response_value].blank?
 
-
     @returns = Return.where(project_id: @last_node.project_id)
 
     @target_node = params[:target_node]
@@ -319,6 +318,7 @@ class ProjectsController < ApplicationController
 
     # set last return status if not 0
     last_return = Return.last
+
     if last_return && last_return != 0
       last_return.status = 0
       last_return.save
