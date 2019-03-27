@@ -1,7 +1,7 @@
 %td
   = link_to project, class: 'show-project-link', 'data-toggle': 'modal', 'data-target': '#modal' do
     = project.name
-%td= project.date.strftime('%m/%d/%Y')
+%td=  project.date ? project.date.strftime('%m/%d/%Y') : ''
 %td= project.subject.name
 %td= project.created_at.strftime('%m/%d/%Y')
 %td= project.updated_at.strftime('%m/%d/%Y')
