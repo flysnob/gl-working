@@ -195,7 +195,7 @@ class ProjectsController < ApplicationController
       description: project_params[:description],
       subject: find_subject(project_params[:subject]),
       version: select_core_version(params),
-      date: project_params[:date],
+      date: project_params[:date].present? ? Date.strptime(project_params[:date], '%m/%d/%Y') : nil,
       user: current_user
     )
   end

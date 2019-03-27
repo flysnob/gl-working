@@ -82,8 +82,8 @@ class VersionsController < ApplicationController
     Version.create(
       module_code: version_params[:module_code],
       version_number: version_params[:version_number],
-      effective_date: version_params[:effective_date],
-      expiration_date: version_params[:expiration_date],
+      effective_date: version_params[:effective_date].present? ? Date.strptime(version_params[:effective_date], '%m/%d/%Y') : nil,
+      expiration_date: version_params[:expiration_date].present? ? Date.strptime(version_params[:expiration_date], '%m/%d/%Y') : nil,
       status: version_params[:status],
       json: version_params[:json],
       subject: find_subject(version_params[:subject]),

@@ -27,7 +27,8 @@ class ResponseProcessor
       )
       
       # select the last active return since that's the one we're working on
-      returns = Return.where(status: 0)
+      returns = Return.where(project_id: @last_node.project_id, status: 0)
+
       if returns.length > 1
         r = returns.first
         r.status = 1
