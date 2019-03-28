@@ -51,7 +51,7 @@ class VersionsController < ApplicationController
     version_params[:subject] = Subject.find(version_params[:subject])
     version_params[:effective_date] = Date.strptime(version_params[:effective_date], '%m/%d/%Y') if version_params[:effective_date].present?
     version_params[:expiration_date] = Date.strptime(version_params[:expiration_date], '%m/%d/%Y') if version_params[:expiration_date].present?
-    version_params[:status] = version_params[:status}.present? ? version_params{:status] : nil
+    version_params[:status] = version_params[:status].present? ? version_params{:status] : nil
 
     if @version.update(version_params)
       flash[:success] = "Version #{@version.subject.name} v.#{@version.version_number} successfully updated."
