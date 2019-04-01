@@ -43,7 +43,7 @@ class QuestionsController < ApplicationController
     question_params[:created_by] = current_user
 
     ActiveRecord::Base.transaction do
-      @quesrtion = build_question(question_params)
+      @question = build_question(question_params)
 
       flash[:error] = @question.errors.full_messages.to_sentence unless @question.errors.empty?
       flash.keep
