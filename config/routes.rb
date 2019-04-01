@@ -73,6 +73,10 @@ Rails.application.routes.draw do
     end
 
     resources :version_nodes, except: [] do
+      member do
+        get 'delete_modal', to: 'version_nodes#delete_modal'
+        patch 'delete', to: 'version_nodes#delete'
+      end
     end
 
     resources :contents, except: [] do

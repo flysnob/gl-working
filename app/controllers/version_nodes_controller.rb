@@ -1,8 +1,8 @@
 # Controller for a single node
 class VersionNodesController < ApplicationController
-  layout 'modal', only: [:edit, :new]
+  layout 'modal', only: [:edit, :new, :delete_modal]
 
-  before_action :find_version_node, only: [:edit, :update]
+  before_action :find_version_node, only: [:edit, :update, :delete_modal, :destroy]
   before_action :find_version, only: [:edit, :new]
   
   def edit; end
@@ -31,6 +31,16 @@ class VersionNodesController < ApplicationController
 
     redirect_to :back
   end
+
+  def destroy
+    @version_node = VersionNode.find(params[:id])
+
+    @version_node.destroy if @version_node
+
+    redirect_to :back
+  end
+
+  def delete_modal; end
 
   private
 

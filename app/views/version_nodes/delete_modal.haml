@@ -1,0 +1,16 @@
+.modal-header
+  %button.close{ 'aria-label': "Close", 'data-dismiss': 'modal', type: 'button' }
+    %span{ 'aria-hidden': 'true' } &times;
+  %h4#modal-title.modal-title= "Remove this version node"
+.modal-body
+  = form_for @version_node, url: delete_version_node_path(@version_node), method: 'post', html: { class: 'validate' } do |f|
+    = hidden_field_tag :version_node_id, params[:version_id]
+
+  .row{style: 'margin-top: 20px;'}
+  = render partial: 'versions/version_field', locals: { label: 'Subject name', value: @version_node.version.subject.name }
+  = render partial: 'versions/version_field', locals: { label: 'Version number', value: @version_node.version.version_number }
+  = render partial: 'version_node_field', locals: { label: 'Version node', value: @version_node.question.question_code }
+  = render partial: 'version_node_field', locals: { label: 'Version node', value: @version_node.question.content }
+.modal-footer
+  %a.btn.btn-default{ 'data-dismiss': 'modal', type: 'button' } Cancel
+  = link_to 'Delete', version_node_path(@version_node), method: :delete, class: 'btn btn-danger delete-version-node-link'
